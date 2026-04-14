@@ -157,6 +157,13 @@ export const color = {
   },
 }
 
+export const divider = {
+  thickness: {
+    normal: '1px',
+    thick:  '12px',
+  },
+}
+
 export const interaction = {
   normal: { normal: 0,    hovered: 0.05, focused: 0.08, pressed: 0.12 },
   light:  { normal: 0,    hovered: 0.04, focused: 0.06, pressed: 0.09 },

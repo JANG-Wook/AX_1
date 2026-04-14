@@ -246,6 +246,12 @@
      Interaction Overlay Opacity
      color: --color-label-normal (#171719), 커스터마이징 가능
      -------------------------------------------------- */
+  /* --------------------------------------------------
+     Divider
+     -------------------------------------------------- */
+  --divider-thickness-normal: 1px;
+  --divider-thickness-thick:  12px;
+
   --interaction-opacity-normal-hovered: 0.05;
   --interaction-opacity-normal-focused: 0.08;
   --interaction-opacity-normal-pressed: 0.12;
