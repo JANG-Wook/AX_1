@@ -227,4 +227,25 @@
   --container-max-width:      1100px;
   --layout-padding-horizontal: 20px;
 
+  /* --------------------------------------------------
+     Spacing Scale (4px 기반)
+     0.5·1·2px — 시각 보정용 / 4px — 기본 단위
+     -------------------------------------------------- */
+  --spacing-0-5: 0.5px;
+  --spacing-1:   1px;
+  --spacing-2:   2px;
+  --spacing-4:   4px;
+  --spacing-6:   6px;
+  --spacing-8:   8px;
+  --spacing-10:  10px;
+  --spacing-12:  12px;
+  --spacing-14:  14px;
+  --spacing-16:  16px;
+  --spacing-20:  20px;
+  --spacing-24:  24px;
+  --spacing-32:  32px;
+  --spacing-40:  40px;
+  --spacing-48:  48px;
+  --spacing-56:  56px;
+
 }
