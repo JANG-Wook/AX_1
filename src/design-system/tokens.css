@@ -242,6 +242,22 @@
      Gradient — Solid (방향성 페이드)
      색상은 사용 시 지정. currentColor = 부모 색상 상속
      -------------------------------------------------- */
+  /* --------------------------------------------------
+     Interaction Overlay Opacity
+     color: --color-label-normal (#171719), 커스터마이징 가능
+     -------------------------------------------------- */
+  --interaction-opacity-normal-hovered: 0.05;
+  --interaction-opacity-normal-focused: 0.08;
+  --interaction-opacity-normal-pressed: 0.12;
+
+  --interaction-opacity-light-hovered:  0.04;
+  --interaction-opacity-light-focused:  0.06;
+  --interaction-opacity-light-pressed:  0.09;
+
+  --interaction-opacity-strong-hovered: 0.08;
+  --interaction-opacity-strong-focused: 0.12;
+  --interaction-opacity-strong-pressed: 0.18;
+
   --gradient-solid-top:    linear-gradient(to top,    transparent, currentColor);
   --gradient-solid-right:  linear-gradient(to right,  transparent, currentColor);
   --gradient-solid-bottom: linear-gradient(to bottom, transparent, currentColor);

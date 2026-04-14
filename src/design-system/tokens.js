@@ -157,6 +157,12 @@ export const color = {
   },
 }
 
+export const interaction = {
+  normal: { normal: 0,    hovered: 0.05, focused: 0.08, pressed: 0.12 },
+  light:  { normal: 0,    hovered: 0.04, focused: 0.06, pressed: 0.09 },
+  strong: { normal: 0,    hovered: 0.08, focused: 0.12, pressed: 0.18 },
+}
+
 export const gradient = {
   solid: {
     top:    'linear-gradient(to top,    transparent, currentColor)',
