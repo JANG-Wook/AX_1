@@ -157,6 +157,14 @@ export const color = {
   },
 }
 
+export const safeArea = {
+  status: {
+    ios:     44,
+    android: 36,
+    web:     0,
+  },
+}
+
 export const ratio = {
   vertical: {
     '1:1': '1 / 1',
