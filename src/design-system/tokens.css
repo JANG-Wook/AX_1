@@ -255,6 +255,15 @@
   --gradient-multiple-bottom: linear-gradient(to bottom, currentColor, transparent);
   --gradient-multiple-left:   linear-gradient(to left,   currentColor, transparent);
 
+  /* --------------------------------------------------
+     Gradient — Mask (요소 경계 마스크 크기)
+     -------------------------------------------------- */
+  --gradient-mask-size-xsmall: 24px;
+  --gradient-mask-size-small:  32px;
+  --gradient-mask-size-medium: 40px;
+  --gradient-mask-size-xlarge: 56px;
+  --gradient-mask-size-large:  64px;
+
   --safe-area-status-ios:     44px;
   --safe-area-status-android: 36px;
   --safe-area-bottom-ios:     34px;

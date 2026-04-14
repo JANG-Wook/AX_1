@@ -170,6 +170,13 @@ export const gradient = {
     bottom: 'linear-gradient(to bottom, currentColor, transparent)',
     left:   'linear-gradient(to left,   currentColor, transparent)',
   },
+  mask: {
+    xsmall: 24,
+    small:  32,
+    medium: 40,
+    xlarge: 56,
+    large:  64,
+  },
 }
 
 export const safeArea = {
