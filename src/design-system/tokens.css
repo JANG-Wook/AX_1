@@ -241,6 +241,27 @@
   --ratio-vertical-1-2: 1 / 2;
 
   /* --------------------------------------------------
+     Aspect Ratio — Horizontal (가로 기준)
+     -------------------------------------------------- */
+  --ratio-horizontal-1-1:      1 / 1;
+  --ratio-horizontal-5-4:      5 / 4;
+  --ratio-horizontal-4-3:      4 / 3;
+  --ratio-horizontal-3-2:      3 / 2;
+  --ratio-horizontal-16-10:    16 / 10;
+  --ratio-horizontal-golden:   1.618 / 1;
+  --ratio-horizontal-16-9:     16 / 9;
+  --ratio-horizontal-2-1:      2 / 1;
+  --ratio-horizontal-21-9:     21 / 9;
+  --ratio-horizontal-4-5:      4 / 5;
+  --ratio-horizontal-3-4:      3 / 4;
+  --ratio-horizontal-2-3:      2 / 3;
+  --ratio-horizontal-10-16:    10 / 16;
+  --ratio-horizontal-golden-v: 1 / 1.618;
+  --ratio-horizontal-9-16:     9 / 16;
+  --ratio-horizontal-1-2:      1 / 2;
+  --ratio-horizontal-9-21:     9 / 21;
+
+  /* --------------------------------------------------
      Icon Size
      -------------------------------------------------- */
   --icon-size:           24px;  /* SVG 실제 크기 */
