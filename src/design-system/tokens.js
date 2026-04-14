@@ -185,11 +185,11 @@ export const breakpoint = {
 }
 
 export const grid = {
-  xs: { containerWidth: '100%', paddingH: 20, contentWidth: 320  },
-  sm: { containerWidth: '100%', paddingH: 20, contentWidth: 728  },
-  md: { containerWidth: '100%', paddingH: 20, contentWidth: 952  },
-  lg: { containerWidth: 1100,   paddingH: 20, contentWidth: 1060 },
-  xl: { containerWidth: 1440,   paddingH: 20, contentWidth: 1400 },
+  xs: { containerWidth: '100%', paddingH: 20, contentWidth: 320,  columns: 2,  gutter: 20 },
+  sm: { containerWidth: '100%', paddingH: 20, contentWidth: 728,  columns: 3,  gutter: 20 },
+  md: { containerWidth: '100%', paddingH: 20, contentWidth: 952,  columns: 3,  gutter: 20 },
+  lg: { containerWidth: 1100,   paddingH: 20, contentWidth: 1060, columns: 12, gutter: 20 },
+  xl: { containerWidth: 1440,   paddingH: 20, contentWidth: 1400, columns: 12, gutter: 20 },
 }
 
 export const layout = {
