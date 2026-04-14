@@ -164,6 +164,12 @@ export const gradient = {
     bottom: 'linear-gradient(to bottom, transparent, currentColor)',
     left:   'linear-gradient(to left,   transparent, currentColor)',
   },
+  multiple: {
+    top:    'linear-gradient(to top,    currentColor, transparent)',
+    right:  'linear-gradient(to right,  currentColor, transparent)',
+    bottom: 'linear-gradient(to bottom, currentColor, transparent)',
+    left:   'linear-gradient(to left,   currentColor, transparent)',
+  },
 }
 
 export const safeArea = {

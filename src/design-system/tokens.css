@@ -247,6 +247,14 @@
   --gradient-solid-bottom: linear-gradient(to bottom, transparent, currentColor);
   --gradient-solid-left:   linear-gradient(to left,   transparent, currentColor);
 
+  /* --------------------------------------------------
+     Gradient — Multiple (색→색 전환)
+     -------------------------------------------------- */
+  --gradient-multiple-top:    linear-gradient(to top,    currentColor, transparent);
+  --gradient-multiple-right:  linear-gradient(to right,  currentColor, transparent);
+  --gradient-multiple-bottom: linear-gradient(to bottom, currentColor, transparent);
+  --gradient-multiple-left:   linear-gradient(to left,   currentColor, transparent);
+
   --safe-area-status-ios:     44px;
   --safe-area-status-android: 36px;
   --safe-area-bottom-ios:     34px;
