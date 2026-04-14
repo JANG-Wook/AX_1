@@ -157,6 +157,43 @@ export const color = {
   },
 }
 
+export const breakpoint = {
+  desktop: 1440,
+  mobile:  375,
+  ios:     375,
+  android: 360,
+}
+
+export const layout = {
+  desktop: {
+    screenWidth:    1440,
+    screenHeight:   960,
+    containerMax:   1100,
+    paddingH:       20,
+    contentWidth:   1060,
+  },
+  mobile: {
+    screenWidth:    375,
+    screenHeight:   635,
+    paddingH:       20,
+    contentWidth:   335,
+  },
+  ios: {
+    screenWidth:    375,
+    screenHeightMin: 667,
+    screenHeightBase: 812,
+    paddingH:       20,
+    contentWidth:   335,
+  },
+  android: {
+    screenWidth:    360,
+    screenHeightMin: 640,
+    screenHeightBase: 800,
+    paddingH:       20,
+    contentWidth:   320,
+  },
+}
+
 export const shadow = {
   normal: {
     xsmall: '0px 1px 2px -1px rgba(23, 23, 23, 0.10)',

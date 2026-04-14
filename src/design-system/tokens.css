@@ -214,4 +214,17 @@
   --shadow-spread-medium:
     0px 15px 75px 0px rgba(23, 23, 23, 0.16);
 
+  /* --------------------------------------------------
+     Layout — Screen & Container
+     Web Desktop: 1440px viewport, 1100px container, 20px padding
+     Web Mobile : 375px viewport, 335px content,    20px padding
+     -------------------------------------------------- */
+  --screen-desktop-width:    1440px;
+  --screen-desktop-height:   960px;
+  --screen-mobile-width:     375px;
+  --screen-mobile-height:    635px;
+
+  --container-max-width:      1100px;
+  --layout-padding-horizontal: 20px;
+
 }
