@@ -157,6 +157,11 @@ export const color = {
   },
 }
 
+export const iconSize = {
+  icon:      24,   // SVG 실제 크기 (px)
+  container: 64,   // 터치 영역 (px)
+}
+
 export const spacing = {
   '0-5': '0.5px',
   '1':   '1px',
