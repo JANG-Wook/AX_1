@@ -1,6 +1,7 @@
 /**
  * AX_1 Design System — tokens.js
  * Figma: Foundation_Typography (node: 156:54083)
+ *         Foundation_Token_Color  (node: 156:46510)
  * ⚠️ 이 파일을 수정하면 tokens.css도 반드시 동기화할 것
  */
 
@@ -79,13 +80,79 @@ export const color = {
   label: {
     strong:      '#000000',
     normal:      '#171719',
-    neutral:     '#6B6B6B',
-    alternative: '#959595',
-    assistive:   '#C2C2C2',
-    disable:     '#DEDEDE',
+    neutral:     'rgba(46, 47, 51, 0.88)',
+    alternative: 'rgba(55, 56, 60, 0.61)',
+    assistive:   'rgba(55, 56, 60, 0.28)',
+    disable:     'rgba(55, 56, 60, 0.16)',
   },
   background: {
-    normalDefault:     '#FFFFFF',
-    normalAlternative: '#F7F7F8',
+    normal:                 '#FFFFFF',
+    normalAlternative:      '#F7F7F8',
+    elevated:               '#FFFFFF',
+    elevatedAlternative:    '#F7F7F8',
+    transparent:            'rgba(255, 255, 255, 0.08)',
+    transparentAlternative: 'rgba(255, 255, 255, 0.28)',
+  },
+  line: {
+    normal:          'rgba(112, 115, 124, 0.22)',
+    strong:          'rgba(112, 115, 124, 0.52)',
+    neutral:         'rgba(112, 115, 124, 0.16)',
+    alternative:     'rgba(112, 115, 124, 0.08)',
+    solidNormal:     '#E1E2E4',
+    solidNeutral:    '#EAEBEC',
+    solidAlternative: '#F4F4F5',
+  },
+  fill: {
+    normal:      'rgba(112, 115, 124, 0.08)',
+    alternative: 'rgba(112, 115, 124, 0.05)',
+    strong:      'rgba(112, 115, 124, 0.16)',
+  },
+  interaction: {
+    inactive: '#989BA2',
+    disable:  '#F4F4F5',
+  },
+  primary: {
+    normal: '#0066FF',
+    strong: '#005EEB',
+    heavy:  '#0054D1',
+  },
+  status: {
+    positive:   '#00BF40',
+    cautionary: '#FF9200',
+    negative:   '#FF4242',
+  },
+  accentBackground: {
+    redOrange: '#FF5E00',
+    lime:      '#58CF04',
+    cyan:      '#00BDDE',
+    lightBlue: '#00AEFF',
+    violet:    '#6541F2',
+    purple:    '#CB59FF',
+    pink:      '#F553DA',
+  },
+  accentForeground: {
+    red:       '#E52222',
+    redOrange: '#F55A00',
+    orange:    '#D17600',
+    lime:      '#429E00',
+    green:     '#009632',
+    cyan:      '#0098B2',
+    lightBlue: '#008DCF',
+    blue:      '#005EEB',
+    violet:    '#5B37ED',
+    purple:    '#AD36E3',
+    pink:      '#E846CD',
+  },
+  inverse: {
+    primary:    '#3385FF',
+    background: '#1B1C1E',
+    label:      '#F7F7F8',
+  },
+  static: {
+    white: '#FFFFFF',
+    black: '#000000',
+  },
+  material: {
+    dimmer: 'rgba(23, 25, 25, 0.52)',
   },
 }

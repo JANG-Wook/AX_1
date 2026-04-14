@@ -1,6 +1,7 @@
 /* ============================================================
    AX_1 Design System — tokens.css
    Figma: Foundation_Typography (node: 156:54083)
+         Foundation_Token_Color  (node: 156:46510)
    ⚠️ 이 파일을 수정하면 tokens.js도 반드시 동기화할 것
    ============================================================ */
 
@@ -22,26 +23,25 @@
   /* --------------------------------------------------
      Typography Scale — Font Size
      -------------------------------------------------- */
-  --font-size-display-1:      56px;
-  --font-size-display-2:      40px;
-  --font-size-display-3:      36px;
-  --font-size-title-1:        32px;
-  --font-size-title-2:        28px;
-  --font-size-title-3:        24px;
-  --font-size-heading-1:      22px;
-  --font-size-heading-2:      20px;
-  --font-size-headline-1:     18px;
-  --font-size-headline-2:     17px;
-  --font-size-body-1:         16px;
-  --font-size-body-2:         15px;
-  --font-size-label-1:        14px;
-  --font-size-label-2:        13px;
-  --font-size-caption-1:      12px;
-  --font-size-caption-2:      11px;
+  --font-size-display-1:  56px;
+  --font-size-display-2:  40px;
+  --font-size-display-3:  36px;
+  --font-size-title-1:    32px;
+  --font-size-title-2:    28px;
+  --font-size-title-3:    24px;
+  --font-size-heading-1:  22px;
+  --font-size-heading-2:  20px;
+  --font-size-headline-1: 18px;
+  --font-size-headline-2: 17px;
+  --font-size-body-1:     16px;
+  --font-size-body-2:     15px;
+  --font-size-label-1:    14px;
+  --font-size-label-2:    13px;
+  --font-size-caption-1:  12px;
+  --font-size-caption-2:  11px;
 
   /* --------------------------------------------------
      Typography Scale — Line Height
-     (variant: normal / reading)
      -------------------------------------------------- */
   --line-height-display-1:       1.286;
   --line-height-display-2:       1.3;
@@ -88,15 +88,97 @@
      -------------------------------------------------- */
   --color-label-strong:      #000000;
   --color-label-normal:      #171719;
-  --color-label-neutral:     #6B6B6B;
-  --color-label-alternative: #959595;
-  --color-label-assistive:   #C2C2C2;
-  --color-label-disable:     #DEDEDE;
+  --color-label-neutral:     rgba(46, 47, 51, 0.88);
+  --color-label-alternative: rgba(55, 56, 60, 0.61);
+  --color-label-assistive:   rgba(55, 56, 60, 0.28);
+  --color-label-disable:     rgba(55, 56, 60, 0.16);
 
   /* --------------------------------------------------
      Semantic Colors — Background
      -------------------------------------------------- */
-  --color-bg-normal-default:      #FFFFFF;
-  --color-bg-normal-alternative:  #F7F7F8;
+  --color-bg-normal:                  #FFFFFF;
+  --color-bg-normal-alternative:      #F7F7F8;
+  --color-bg-elevated:                #FFFFFF;
+  --color-bg-elevated-alternative:    #F7F7F8;
+  --color-bg-transparent:             rgba(255, 255, 255, 0.08);
+  --color-bg-transparent-alternative: rgba(255, 255, 255, 0.28);
+
+  /* --------------------------------------------------
+     Semantic Colors — Line (경계선)
+     -------------------------------------------------- */
+  --color-line-normal:           rgba(112, 115, 124, 0.22);
+  --color-line-strong:           rgba(112, 115, 124, 0.52);
+  --color-line-neutral:          rgba(112, 115, 124, 0.16);
+  --color-line-alternative:      rgba(112, 115, 124, 0.08);
+  --color-line-solid-normal:     #E1E2E4;
+  --color-line-solid-neutral:    #EAEBEC;
+  --color-line-solid-alternative: #F4F4F5;
+
+  /* --------------------------------------------------
+     Semantic Colors — Fill (배경 채움)
+     -------------------------------------------------- */
+  --color-fill-normal:      rgba(112, 115, 124, 0.08);
+  --color-fill-alternative: rgba(112, 115, 124, 0.05);
+  --color-fill-strong:      rgba(112, 115, 124, 0.16);
+
+  /* --------------------------------------------------
+     Semantic Colors — Interaction
+     -------------------------------------------------- */
+  --color-interaction-inactive: #989BA2;
+  --color-interaction-disable:  #F4F4F5;
+
+  /* --------------------------------------------------
+     Semantic Colors — Primary (브랜드)
+     -------------------------------------------------- */
+  --color-primary-normal: #0066FF;
+  --color-primary-strong: #005EEB;
+  --color-primary-heavy:  #0054D1;
+
+  /* --------------------------------------------------
+     Semantic Colors — Status
+     -------------------------------------------------- */
+  --color-status-positive:   #00BF40;
+  --color-status-cautionary: #FF9200;
+  --color-status-negative:   #FF4242;
+
+  /* --------------------------------------------------
+     Semantic Colors — Accent Background
+     -------------------------------------------------- */
+  --color-accent-bg-red-orange: #FF5E00;
+  --color-accent-bg-lime:       #58CF04;
+  --color-accent-bg-cyan:       #00BDDE;
+  --color-accent-bg-light-blue: #00AEFF;
+  --color-accent-bg-violet:     #6541F2;
+  --color-accent-bg-purple:     #CB59FF;
+  --color-accent-bg-pink:       #F553DA;
+
+  /* --------------------------------------------------
+     Semantic Colors — Accent Foreground
+     -------------------------------------------------- */
+  --color-accent-fg-red:        #E52222;
+  --color-accent-fg-red-orange: #F55A00;
+  --color-accent-fg-orange:     #D17600;
+  --color-accent-fg-lime:       #429E00;
+  --color-accent-fg-green:      #009632;
+  --color-accent-fg-cyan:       #0098B2;
+  --color-accent-fg-light-blue: #008DCF;
+  --color-accent-fg-blue:       #005EEB;
+  --color-accent-fg-violet:     #5B37ED;
+  --color-accent-fg-purple:     #AD36E3;
+  --color-accent-fg-pink:       #E846CD;
+
+  /* --------------------------------------------------
+     Semantic Colors — Inverse (다크 배경용)
+     -------------------------------------------------- */
+  --color-inverse-primary:    #3385FF;
+  --color-inverse-background: #1B1C1E;
+  --color-inverse-label:      #F7F7F8;
+
+  /* --------------------------------------------------
+     Semantic Colors — Static / Material
+     -------------------------------------------------- */
+  --color-static-white:    #FFFFFF;
+  --color-static-black:    #000000;
+  --color-material-dimmer: rgba(23, 25, 25, 0.52);
 
 }
