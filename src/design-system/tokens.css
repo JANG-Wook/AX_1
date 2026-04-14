@@ -240,6 +240,8 @@
      -------------------------------------------------- */
   --safe-area-status-ios:     44px;
   --safe-area-status-android: 36px;
+  --safe-area-bottom-ios:     34px;
+  --safe-area-bottom-android: 14px;
 
   --ratio-vertical-1-1: 1 / 1;
   --ratio-vertical-3-4: 3 / 4;

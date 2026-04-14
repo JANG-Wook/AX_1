@@ -158,11 +158,8 @@ export const color = {
 }
 
 export const safeArea = {
-  status: {
-    ios:     44,
-    android: 36,
-    web:     0,
-  },
+  status: { ios: 44, android: 36, web: 0 },
+  bottom: { ios: 34, android: 14, web: 0 },
 }
 
 export const ratio = {
