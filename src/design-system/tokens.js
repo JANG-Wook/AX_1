@@ -158,10 +158,19 @@ export const color = {
 }
 
 export const breakpoint = {
-  desktop: 1440,
-  mobile:  375,
-  ios:     375,
-  android: 360,
+  xs: 0,     // ~767px   모바일
+  sm: 768,   // 768–991px  태블릿 세로
+  md: 992,   // 992–1199px 태블릿 가로
+  lg: 1200,  // 1200–1599px 데스크톱
+  xl: 1600,  // 1600px+    와이드 데스크톱
+}
+
+export const grid = {
+  xs: { containerWidth: '100%', paddingH: 20, contentWidth: 320  },
+  sm: { containerWidth: '100%', paddingH: 20, contentWidth: 728  },
+  md: { containerWidth: '100%', paddingH: 20, contentWidth: 952  },
+  lg: { containerWidth: 1100,   paddingH: 20, contentWidth: 1060 },
+  xl: { containerWidth: 1440,   paddingH: 20, contentWidth: 1400 },
 }
 
 export const layout = {
