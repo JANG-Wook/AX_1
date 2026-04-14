@@ -157,6 +157,15 @@ export const color = {
   },
 }
 
+export const gradient = {
+  solid: {
+    top:    'linear-gradient(to top,    transparent, currentColor)',
+    right:  'linear-gradient(to right,  transparent, currentColor)',
+    bottom: 'linear-gradient(to bottom, transparent, currentColor)',
+    left:   'linear-gradient(to left,   transparent, currentColor)',
+  },
+}
+
 export const safeArea = {
   status: { ios: 44, android: 36, web: 0 },
   bottom: { ios: 34, android: 14, web: 0 },

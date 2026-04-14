@@ -238,6 +238,15 @@
   /* --------------------------------------------------
      Safe Area — Status Bar
      -------------------------------------------------- */
+  /* --------------------------------------------------
+     Gradient — Solid (방향성 페이드)
+     색상은 사용 시 지정. currentColor = 부모 색상 상속
+     -------------------------------------------------- */
+  --gradient-solid-top:    linear-gradient(to top,    transparent, currentColor);
+  --gradient-solid-right:  linear-gradient(to right,  transparent, currentColor);
+  --gradient-solid-bottom: linear-gradient(to bottom, transparent, currentColor);
+  --gradient-solid-left:   linear-gradient(to left,   transparent, currentColor);
+
   --safe-area-status-ios:     44px;
   --safe-area-status-android: 36px;
   --safe-area-bottom-ios:     34px;
