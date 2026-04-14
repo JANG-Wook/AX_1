@@ -157,6 +157,15 @@ export const color = {
   },
 }
 
+export const ratio = {
+  vertical: {
+    '1:1': '1 / 1',
+    '3:4': '3 / 4',
+    '2:3': '2 / 3',
+    '1:2': '1 / 2',
+  },
+}
+
 export const iconSize = {
   icon:      24,   // SVG 실제 크기 (px)
   container: 64,   // 터치 영역 (px)
