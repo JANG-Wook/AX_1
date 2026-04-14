@@ -156,3 +156,17 @@ export const color = {
     dimmer: 'rgba(23, 25, 25, 0.52)',
   },
 }
+
+export const shadow = {
+  normal: {
+    xsmall: '0px 1px 2px -1px rgba(23, 23, 23, 0.10)',
+    small:  '0px 4px 6px -1px rgba(23, 23, 23, 0.06), 0px 2px 4px -2px rgba(23, 23, 23, 0.06)',
+    medium: '0px 10px 15px -3px rgba(23, 23, 23, 0.07), 0px 4px 6px -2px rgba(23, 23, 23, 0.07)',
+    large:  '0px 16px 24px -6px rgba(23, 23, 23, 0.08), 0px 6px 10px -4px rgba(23, 23, 23, 0.08)',
+    xlarge: '0px 24px 38px -10px rgba(23, 23, 23, 0.12), 0px 10px 15px -5px rgba(23, 23, 23, 0.10)',
+  },
+  spread: {
+    small:  '0px 0px 60px 0px rgba(23, 23, 23, 0.10)',
+    medium: '0px 15px 75px 0px rgba(23, 23, 23, 0.16)',
+  },
+}
