@@ -128,6 +128,18 @@
   --color-interaction-disable:  #F4F4F5;
 
   /* --------------------------------------------------
+     Atomic Colors — Cool Neutral (컴포넌트 전용)
+     -------------------------------------------------- */
+  --color-cool-neutral-30: #46474C;
+
+  /* --------------------------------------------------
+     Atomic Colors — Status (컴포넌트 전용)
+     -------------------------------------------------- */
+  --color-atomic-green-60:  #1ED45A;
+  --color-atomic-orange-60: #FFA938;
+  --color-atomic-red-60:    #FF6363;
+
+  /* --------------------------------------------------
      Semantic Colors — Primary (브랜드)
      -------------------------------------------------- */
   --color-primary-normal: #0066FF;
@@ -213,6 +225,18 @@
 
   --shadow-spread-medium:
     0px 15px 75px 0px rgba(23, 23, 23, 0.16);
+
+  /* --------------------------------------------------
+     Shadow — Component (컴포넌트 전용 그림자)
+     -------------------------------------------------- */
+  --shadow-segment-knob:
+    0px 0px 4px 0px rgba(0, 0, 0, 0.08);
+
+  --shadow-text-overlay:
+    0px 0px 12px rgba(0, 0, 0, 0.16);
+
+  --shadow-page-indicator-text:
+    0px 0px 6px rgba(0, 0, 0, 0.08);
 
   /* --------------------------------------------------
      Layout — Screen & Container
@@ -344,4 +368,22 @@
   --spacing-48:  48px;
   --spacing-56:  56px;
 
+}
+
+/* --------------------------------------------------
+   Global — Input Placeholder
+   인라인 스타일로 제어 불가한 ::placeholder 색상
+   -------------------------------------------------- */
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-label-assistive);
+  opacity: 1; /* Firefox 기본값 보정 */
+}
+
+/* --------------------------------------------------
+   Animation — Keyframes
+   인라인 스타일에서 animation-name으로 참조
+   -------------------------------------------------- */
+@keyframes ax-spin {
+  to { transform: rotate(360deg); }
 }

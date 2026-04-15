@@ -127,8 +127,8 @@ font-size: var(--font-size-sm);
 
 | 파일 | 역할 |
 |------|------|
-| `J1/tokens.css` | CSS 변수 정의 (`:root`) |
-| `J1/tokens.js` | JS에서 사용하는 토큰 객체 (export) |
+| `AX_1/tokens.css` | CSS 변수 정의 (`:root`) |
+| `AX_1/tokens.js` | JS에서 사용하는 토큰 객체 (export) |
 
 ---
 

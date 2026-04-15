@@ -111,6 +111,14 @@ export const color = {
     inactive: '#989BA2',
     disable:  '#F4F4F5',
   },
+  coolNeutral: {
+    30: '#46474C',
+  },
+  atomic: {
+    green:  { 60: '#1ED45A' },
+    orange: { 60: '#FFA938' },
+    red:    { 60: '#FF6363' },
+  },
   primary: {
     normal: '#0066FF',
     strong: '#005EEB',
@@ -295,6 +303,10 @@ export const layout = {
   },
 }
 
+export const animation = {
+  spin: 'ax-spin 0.8s linear infinite',
+}
+
 export const shadow = {
   normal: {
     xsmall: '0px 1px 2px -1px rgba(23, 23, 23, 0.10)',
@@ -307,4 +319,7 @@ export const shadow = {
     small:  '0px 0px 60px 0px rgba(23, 23, 23, 0.10)',
     medium: '0px 15px 75px 0px rgba(23, 23, 23, 0.16)',
   },
+  segmentKnob:         '0px 0px 4px 0px rgba(0, 0, 0, 0.08)',
+  textOverlay:         '0px 0px 12px rgba(0, 0, 0, 0.16)',
+  pageIndicatorText:   '0px 0px 6px rgba(0, 0, 0, 0.08)',
 }

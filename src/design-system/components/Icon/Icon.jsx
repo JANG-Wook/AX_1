@@ -3,15 +3,25 @@
  *
  * Props:
  *  name      — 아이콘 이름 (camelCase). 예: 'arrowDown', 'chevronLeft', 'navigationCareer'
- *  size      — 아이콘 크기(px). 기본: 24 (--icon-size)
+ *  size      — 아이콘 크기. 숫자(px) 또는 named variant 기본: 24
+ *              named: 'xsmall'(16) | 'small'(20) | 'medium'(28) | 'large'(32) | 'xlarge'(24)
  *  color     — 색상. 기본: currentColor (부모 색상 상속)
  *  className — 추가 클래스
  *
  * 사용 예:
  *  <Icon name="arrowDown" />
+ *  <Icon name="star" size="medium" color="var(--color-primary-normal)" />
  *  <Icon name="arrowDownThick" size={20} color="var(--color-primary-normal)" />
- *  <Icon name="navigationCareer" />
+ *  <Icon name="navigationCareer" size="large" />
  */
+
+const SIZE_MAP = {
+  xsmall: 16,
+  small:  20,
+  medium: 28,
+  large:  32,
+  xlarge: 24,
+}
 
 const normalModules = import.meta.glob(
   '../../icons/normal/*.svg',
@@ -45,6 +55,7 @@ export default function Icon({
   className = '',
   ...props
 }) {
+  const resolvedSize = typeof size === 'string' ? (SIZE_MAP[size] ?? 24) : size
   const SvgComponent = iconMap[name]
 
   if (!SvgComponent) {
@@ -56,8 +67,8 @@ export default function Icon({
 
   return (
     <SvgComponent
-      width={size}
-      height={size}
+      width={resolvedSize}
+      height={resolvedSize}
       fill={color}
       className={className}
       aria-hidden="true"
