@@ -1,0 +1,80 @@
+import { useState } from 'react'
+import Category from '../../design-system/components/Category/Category'
+import Section, { Case } from '../Section'
+
+const ITEMS_KO = ['전체', '인기', '최신', '추천', '완료', '진행중']
+
+export default function CategoryPage() {
+  const [tab0, setTab0] = useState(0)
+  const [tab1, setTab1] = useState(0)
+  const [tab2, setTab2] = useState(0)
+  const [tab3, setTab3] = useState(0)
+  const [tab4, setTab4] = useState(0)
+  const [tab5, setTab5] = useState(0)
+
+  return (
+    <div>
+      <h2 style={{
+        fontSize:     'var(--font-size-title-3)',
+        lineHeight:   'var(--line-height-title-3)',
+        fontWeight:   'var(--font-weight-bold)',
+        color:        'var(--color-label-normal)',
+        marginBottom: 'var(--spacing-32)',
+      }}>Category</h2>
+
+      <Section title="Variant" gap="var(--spacing-24)" column>
+        <Case label='variant="normal"'>
+          <div style={{ width: '480px' }}>
+            <Category items={ITEMS_KO} value={tab0} onChange={setTab0} variant="normal" />
+          </div>
+        </Case>
+        <Case label='variant="alternative"'>
+          <div style={{ width: '480px' }}>
+            <Category items={ITEMS_KO} value={tab1} onChange={setTab1} variant="alternative" />
+          </div>
+        </Case>
+      </Section>
+
+      <Section title="Size" gap="var(--spacing-24)" column>
+        {(['small', 'medium', 'large', 'xlarge']).map((size, i) => (
+          <Case key={size} label={`size="${size}"`}>
+            <div style={{ width: '480px' }}>
+              <Category
+                items={['전체', '인기', '최신', '추천']}
+                value={i === 0 ? tab2 : i === 1 ? tab3 : i === 2 ? tab4 : tab5}
+                onChange={i === 0 ? setTab2 : i === 1 ? setTab3 : i === 2 ? setTab4 : setTab5}
+                size={size}
+              />
+            </div>
+          </Case>
+        ))}
+      </Section>
+
+      <Section title="Scroll" gap="var(--spacing-24)" column>
+        <Case label='scroll=true (넘치는 항목 스크롤)'>
+          <div style={{ width: '300px' }}>
+            <Category
+              items={['전체', '디자인', '개발', '마케팅', '기획', '운영', '인사', '재무']}
+              value={tab0}
+              onChange={setTab0}
+              scroll
+            />
+          </div>
+        </Case>
+      </Section>
+
+      <Section title="Padding Options" gap="var(--spacing-24)" column>
+        <Case label='horizontalPadding=true'>
+          <div style={{ width: '480px', backgroundColor: 'var(--color-bg-normal-alternative)', borderRadius: 'var(--spacing-8)' }}>
+            <Category items={ITEMS_KO} value={tab0} onChange={setTab0} horizontalPadding />
+          </div>
+        </Case>
+        <Case label='verticalPadding=true'>
+          <div style={{ width: '480px', backgroundColor: 'var(--color-bg-normal-alternative)', borderRadius: 'var(--spacing-8)' }}>
+            <Category items={ITEMS_KO} value={tab0} onChange={setTab0} verticalPadding />
+          </div>
+        </Case>
+      </Section>
+    </div>
+  )
+}

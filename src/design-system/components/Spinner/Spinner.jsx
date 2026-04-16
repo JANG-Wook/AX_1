@@ -15,7 +15,7 @@
  *  <Spinner />
  *  <Spinner size={20} />
  *  <Spinner color="var(--color-status-positive)" />
- *  <Spinner animate={false} />   {/* 정적 상태 */}
+ *  <Spinner animate={false} />   // 정적 상태
  */
 
 export default function Spinner({

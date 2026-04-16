@@ -20,8 +20,8 @@
  * 사용 예:
  *  <Avatar src="/profile.jpg" alt="홍길동" />
  *  <Avatar variant="company" size="large" src="/logo.png" alt="회사명" />
- *  <Avatar variant="person" size="medium" />                {/* 플레이스홀더 */}
- *  <Avatar src="/img.jpg" badge={<OnlineDot />} />          {/* 배지 슬롯 */}
+ *  <Avatar variant="person" size="medium" />                // 플레이스홀더
+ *  <Avatar src="/img.jpg" badge={<OnlineDot />} />          // 배지 슬롯
  */
 
 import Icon from '../Icon/Icon'

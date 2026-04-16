@@ -18,7 +18,7 @@
  *  <Thumbnail src="/img.jpg" alt="썸네일" />
  *  <Thumbnail src="/img.jpg" ratio="16/9" radius />
  *  <Thumbnail src="/img.jpg" ratio="4/3" border radius overlay={<PlaytimeBadge time="1:23" />} />
- *  <Thumbnail ratio="1/1" radius />  {/* src 없으면 빈 배경 */}
+ *  <Thumbnail ratio="1/1" radius />   // src 없으면 빈 배경
  */
 
 export default function Thumbnail({
