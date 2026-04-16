@@ -163,6 +163,10 @@ export const color = {
   material: {
     dimmer: 'rgba(23, 25, 25, 0.52)',
   },
+  ios: {
+    fillSecondary:   'rgba(120, 120, 128, 0.16)',
+    glassBackground: 'rgba(245, 245, 245, 0.60)',
+  },
 }
 
 export const divider = {

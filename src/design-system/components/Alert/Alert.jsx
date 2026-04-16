@@ -75,7 +75,7 @@ function IOSActionButton({ label, isPrimary, onClick }) {
         cursor:          'pointer',
         backgroundColor: isPrimary
           ? 'var(--color-primary-normal)'
-          : 'rgba(120, 120, 128, 0.16)',
+          : 'var(--color-ios-fill-secondary)',
         color:           isPrimary
           ? 'var(--color-static-white)'
           : 'var(--color-static-black)',
@@ -142,7 +142,7 @@ export default function Alert({
           width:                '270px',
           backdropFilter:       'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
-          backgroundColor:      'rgba(245, 245, 245, 0.6)',
+          backgroundColor:      'var(--color-ios-glass-background)',
           boxSizing:            'border-box',
         }}>
           {/* 본문 */}
