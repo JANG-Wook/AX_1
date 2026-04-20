@@ -3,7 +3,7 @@ import Section, { Case } from '../Section'
 
 function AlertBox({ children }) {
   return (
-    <div style={{ width: '360px', height: '280px', position: 'relative', overflow: 'hidden', borderRadius: 'var(--spacing-12)', flexShrink: 0 }}>
+    <div style={{ width: '400px', height: '340px', position: 'relative', overflow: 'hidden', borderRadius: 'var(--spacing-12)', flexShrink: 0 }}>
       {children}
     </div>
   )

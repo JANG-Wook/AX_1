@@ -1,4 +1,14 @@
+import { useEffect, useState } from 'react'
 import Section, { Case } from '../Section'
+
+function useCssVar(name) {
+  const [value, setValue] = useState('')
+  useEffect(() => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+    setValue(v)
+  }, [name])
+  return value
+}
 
 const COLOR_GROUPS = [
   {
@@ -117,24 +127,34 @@ const COLOR_GROUPS = [
 ]
 
 function Swatch({ name, label }) {
+  const computedValue = useCssVar(name)
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)', width: '120px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-6)', width: '120px' }}>
       <div style={{
-        width:        '120px',
-        height:       '64px',
-        borderRadius: 'var(--spacing-8)',
+        width:           '120px',
+        height:          '64px',
+        borderRadius:    'var(--spacing-8)',
         backgroundColor: `var(${name})`,
-        border:       '1px solid var(--color-line-neutral)',
-        boxSizing:    'border-box',
+        border:          '1px solid var(--color-line-neutral)',
+        boxSizing:       'border-box',
+        flexShrink:      0,
       }} />
       <p style={{
         fontSize:      'var(--font-size-caption-1)',
         lineHeight:    'var(--line-height-caption-1)',
         letterSpacing: 'var(--letter-spacing-caption-1)',
-        fontWeight:    'var(--font-weight-medium)',
+        fontWeight:    'var(--font-weight-semibold)',
         color:         'var(--color-label-normal)',
-        wordBreak:     'break-all',
       }}>{label}</p>
+      <p style={{
+        fontSize:      'var(--font-size-caption-1)',
+        lineHeight:    'var(--line-height-caption-1)',
+        letterSpacing: 'var(--letter-spacing-caption-1)',
+        fontWeight:    'var(--font-weight-regular)',
+        color:         'var(--color-label-alternative)',
+        fontVariantNumeric: 'tabular-nums',
+      }}>{computedValue || '—'}</p>
       <p style={{
         fontSize:      'var(--font-size-caption-2)',
         lineHeight:    'var(--line-height-caption-2)',

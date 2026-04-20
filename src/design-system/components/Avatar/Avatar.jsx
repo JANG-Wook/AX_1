@@ -14,7 +14,7 @@
  *              large: 48px   xlarge: 56px
  *  src       — 이미지 URL. 없으면 플레이스홀더 표시
  *  alt       — 이미지 alt 텍스트                   기본: ''
- *  badge     — ReactNode  우측 하단 배지 슬롯       기본: null
+ *  badge     — ReactNode  우측 상단 배지 슬롯       기본: null
  *  className — 추가 클래스
  *
  * 사용 예:
@@ -83,13 +83,12 @@ export default function Avatar({
     display:   'block',
   }
 
-  /* 배지 앵커: 우측 하단 꼭짓점에 size=0 div, 콘텐츠가 overflow */
+  /* 배지 앵커: 우측 상단 꼭짓점에 고정, 배지 자체 크기의 50%만큼 밖으로 밀어 모서리에 걸치도록 */
   const badgeAnchorStyle = {
-    position: 'absolute',
-    right:    0,
-    bottom:   0,
-    width:    0,
-    height:   0,
+    position:  'absolute',
+    right:     0,
+    top:       0,
+    transform: 'translate(50%, -50%)',
   }
 
   const placeholderIcon = isPerson ? 'personFill' : 'companyFill'

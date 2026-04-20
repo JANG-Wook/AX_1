@@ -1,5 +1,7 @@
 import Avatar from '../../design-system/components/Avatar/Avatar'
 import Section, { Case } from '../Section'
+import profileImg from '/T1_parksy/Profile.png'
+import companyImg from '/T1_parksy/Company.jpg'
 
 const SIZES    = ['xsmall', 'small', 'medium', 'large', 'xlarge']
 const VARIANTS = ['person', 'company', 'academy']
@@ -47,8 +49,8 @@ export default function AvatarPage() {
             <Avatar
               variant="person"
               size={s}
-              src="https://i.pravatar.cc/150?img=3"
-              alt="프로필 이미지"
+              src={profileImg}
+              alt="박서준 프로필"
             />
           </Case>
         ))}
@@ -56,10 +58,10 @@ export default function AvatarPage() {
 
       <Section title="Company / Academy with Image" gap="var(--spacing-24)">
         <Case label='variant="company"' center>
-          <Avatar variant="company" size="large" src="https://i.pravatar.cc/150?img=5" alt="회사" />
+          <Avatar variant="company" size="large" src={companyImg} alt="T1" />
         </Case>
         <Case label='variant="academy"' center>
-          <Avatar variant="academy" size="large" src="https://i.pravatar.cc/150?img=7" alt="아카데미" />
+          <Avatar variant="academy" size="large" src={companyImg} alt="T1" />
         </Case>
       </Section>
 
@@ -71,8 +73,8 @@ export default function AvatarPage() {
           <Avatar
             variant="person"
             size="large"
-            src="https://i.pravatar.cc/150?img=3"
-            alt="프로필"
+            src={profileImg}
+            alt="박서준 프로필"
             badge={<OnlineDot />}
           />
         </Case>
@@ -80,8 +82,8 @@ export default function AvatarPage() {
           <Avatar
             variant="person"
             size="xlarge"
-            src="https://i.pravatar.cc/150?img=10"
-            alt="프로필"
+            src={profileImg}
+            alt="박서준 프로필"
             badge={<OnlineDot />}
           />
         </Case>

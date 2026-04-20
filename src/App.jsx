@@ -3,6 +3,14 @@ import Sidebar from './showcase/Sidebar'
 
 import ColorsPage         from './showcase/pages/ColorsPage'
 import TypographyPage     from './showcase/pages/TypographyPage'
+import ElevationPage      from './showcase/pages/ElevationPage'
+import ArtboardPage       from './showcase/pages/ArtboardPage'
+import BreakpointPage     from './showcase/pages/BreakpointPage'
+import SpacingPage        from './showcase/pages/SpacingPage'
+import LayoutGridColumnPage from './showcase/pages/LayoutGridColumnPage'
+import LayoutMaxWidthPage    from './showcase/pages/LayoutMaxWidthPage'
+import ThemeIconNormalPage      from './showcase/pages/ThemeIconNormalPage'
+import ThemeIconNavigationPage  from './showcase/pages/ThemeIconNavigationPage'
 import AlertPage          from './showcase/pages/AlertPage'
 import AvatarPage         from './showcase/pages/AvatarPage'
 import CardPage           from './showcase/pages/CardPage'
@@ -30,10 +38,25 @@ import TextfieldPage      from './showcase/pages/TextfieldPage'
 import ThumbnailPage      from './showcase/pages/ThumbnailPage'
 import ToastPage          from './showcase/pages/ToastPage'
 import TooltipPage        from './showcase/pages/TooltipPage'
+import ElementRatioVerticalPage    from './showcase/pages/ElementRatioVerticalPage'
+import ElementRatioHorizontalPage  from './showcase/pages/ElementRatioHorizontalPage'
+import ElementSafeAreaPage           from './showcase/pages/ElementSafeAreaPage'
+import DecorateGradientPage        from './showcase/pages/DecorateGradientPage'
+import EssentialPage              from './showcase/pages/EssentialPage'
+import DecorateInteractionPage    from './showcase/pages/DecorateInteractionPage'
+import ActionBottomPage           from './showcase/pages/ActionBottomPage'
 
 const PAGE_MAP = {
   colors:           ColorsPage,
   typography:       TypographyPage,
+  elevation:        ElevationPage,
+  artboard:         ArtboardPage,
+  breakpoint:       BreakpointPage,
+  spacing:          SpacingPage,
+  layoutGridColumn: LayoutGridColumnPage,
+  layoutMaxWidth:   LayoutMaxWidthPage,
+  iconNormal:       ThemeIconNormalPage,
+  iconNavigation:   ThemeIconNavigationPage,
   alert:            AlertPage,
   avatar:           AvatarPage,
   card:             CardPage,
@@ -60,7 +83,14 @@ const PAGE_MAP = {
   textfield:        TextfieldPage,
   thumbnail:        ThumbnailPage,
   toast:            ToastPage,
-  tooltip:          TooltipPage,
+  tooltip:              TooltipPage,
+  elementRatioVertical:   ElementRatioVerticalPage,
+  elementRatioHorizontal: ElementRatioHorizontalPage,
+  elementSafeArea:        ElementSafeAreaPage,
+  decorateGradient:         DecorateGradientPage,
+  essential:                EssentialPage,
+  decorateInteraction:      DecorateInteractionPage,
+  actionBottom:             ActionBottomPage,
 }
 
 export default function App() {

@@ -12,7 +12,7 @@ export default function DividerPage() {
         marginBottom: 'var(--spacing-32)',
       }}>Divider</h2>
 
-      <Section title="Variant (Horizontal)" gap="var(--spacing-24)" column>
+      <Section title="Variant (Horizontal)" gap="var(--spacing-24)" column background="var(--color-fill-normal)">
         <Case label='variant="normal" (1px)'>
           <div style={{ width: '400px' }}>
             <Divider variant="normal" />
@@ -25,7 +25,7 @@ export default function DividerPage() {
         </Case>
       </Section>
 
-      <Section title="Vertical" gap="var(--spacing-24)">
+      <Section title="Vertical" gap="var(--spacing-24)" background="var(--color-fill-normal)">
         <Case label='vertical=true'>
           <div style={{ display: 'flex', alignItems: 'center', height: '64px', gap: 'var(--spacing-16)' }}>
             <span style={{ fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-normal)' }}>항목 A</span>
@@ -37,7 +37,7 @@ export default function DividerPage() {
         </Case>
       </Section>
 
-      <Section title="In Context" gap="var(--spacing-16)" column>
+      <Section title="In Context" gap="var(--spacing-16)" column background="var(--color-fill-normal)">
         <Case label="리스트 항목 구분">
           <div style={{ width: '360px', backgroundColor: 'var(--color-bg-elevated)', borderRadius: 'var(--spacing-12)', overflow: 'hidden', border: '1px solid var(--color-line-neutral)' }}>
             {['첫 번째 항목', '두 번째 항목', '세 번째 항목'].map((item, i, arr) => (

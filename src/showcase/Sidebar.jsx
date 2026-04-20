@@ -1,41 +1,118 @@
+import logo from '/T1_parksy/Infobank_Logo_Color_CMYK_Dark Grey.png'
+
 const NAV = [
   {
     group: 'Foundation',
     items: [
-      { id: 'colors',     label: 'Colors'     },
-      { id: 'typography', label: 'Typography' },
+      { id: 'typography',  label: 'Typography' },
+      { id: 'colors',      label: 'Color'      },
+      { id: 'elevation',   label: 'Elevation'  },
     ],
   },
   {
-    group: 'Components',
+    group: 'Foundation Screen',
     items: [
-      { id: 'alert',            label: 'Alert'            },
-      { id: 'avatar',           label: 'Avatar'           },
-      { id: 'card',             label: 'Card'             },
-      { id: 'category',         label: 'Category'         },
-      { id: 'checkbox',         label: 'Checkbox'         },
-      { id: 'contentBadge',     label: 'ContentBadge'     },
-      { id: 'divider',          label: 'Divider'          },
-      { id: 'framedStyle',      label: 'FramedStyle'      },
-      { id: 'icon',             label: 'Icon'             },
-      { id: 'listCard',         label: 'ListCard'         },
-      { id: 'listCell',         label: 'ListCell'         },
-      { id: 'menu',             label: 'Menu'             },
-      { id: 'pageIndicator',    label: 'PageIndicator'    },
-      { id: 'paginationDots',   label: 'PaginationDots'   },
-      { id: 'paginationNav',    label: 'PaginationNav'    },
-      { id: 'radio',            label: 'Radio'            },
-      { id: 'segmentedControl', label: 'SegmentedControl' },
-      { id: 'select',           label: 'Select'           },
-      { id: 'skeleton',         label: 'Skeleton'         },
-      { id: 'snackbar',         label: 'Snackbar'         },
-      { id: 'spinner',          label: 'Spinner'          },
-      { id: 'switch',           label: 'Switch'           },
-      { id: 'tab',              label: 'Tab'              },
-      { id: 'textfield',        label: 'Textfield'        },
-      { id: 'thumbnail',        label: 'Thumbnail'        },
-      { id: 'toast',            label: 'Toast'            },
-      { id: 'tooltip',          label: 'Tooltip'          },
+      { id: 'artboard',         label: 'Artboard'            },
+      { id: 'breakpoint',       label: 'Breakpoint'          },
+      { id: 'spacing',          label: 'Spacing'             },
+      { id: 'layoutGridColumn', label: 'Layout_Grid Column'  },
+      { id: 'layoutMaxWidth',   label: 'Layout_Max-width'    },
+    ],
+  },
+  {
+    group: 'Theme Icon',
+    items: [
+      { id: 'iconNormal', label: 'Normal' },
+    ],
+  },
+  {
+    group: 'Element',
+    items: [
+      { id: 'elementRatioVertical',    label: 'Basic_Ratio_Vertical'       },
+      { id: 'elementRatioHorizontal',  label: 'Basic_Ratio_Horizontal'     },
+      { id: 'elementSafeArea',          label: 'Spacing_Safe Area'          },
+      { id: 'decorateGradient',         label: 'Decorate_Gradient'          },
+      { id: 'decorateInteraction',     label: 'Decorate_Interaction'       },
+    ],
+  },
+  {
+    group: 'Component Layout',
+    items: [
+      { id: 'essential', label: 'Essential' },
+      { id: 'divider',   label: 'Divider'    },
+    ],
+  },
+  {
+    group: 'Component Action Area',
+    items: [
+      { id: 'actionBottom',      label: 'Bottom'              },
+      { id: 'button',            label: 'Button'              },
+      { id: 'textButton',        label: 'Text Button'         },
+      { id: 'actionNormal',      label: 'Normal'              },
+      { id: 'actionBackground',  label: 'Background'          },
+      { id: 'iconButtonOutlined',label: 'Icon Button_Outlined'},
+      { id: 'iconButtonSolid',   label: 'Icon Button_Solid'   },
+      { id: 'chip',              label: 'Chip'                },
+      { id: 'toggleIcon',        label: 'Toggle Icon'         },
+    ],
+  },
+  {
+    group: 'Component Selection and Input',
+    items: [
+      { id: 'textfield',        label: 'Textinput_Textfield' },
+      { id: 'textarea',         label: 'Textinput_Textarea'  },
+      { id: 'select',           label: 'Select'              },
+      { id: 'checkbox',         label: 'Control_Checkbox'    },
+      { id: 'radio',            label: 'Control_Radio'       },
+      { id: 'checkMark',        label: 'Control_Check Mark'  },
+      { id: 'switch',           label: 'Control_Switch'      },
+      { id: 'segmentedControl', label: 'Segmented Control'   },
+      { id: 'framedStyle',      label: 'Framed Style'        },
+    ],
+  },
+  {
+    group: 'Component Content',
+    items: [
+      { id: 'contentBadge', label: 'Content Badge'  },
+      { id: 'thumbnail',    label: 'Thumbnail'      },
+      { id: 'avatar',       label: 'Avatar Person'  },
+      { id: 'listCell',     label: 'List Cell'      },
+      { id: 'card',         label: 'Card_Card'      },
+      { id: 'listCard',     label: 'Card_List Card' },
+    ],
+  },
+  {
+    group: 'Component Loading',
+    items: [
+      { id: 'spinner',           label: 'Circular'           },
+      { id: 'skeletonText',      label: 'Skeleton_Text'      },
+      { id: 'skeletonRectangle', label: 'Skeleton_Rectangle' },
+      { id: 'skeletonCircle',    label: 'Skeleton_Circle'    },
+    ],
+  },
+  {
+    group: 'Component Navigation',
+    items: [
+      { id: 'tab',           label: 'Tab'                    },
+      { id: 'category',      label: 'Category'               },
+      { id: 'pageIndicator', label: 'Page Indicator Counter' },
+      { id: 'paginationDots',label: 'Pagination_Dot'         },
+      { id: 'paginationNav', label: 'Pagination_Navigation'  },
+    ],
+  },
+  {
+    group: 'Component Feedback',
+    items: [
+      { id: 'toast',    label: 'Toast'    },
+      { id: 'snackbar', label: 'Snackbar' },
+      { id: 'alert',    label: 'Alert'    },
+    ],
+  },
+  {
+    group: 'Component Presentation',
+    items: [
+      { id: 'tooltip', label: 'Tooltip' },
+      { id: 'menu',    label: 'Menu'    },
     ],
   },
 ]
@@ -55,6 +132,22 @@ export default function Sidebar({ activePage, onNavigate }) {
       top:             0,
       boxSizing:       'border-box',
     }}>
+      <div style={{
+        paddingTop:    'var(--spacing-16)',
+        paddingLeft:   'var(--spacing-16)',
+        paddingRight:  'var(--spacing-16)',
+        paddingBottom: 'var(--spacing-24)',
+        marginBottom:  'var(--spacing-8)',
+        borderBottom: '1px solid var(--color-line-solid-neutral)',
+      }}>
+        <img
+          src={logo}
+          alt="Infobank"
+          draggable={false}
+          style={{ width: '75%', height: 'auto', display: 'block' }}
+        />
+      </div>
+
       {NAV.map(({ group, items }) => (
         <div key={group} style={{ marginBottom: 'var(--spacing-8)' }}>
           <p style={{
