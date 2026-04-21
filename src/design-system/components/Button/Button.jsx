@@ -26,6 +26,7 @@
  *  <Button disabled label="비활성화" />
  */
 
+import { useState } from 'react'
 import Spinner from '../Spinner/Spinner'
 
 /* ── 사이즈별 스펙 ────────────────────────────────────────────── */
@@ -105,6 +106,18 @@ const COLOR_SCHEME = {
   },
 }
 
+/* ── 인터랙션 오버레이 opacity (variant × color) ─────────────── */
+const OVERLAY_OPACITY = {
+  solid: {
+    primary:   { hovered: 0.08, focused: 0.12, pressed: 0.18 },
+    assistive: { hovered: 0.05, focused: 0.08, pressed: 0.12 },
+  },
+  outlined: {
+    primary:   { hovered: 0.04, focused: 0.06, pressed: 0.09 },
+    assistive: { hovered: 0.04, focused: 0.06, pressed: 0.09 },
+  },
+}
+
 /* ── iconOnly일 때 정사각형 패딩 ────────────────────────────── */
 function iconOnlyPadding(size) {
   if (size === 'large')  return 'var(--spacing-14)'
@@ -126,10 +139,21 @@ export default function Button({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
   const sz     = SIZE[size]     ?? SIZE.large
   const scheme = COLOR_SCHEME[variant]?.[color] ?? COLOR_SCHEME.solid.primary
 
   const isDisabled = disabled || loading
+
+  const opacityMap     = OVERLAY_OPACITY[variant]?.[color] ?? OVERLAY_OPACITY.solid.primary
+  const overlayOpacity = isDisabled  ? 0
+    : isPressed                      ? opacityMap.pressed
+    : isFocused                      ? opacityMap.focused
+    : isHovered                      ? opacityMap.hovered
+    : 0
 
   const iconOnlyPad = iconOnly ? iconOnlyPadding(size) : null
 
@@ -171,6 +195,15 @@ export default function Button({
     flexShrink: 0,
   }
 
+  /* 인터랙션 오버레이 */
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+  }
+
   /* 로딩 중 텍스트/아이콘 숨김 */
   const contentStyle = {
     display:    'contents',
@@ -186,8 +219,17 @@ export default function Button({
       onClick={!isDisabled ? onClick : undefined}
       aria-label={iconOnly ? label : undefined}
       aria-busy={loading || undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      {/* 인터랙션 오버레이 */}
+      <div style={overlayStyle} aria-hidden="true" />
+
       {/* 로딩 스피너 — 절대 중앙 */}
       {loading && (
         <span style={{

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Menu from '../../design-system/components/Menu/Menu'
 import Section, { Case } from '../Section'
 
@@ -48,6 +49,14 @@ const manyItems = Array.from({ length: 12 }, (_, i) => ({
 }))
 
 export default function MenuPage() {
+  const [lastClicked, setLastClicked] = useState(null)
+
+  const demoItems = [
+    { label: '복사',     onClick: () => setLastClicked('복사') },
+    { label: '붙여넣기', onClick: () => setLastClicked('붙여넣기') },
+    { label: '삭제',     onClick: () => setLastClicked('삭제') },
+  ]
+
   return (
     <div>
       <h2 style={{
@@ -57,6 +66,26 @@ export default function MenuPage() {
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
       }}>Menu</h2>
+
+      <Section title="인터랙션 데모">
+        <Case label="메뉴 항목에 마우스를 올리거나 클릭해보세요">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+            <Menu items={demoItems} />
+            <div style={{
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+            }}>
+              {lastClicked
+                ? <><strong style={{ color: 'var(--color-label-normal)' }}>"{lastClicked}"</strong> 클릭됨</>
+                : '항목을 클릭해보세요'
+              }
+            </div>
+          </div>
+        </Case>
+      </Section>
 
       <Section title="Variant = normal">
         <Case label='기본'>

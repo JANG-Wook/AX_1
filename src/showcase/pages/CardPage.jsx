@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Card from '../../design-system/components/Card/Card'
 import Avatar from '../../design-system/components/Avatar/Avatar'
 import ContentBadge from '../../design-system/components/ContentBadge/ContentBadge'
@@ -6,6 +7,9 @@ import Section, { Case } from '../Section'
 const IMG = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'
 
 export default function CardPage() {
+  const [demoSaved, setDemoSaved] = useState(false)
+  const [demoClicked, setDemoClicked] = useState(0)
+
   return (
     <div>
       <h2 style={{
@@ -15,6 +19,36 @@ export default function CardPage() {
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
       }}>Card</h2>
+
+      <Section title="인터랙션 데모" gap="var(--spacing-24)">
+        <Case label="카드에 마우스를 올리거나 클릭해보세요">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+            <div style={{ width: '240px' }}>
+              <Card
+                src={IMG}
+                alt="카드"
+                title="산속의 고요한 아침"
+                caption="자연 · 사진"
+                saved={demoSaved}
+                onToggleSave={() => setDemoSaved(s => !s)}
+                onClick={() => setDemoClicked(c => c + 1)}
+              />
+            </div>
+            <div style={{
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+              display: 'flex',
+              gap: 'var(--spacing-16)',
+            }}>
+              <span>클릭: <strong style={{ color: 'var(--color-label-normal)' }}>{demoClicked}회</strong></span>
+              <span>북마크: <strong style={{ color: demoSaved ? 'var(--color-primary-normal)' : 'var(--color-label-normal)' }}>{demoSaved ? '저장됨' : '미저장'}</strong></span>
+            </div>
+          </div>
+        </Case>
+      </Section>
 
       <Section title="Platform" gap="var(--spacing-24)">
         <Case label='platform="desktop"'>

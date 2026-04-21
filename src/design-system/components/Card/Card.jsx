@@ -16,6 +16,7 @@
  *  overlayCaption — 오버레이 위 캡션 텍스트     기본: ''
  *  saved          — 북마크 활성 상태            기본: false
  *  onToggleSave   — 북마크 토글 콜백 () => void
+ *  onClick        — 카드 클릭 핸들러
  *  skeleton       — 스켈레톤 로딩 상태          기본: false
  *  topContent     — ReactNode  제목 위 슬롯    기본: null
  *  bottomContent  — ReactNode  캡션 아래 슬롯  기본: null
@@ -24,97 +25,109 @@
  * 사용 예:
  *  <Card src="/img.jpg" title="제목" caption="캡션" />
  *  <Card platform="mobile" src="/img.jpg" title="제목" caption="캡션" />
- *  <Card src="/img.jpg" title="제목" saved onToggleSave={toggle} />
+ *  <Card src="/img.jpg" title="제목" saved onToggleSave={toggle} onClick={goDetail} />
  *  <Card src="/img.jpg" title="제목" overlayCaption="D-3" thumbnailOverlay />
  *  <Card src="/img.jpg" title="제목" bottomContent={<Badge />} />
  *  <Card skeleton />
  */
 
+import { useState } from 'react'
 import Icon from '../Icon/Icon'
 
 const PLATFORM = {
   desktop: {
-    outerGap:          'var(--spacing-8)',
-    thumbnailRatio:    '3/2',
-    overlayPadding:    '14px',
-    titleFontSize:     'var(--font-size-body-1)',
-    titleLineHeight:   'var(--line-height-body-1-normal)',
-    titleLetterSpacing:'var(--letter-spacing-body-1)',
-    overlayCaptionSize:'var(--font-size-label-2)',
-    overlayCaptionLH:  'var(--line-height-label-2)',
-    overlayCaptionLS:  'var(--letter-spacing-label-2)',
-    toggleIconSize:    24,
-    containerPaddingX: 'var(--spacing-6)',
+    outerGap:           'var(--spacing-8)',
+    thumbnailRatio:     '3/2',
+    overlayPadding:     'var(--spacing-14)',
+    titleFontSize:      'var(--font-size-body-1)',
+    titleLineHeight:    'var(--line-height-body-1-normal)',
+    titleLetterSpacing: 'var(--letter-spacing-body-1)',
+    overlayCaptionSize: 'var(--font-size-label-2)',
+    overlayCaptionLH:   'var(--line-height-label-2)',
+    overlayCaptionLS:   'var(--letter-spacing-label-2)',
+    toggleIconSize:     24,
+    containerPaddingX:  'var(--spacing-6)',
   },
   mobile: {
-    outerGap:          'var(--spacing-6)',
-    thumbnailRatio:    '4/3',
-    overlayPadding:    '10px',
-    titleFontSize:     'var(--font-size-body-2)',
-    titleLineHeight:   'var(--line-height-body-2-normal)',
-    titleLetterSpacing:'var(--letter-spacing-body-2)',
-    overlayCaptionSize:'var(--font-size-caption-1)',
-    overlayCaptionLH:  'var(--line-height-caption-1)',
-    overlayCaptionLS:  'var(--letter-spacing-caption-1)',
-    toggleIconSize:    20,
-    containerPaddingX: '0px',
+    outerGap:           'var(--spacing-6)',
+    thumbnailRatio:     '4/3',
+    overlayPadding:     'var(--spacing-10)',
+    titleFontSize:      'var(--font-size-body-2)',
+    titleLineHeight:    'var(--line-height-body-2-normal)',
+    titleLetterSpacing: 'var(--letter-spacing-body-2)',
+    overlayCaptionSize: 'var(--font-size-caption-1)',
+    overlayCaptionLH:   'var(--line-height-caption-1)',
+    overlayCaptionLS:   'var(--letter-spacing-caption-1)',
+    toggleIconSize:     20,
+    containerPaddingX:  0,
   },
 }
 
-export default function Card({
-  platform        = 'desktop',
-  src             = '',
-  alt             = '',
-  title           = '',
-  caption         = '',
-  extraCaption    = '',
-  thumbnailOverlay = true,
-  overlayCaption  = '',
-  saved           = false,
-  onToggleSave    = null,
-  skeleton        = false,
-  topContent      = null,
-  bottomContent   = null,
-  className       = '',
-}) {
-  const p = PLATFORM[platform] ?? PLATFORM.desktop
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
 
-  /* ── 외부 래퍼 ── */
+export default function Card({
+  platform         = 'desktop',
+  src              = '',
+  alt              = '',
+  title            = '',
+  caption          = '',
+  extraCaption     = '',
+  thumbnailOverlay = true,
+  overlayCaption   = '',
+  saved            = false,
+  onToggleSave     = null,
+  onClick          = null,
+  skeleton         = false,
+  topContent       = null,
+  bottomContent    = null,
+  className        = '',
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const p = PLATFORM[platform] ?? PLATFORM.desktop
+  const isClickable = !!onClick
+
+  const overlayOpacity = !isClickable ? 0
+    : isPressed                       ? OVERLAY_OPACITY.pressed
+    : isFocused                       ? OVERLAY_OPACITY.focused
+    : isHovered                       ? OVERLAY_OPACITY.hovered
+    : 0
+
   const outerStyle = {
     display:       'flex',
     flexDirection: 'column',
     gap:           p.outerGap,
     alignItems:    'flex-start',
     width:         '100%',
+    cursor:        isClickable ? 'pointer' : 'default',
+    outline:       'none',
   }
 
-  /* ── 썸네일 래퍼 ── */
   const thumbWrapStyle = {
-    position:     'relative',
-    width:        '100%',
-    aspectRatio:  p.thumbnailRatio,
-    borderRadius: '12px',
-    overflow:     'hidden',
-    flexShrink:   0,
+    position:        'relative',
+    width:           '100%',
+    aspectRatio:     p.thumbnailRatio,
+    borderRadius:    'var(--spacing-12)',
+    overflow:        'hidden',
+    flexShrink:      0,
     backgroundColor: 'var(--color-fill-normal)',
   }
 
   const imgStyle = {
-    position:   'absolute',
-    inset:      0,
-    width:      '100%',
-    height:     '100%',
-    objectFit:  'cover',
-    display:    'block',
+    position:  'absolute',
+    inset:     0,
+    width:     '100%',
+    height:    '100%',
+    objectFit: 'cover',
+    display:   'block',
   }
 
-  /* ── 오버레이 ── */
   const overlayStyle = {
     position:  'absolute',
     inset:     0,
-    top:       0,
-    left:      0,
-    right:     0,
     padding:   p.overlayPadding,
     display:   'flex',
     gap:       'var(--spacing-4)',
@@ -122,10 +135,10 @@ export default function Card({
   }
 
   const gradientStyle = {
-    position:   'absolute',
-    inset:      0,
-    background: 'linear-gradient(to bottom, var(--color-static-black), transparent)',
-    opacity:    0.35,
+    position:      'absolute',
+    inset:         0,
+    background:    'linear-gradient(to bottom, var(--color-static-black), transparent)',
+    opacity:       0.35,
     pointerEvents: 'none',
   }
 
@@ -140,16 +153,14 @@ export default function Card({
     minWidth:      0,
   }
 
-  /* ── 썸네일 내부 border ── */
   const thumbBorderStyle = {
-    position:     'absolute',
-    inset:        0,
-    border:       '1px solid var(--color-line-alternative)',
-    borderRadius: '12px',
-    pointerEvents:'none',
+    position:      'absolute',
+    inset:         0,
+    border:        '1px solid var(--color-line-alternative)',
+    borderRadius:  'var(--spacing-12)',
+    pointerEvents: 'none',
   }
 
-  /* ── 정보 컨테이너 ── */
   const infoStyle = {
     display:       'flex',
     flexDirection: 'column',
@@ -161,7 +172,6 @@ export default function Card({
     flexShrink:    0,
   }
 
-  /* ── 텍스트 블록 ── */
   const contentStyle = {
     display:       'flex',
     flexDirection: 'column',
@@ -189,34 +199,32 @@ export default function Card({
     width:         '100%',
   }
 
-  /* ── 스켈레톤 rect 스타일 ── */
-  const skeletonRect = (width = '100%', height = '16px') => ({
+  const skeletonRect = (width = '100%', height = 'var(--spacing-16)') => ({
     backgroundColor: 'var(--color-fill-normal)',
-    borderRadius:    '4px',
+    borderRadius:    'var(--spacing-4)',
     width,
     height,
     flexShrink:      0,
   })
 
-  /* ── 북마크 토글 ── */
   const handleSaveClick = (e) => {
     e.stopPropagation()
-    if (onToggleSave) onToggleSave()
+    onToggleSave?.()
   }
 
-  const toggleBtnStyle = {
-    display:        'flex',
-    alignItems:     'center',
-    justifyContent: 'center',
-    flexShrink:     0,
-    background:     'none',
-    border:         'none',
-    padding:        0,
-    cursor:         onToggleSave ? 'pointer' : 'default',
-  }
+  const cardEvents = isClickable ? {
+    onClick,
+    onMouseEnter: () => setIsHovered(true),
+    onMouseLeave: () => { setIsHovered(false); setIsPressed(false) },
+    onMouseDown:  () => setIsPressed(true),
+    onMouseUp:    () => setIsPressed(false),
+    onFocus:      () => setIsFocused(true),
+    onBlur:       () => { setIsFocused(false); setIsPressed(false) },
+    tabIndex:     0,
+  } : {}
 
   return (
-    <div style={outerStyle} className={className}>
+    <div style={outerStyle} className={className} {...cardEvents}>
 
       {/* ── 썸네일 영역 ── */}
       <div style={thumbWrapStyle}>
@@ -227,21 +235,28 @@ export default function Card({
         {/* 오버레이 */}
         {!skeleton && thumbnailOverlay && (
           <div style={overlayStyle}>
-            {/* 그라데이션 */}
             <div aria-hidden="true" style={gradientStyle} />
 
-            {/* 오버레이 캡션 */}
             {overlayCaption && (
               <span style={overlayCaptionStyle}>{overlayCaption}</span>
             )}
 
-            {/* 북마크 토글 아이콘 */}
             {(onToggleSave !== null || saved) && (
               <button
                 type="button"
                 aria-label={saved ? '북마크 해제' : '북마크'}
                 aria-pressed={saved}
-                style={toggleBtnStyle}
+                style={{
+                  display:        'flex',
+                  alignItems:     'center',
+                  justifyContent: 'center',
+                  flexShrink:     0,
+                  background:     'none',
+                  border:         'none',
+                  padding:        0,
+                  cursor:         onToggleSave ? 'pointer' : 'default',
+                  outline:        'none',
+                }}
                 onClick={handleSaveClick}
               >
                 <Icon
@@ -254,37 +269,46 @@ export default function Card({
           </div>
         )}
 
-        {/* 내부 테두리 */}
+        {/* 인터랙션 오버레이 (클릭 가능한 카드에만 표시) */}
+        {isClickable && (
+          <div
+            aria-hidden="true"
+            style={{
+              position:        'absolute',
+              inset:           0,
+              backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+              pointerEvents:   'none',
+              transition:      'background-color 0.15s ease',
+            }}
+          />
+        )}
+
         <div aria-hidden="true" style={thumbBorderStyle} />
       </div>
 
       {/* ── 정보 영역 ── */}
       <div style={infoStyle}>
         {topContent && (
-          <div style={{ width: '100%', flexShrink: 0 }}>
-            {topContent}
-          </div>
+          <div style={{ width: '100%', flexShrink: 0 }}>{topContent}</div>
         )}
 
         <div style={contentStyle}>
           {skeleton ? (
             <>
-              <div style={skeletonRect('70%', '20px')} />
-              <div style={skeletonRect('50%', '16px')} />
+              <div style={skeletonRect('70%', 'var(--spacing-20)')} />
+              <div style={skeletonRect('50%', 'var(--spacing-16)')} />
             </>
           ) : (
             <>
-              {title && <span style={titleStyle}>{title}</span>}
-              {caption && <span style={captionStyle}>{caption}</span>}
+              {title        && <span style={titleStyle}>{title}</span>}
+              {caption      && <span style={captionStyle}>{caption}</span>}
               {extraCaption && <span style={captionStyle}>{extraCaption}</span>}
             </>
           )}
         </div>
 
         {bottomContent && (
-          <div style={{ width: '100%', flexShrink: 0 }}>
-            {bottomContent}
-          </div>
+          <div style={{ width: '100%', flexShrink: 0 }}>{bottomContent}</div>
         )}
       </div>
     </div>

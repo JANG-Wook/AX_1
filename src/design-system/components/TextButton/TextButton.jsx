@@ -23,6 +23,7 @@
  *  <TextButton disabled label="비활성화" />
  */
 
+import { useState } from 'react'
 import Spinner from '../Spinner/Spinner'
 
 /* ── 사이즈별 스펙 ────────────────────────────────────────────── */
@@ -59,6 +60,17 @@ const COLOR_SCHEME = {
   },
 }
 
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = {
+  primary:   { hovered: 0.05, focused: 0.08, pressed: 0.12 },
+  assistive: { hovered: 0.04, focused: 0.06, pressed: 0.09 },
+}
+
+const OVERLAY_COLOR = {
+  primary:   'var(--color-primary-normal)',
+  assistive: 'var(--color-label-normal)',
+}
+
 export default function TextButton({
   color        = 'primary',
   size         = 'medium',
@@ -71,10 +83,22 @@ export default function TextButton({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
   const sz     = SIZE[size]     ?? SIZE.medium
   const scheme = COLOR_SCHEME[color] ?? COLOR_SCHEME.primary
 
   const isDisabled = disabled || loading
+
+  const opacityMap     = OVERLAY_OPACITY[color] ?? OVERLAY_OPACITY.primary
+  const overlayOpacity = isDisabled                ? 0
+    : isPressed                                    ? opacityMap.pressed
+    : isFocused                                    ? opacityMap.focused
+    : isHovered                                    ? opacityMap.hovered
+    : 0
+  const overlayColor = OVERLAY_COLOR[color] ?? OVERLAY_COLOR.primary
 
   const buttonStyle = {
     display:         'inline-flex',
@@ -110,6 +134,19 @@ export default function TextButton({
     flexShrink: 0,
   }
 
+  /* 텍스트 영역 좌우로 8px 확장된 오버레이 */
+  const overlayStyle = {
+    position:        'absolute',
+    top:             0,
+    bottom:          0,
+    left:            'calc(-1 * var(--spacing-8))',
+    right:           'calc(-1 * var(--spacing-8))',
+    backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    borderRadius:    'var(--spacing-6)',
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+  }
+
   return (
     <button
       type="button"
@@ -118,8 +155,16 @@ export default function TextButton({
       disabled={isDisabled}
       onClick={!isDisabled ? onClick : undefined}
       aria-busy={loading || undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      <div style={overlayStyle} aria-hidden="true" />
+
       {loading ? (
         <Spinner
           size={sz.spinnerSize}

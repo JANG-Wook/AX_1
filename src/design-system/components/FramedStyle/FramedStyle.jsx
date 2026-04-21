@@ -30,6 +30,10 @@
  *  </FramedStyle>
  */
 
+import { useState } from 'react'
+
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 export default function FramedStyle({
   selected  = false,
   status    = 'normal',
@@ -38,7 +42,18 @@ export default function FramedStyle({
   className = '',
   children,
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const isClickable  = !!onClick && !disabled
   const isNegative   = status === 'negative'
+
+  const overlayOpacity = !isClickable ? 0
+    : isPressed          ? OVERLAY_OPACITY.pressed
+    : isFocused          ? OVERLAY_OPACITY.focused
+    : isHovered          ? OVERLAY_OPACITY.hovered
+    : 0
   const showRing     = selected && !disabled
   const ringColor    = isNegative
     ? 'var(--color-status-negative)'
@@ -59,7 +74,8 @@ export default function FramedStyle({
     backgroundColor: disabled
       ? 'var(--color-interaction-disable)'
       : 'var(--color-bg-normal)',
-    borderRadius:    '14px',
+    borderRadius:    'var(--spacing-14)',
+    overflow:        'hidden',
     paddingTop:      'var(--spacing-4)',
     paddingBottom:   'var(--spacing-4)',
     paddingLeft:     'var(--spacing-16)',
@@ -74,7 +90,7 @@ export default function FramedStyle({
   const innerBorderStyle = {
     position:     'absolute',
     inset:        0,
-    borderRadius: '14px',
+    borderRadius: 'var(--spacing-14)',
     border:       '1px solid var(--color-line-neutral)',
     pointerEvents: 'none',
   }
@@ -82,7 +98,7 @@ export default function FramedStyle({
   const ringBaseStyle = {
     position:     'absolute',
     inset:        0,
-    borderRadius: '14px',
+    borderRadius: 'var(--spacing-14)',
     border:       '2px solid var(--color-bg-normal)',
     pointerEvents: 'none',
   }
@@ -90,7 +106,7 @@ export default function FramedStyle({
   const ringStyle = {
     position:     'absolute',
     inset:        0,
-    borderRadius: '14px',
+    borderRadius: 'var(--spacing-14)',
     border:       `2px solid ${ringColor}`,
     opacity:      0.43,
     pointerEvents: 'none',
@@ -123,8 +139,25 @@ export default function FramedStyle({
         tabIndex={onClick && !disabled ? 0 : undefined}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       >
-        {/* 드롭 섀도우는 containerStyle의 boxShadow로 처리 */}
+        {/* 인터랙션 오버레이 */}
+        <div
+          aria-hidden="true"
+          style={{
+            position:        'absolute',
+            inset:           0,
+            backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+            pointerEvents:   'none',
+            transition:      'background-color 0.15s ease',
+            zIndex:          2,
+          }}
+        />
 
         {/* 내부 테두리 */}
         <div aria-hidden="true" style={innerBorderStyle} />

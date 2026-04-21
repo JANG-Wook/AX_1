@@ -24,6 +24,31 @@ export default function TabPage() {
         marginBottom: 'var(--spacing-32)',
       }}>Tab</h2>
 
+      <Section title="인터랙션 데모" gap="var(--spacing-24)" column>
+        <Case label="항목을 클릭하거나 마우스를 올려보세요">
+          <div style={{ width: '480px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+            <Tab
+              items={[{ label: '홈' }, { label: '탐색' }, { label: '알림' }]}
+              value={t0}
+              onChange={setT0}
+              resize="fill"
+            />
+            <div style={{
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              textAlign: 'center',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+            }}>
+              선택된 탭: <strong style={{ color: 'var(--color-label-normal)' }}>
+                {['홈', '탐색', '알림'][t0]}
+              </strong>
+            </div>
+          </div>
+        </Case>
+      </Section>
+
       <Section title="Size" gap="var(--spacing-24)" column>
         <Case label='size="medium" (48px)'>
           <div style={{ width: '480px' }}>

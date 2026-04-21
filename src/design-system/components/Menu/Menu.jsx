@@ -98,6 +98,11 @@ function RadioDisabled({ active }) {
   )
 }
 
+import { useState } from 'react'
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 /* ── Leading 인디케이터 선택 ─────────────────────────────────── */
 function LeadingIndicator({ variant, active, disabled }) {
   if (variant === 'checkbox') {
@@ -113,8 +118,18 @@ function LeadingIndicator({ variant, active, disabled }) {
 
 /* ── 단일 셀 ─────────────────────────────────────────────────── */
 function MenuItem({ item, variant, cellPadding }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
   const isDisabled = !!item.disabled
   const isActive   = !!item.active
+
+  const overlayOpacity = isDisabled ? 0
+    : isPressed          ? OVERLAY_OPACITY.pressed
+    : isFocused          ? OVERLAY_OPACITY.focused
+    : isHovered          ? OVERLAY_OPACITY.hovered
+    : 0
 
   const labelColor = isDisabled
     ? 'var(--color-label-disable)'
@@ -182,7 +197,7 @@ function MenuItem({ item, variant, cellPadding }) {
   const labelStyle = {
     display:       'flex',
     alignItems:    'center',
-    minHeight:     '24px',
+    minHeight:     'var(--spacing-24)',
     width:         '100%',
     flexShrink:    0,
     position:      'relative',
@@ -224,16 +239,34 @@ function MenuItem({ item, variant, cellPadding }) {
             width:       '100%',
             textAlign:   'left',
             cursor:      isDisabled ? 'not-allowed' : 'pointer',
+            position:    'relative',
+            overflow:    'hidden',
           }}
           onClick={isDisabled ? undefined : item.onClick}
           disabled={isDisabled}
           aria-pressed={variant !== 'normal' ? isActive : undefined}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+          onMouseDown={() => setIsPressed(true)}
+          onMouseUp={() => setIsPressed(false)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => { setIsFocused(false); setIsPressed(false) }}
         >
+          <div
+            aria-hidden="true"
+            style={{
+              position:        'absolute',
+              inset:           0,
+              backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+              pointerEvents:   'none',
+              transition:      'background-color 0.15s ease',
+            }}
+          />
           <div style={containerStyle}>
             <div style={wrapperStyle}>
               {/* leading indicator (checkbox/radio) */}
               {variant !== 'normal' && (
-                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', paddingTop: '2px' }}>
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', paddingTop: 'var(--spacing-2)' }}>
                   <LeadingIndicator variant={variant} active={isActive} disabled={isDisabled} />
                 </div>
               )}

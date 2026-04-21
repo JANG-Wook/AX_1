@@ -20,6 +20,11 @@
  *  <IconButtonNormal icon={<CloseIcon />} disabled aria-label="닫기" />
  */
 
+import { useState } from 'react'
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 export default function IconButtonNormal({
   icon,
   color     = 'var(--color-label-normal)',
@@ -29,11 +34,22 @@ export default function IconButtonNormal({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = disabled    ? 0
+    : isPressed                      ? OVERLAY_OPACITY.pressed
+    : isFocused                      ? OVERLAY_OPACITY.focused
+    : isHovered                      ? OVERLAY_OPACITY.hovered
+    : 0
+
   const buttonStyle = {
     display:         'inline-flex',
     alignItems:      'center',
     justifyContent:  'center',
     position:        'relative',
+    overflow:        'hidden',
     padding:         'var(--spacing-8)',
     backgroundColor: 'transparent',
     border:          'none',
@@ -48,16 +64,23 @@ export default function IconButtonNormal({
     userSelect:      'none',
   }
 
-  /* 아이콘 영역 24×24px */
   const iconWrapStyle = {
-    display:    'flex',
-    alignItems: 'center',
-    width:      'var(--spacing-24)',
-    height:     'var(--spacing-24)',
-    flexShrink: 0,
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'center',
+    width:          'var(--spacing-24)',
+    height:         'var(--spacing-24)',
+    flexShrink:     0,
   }
 
-  /* Push Badge — 우측 상단 알림 도트 */
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+  }
+
   const badgeStyle = {
     position:        'absolute',
     top:             'var(--spacing-6)',
@@ -78,8 +101,16 @@ export default function IconButtonNormal({
       style={buttonStyle}
       disabled={disabled}
       onClick={!disabled ? onClick : undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      <div style={overlayStyle} aria-hidden="true" />
+
       <span style={iconWrapStyle} aria-hidden="true">
         {icon}
       </span>

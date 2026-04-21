@@ -15,8 +15,7 @@ const NAV = [
       { id: 'artboard',         label: 'Artboard'            },
       { id: 'breakpoint',       label: 'Breakpoint'          },
       { id: 'spacing',          label: 'Spacing'             },
-      { id: 'layoutGridColumn', label: 'Layout_Grid Column'  },
-      { id: 'layoutMaxWidth',   label: 'Layout_Max-width'    },
+      { id: 'layout',           label: 'Layout'              },
     ],
   },
   {
@@ -28,11 +27,9 @@ const NAV = [
   {
     group: 'Element',
     items: [
-      { id: 'elementRatioVertical',    label: 'Basic_Ratio_Vertical'       },
-      { id: 'elementRatioHorizontal',  label: 'Basic_Ratio_Horizontal'     },
-      { id: 'elementSafeArea',          label: 'Spacing_Safe Area'          },
-      { id: 'decorateGradient',         label: 'Decorate_Gradient'          },
-      { id: 'decorateInteraction',     label: 'Decorate_Interaction'       },
+      { id: 'basicRatio',              label: 'Basic Ratio'                },
+      { id: 'elementSafeArea',          label: 'Spacing Safe Area'          },
+      { id: 'decorate',                 label: 'Decorate'                   },
     ],
   },
   {
@@ -50,8 +47,7 @@ const NAV = [
       { id: 'textButton',        label: 'Text Button'         },
       { id: 'actionNormal',      label: 'Normal'              },
       { id: 'actionBackground',  label: 'Background'          },
-      { id: 'iconButtonOutlined',label: 'Icon Button_Outlined'},
-      { id: 'iconButtonSolid',   label: 'Icon Button_Solid'   },
+      { id: 'iconButton',        label: 'Icon Button'         },
       { id: 'chip',              label: 'Chip'                },
       { id: 'toggleIcon',        label: 'Toggle Icon'         },
     ],
@@ -119,7 +115,7 @@ const NAV = [
 
 export default function Sidebar({ activePage, onNavigate }) {
   return (
-    <nav style={{
+    <nav className="sidebar-scroll" style={{
       width:           '220px',
       flexShrink:      0,
       height:          '100vh',

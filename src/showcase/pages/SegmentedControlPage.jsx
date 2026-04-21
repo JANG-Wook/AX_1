@@ -29,6 +29,26 @@ export default function SegmentedControlPage() {
         marginBottom: 'var(--spacing-32)',
       }}>SegmentedControl</h2>
 
+      <Section title="인터랙션 데모" gap="var(--spacing-24)" column>
+        <Case label="세그먼트를 클릭하거나 마우스를 올려보세요">
+          <div style={{ width: '360px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+            <SegmentedControl variant="solid" items={ITEMS_TEXT} value={v0} onChange={setV0} />
+            <div style={{
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              textAlign: 'center',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+            }}>
+              선택된 기간: <strong style={{ color: 'var(--color-label-normal)' }}>
+                {ITEMS_TEXT[v0].label}
+              </strong>
+            </div>
+          </div>
+        </Case>
+      </Section>
+
       <Section title="Variant" gap="var(--spacing-24)" column>
         <Case label='variant="solid"'>
           <SegmentedControl variant="solid" items={ITEMS_TEXT} value={v0} onChange={setV0} />

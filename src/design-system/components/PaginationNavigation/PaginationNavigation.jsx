@@ -21,6 +21,8 @@
  *  <PaginationNavigation count={20} value={9} onChange={setPage} variant="minimize" />
  */
 
+import { useState } from 'react'
+
 /* ── 윈도우 알고리즘 ──────────────────────────────────────────
  * windowSize=9 (extended): count ≤ 11 이면 전체 표시
  * windowSize=5 (compact):  count ≤ 7  이면 전체 표시
@@ -28,7 +30,7 @@
  */
 function getVisiblePages(count, value, windowSize) {
   const total   = Math.max(1, count)
-  const current = Math.max(0, Math.min(value, total - 1)) + 1 // 1-indexed
+  const current = Math.max(0, Math.min(value, total - 1)) + 1
 
   if (total <= windowSize + 2) {
     return Array.from({ length: total }, (_, i) => ({ page: i + 1 }))
@@ -39,7 +41,7 @@ function getVisiblePages(count, value, windowSize) {
   const winEnd   = Math.min(total - 1, winStart + windowSize - 1)
 
   const items = [{ page: 1 }]
-  if (winStart > 2)      items.push({ ellipsis: true })
+  if (winStart > 2)       items.push({ ellipsis: true })
   for (let p = winStart; p <= winEnd; p++) items.push({ page: p })
   if (winEnd < total - 1) items.push({ ellipsis: true })
   items.push({ page: total })
@@ -50,86 +52,37 @@ function getVisiblePages(count, value, windowSize) {
 /* ── 인라인 SVG 아이콘 ─────────────────────────────────────── */
 function ChevronLeft({ size = 16 }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M10 3L5 8L10 13"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
 function ChevronRight({ size = 16 }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M6 3L11 8L6 13"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
-/* ── 공통 스타일 ──────────────────────────────────────────── */
-const PAGE_BTN_BASE = {
-  display:        'flex',
-  alignItems:     'center',
-  justifyContent: 'center',
-  minWidth:       '20px',
-  height:         '30px',
-  paddingTop:     'var(--spacing-4)',
-  paddingBottom:  'var(--spacing-4)',
-  background:     'none',
-  border:         'none',
-  cursor:         'pointer',
-  flexShrink:     0,
-  boxSizing:      'border-box',
-  fontSize:       'var(--font-size-body-2)',
-  lineHeight:     'var(--line-height-body-2-normal)',
-  letterSpacing:  'var(--letter-spacing-body-2)',
-  textAlign:      'center',
-  whiteSpace:     'nowrap',
-}
-
-/* ── 서브컴포넌트: 페이지 버튼 ─────────────────────────────── */
-function PageButton({ page, isActive, onClick }) {
-  return (
-    <button
-      style={{
-        ...PAGE_BTN_BASE,
-        color:      isActive ? 'var(--color-label-strong)' : 'var(--color-label-neutral)',
-        fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
-      }}
-      onClick={() => onClick?.(page - 1)}
-      aria-current={isActive ? 'page' : undefined}
-    >
-      {page}
-    </button>
-  )
-}
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
 
 /* ── 서브컴포넌트: 이전/다음 아이콘 버튼 ──────────────────── */
 function NavButton({ direction, disabled, iconSize, onClick }) {
-  const isLeft    = direction === 'left'
-  const color     = disabled
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = disabled    ? 0
+    : isPressed                      ? OVERLAY_OPACITY.pressed
+    : isFocused                      ? OVERLAY_OPACITY.focused
+    : isHovered                      ? OVERLAY_OPACITY.hovered
+    : 0
+
+  const isLeft = direction === 'left'
+  const color  = disabled
     ? 'var(--color-label-disable)'
     : 'var(--color-label-neutral)'
 
@@ -139,19 +92,36 @@ function NavButton({ direction, disabled, iconSize, onClick }) {
         display:        'flex',
         alignItems:     'center',
         justifyContent: 'center',
+        position:       'relative',
+        overflow:       'hidden',
         width:          `${iconSize}px`,
         height:         `${iconSize}px`,
         background:     'none',
         border:         'none',
+        borderRadius:   '50%',
         cursor:         disabled ? 'not-allowed' : 'pointer',
         color,
         flexShrink:     0,
         padding:        0,
+        outline:        'none',
       }}
       disabled={disabled}
       onClick={onClick}
       aria-label={isLeft ? '이전 페이지' : '다음 페이지'}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
     >
+      <div style={{
+        position:        'absolute',
+        inset:           0,
+        backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+        pointerEvents:   'none',
+        transition:      'background-color 0.15s ease',
+      }} aria-hidden="true" />
       {isLeft
         ? <ChevronLeft  size={iconSize} />
         : <ChevronRight size={iconSize} />
@@ -160,14 +130,69 @@ function NavButton({ direction, disabled, iconSize, onClick }) {
   )
 }
 
+/* ── 서브컴포넌트: 페이지 번호 버튼 ────────────────────────── */
+function PageButton({ page, isActive, onClick }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = isPressed ? OVERLAY_OPACITY.pressed
+    : isFocused                    ? OVERLAY_OPACITY.focused
+    : isHovered                    ? OVERLAY_OPACITY.hovered
+    : 0
+
+  return (
+    <button
+      style={{
+        display:        'flex',
+        alignItems:     'center',
+        justifyContent: 'center',
+        position:       'relative',
+        overflow:       'hidden',
+        minWidth:       'var(--spacing-20)',
+        height:         'calc(var(--spacing-24) + var(--spacing-6))',
+        paddingTop:     'var(--spacing-4)',
+        paddingBottom:  'var(--spacing-4)',
+        background:     'none',
+        border:         'none',
+        borderRadius:   'var(--spacing-4)',
+        cursor:         'pointer',
+        flexShrink:     0,
+        boxSizing:      'border-box',
+        fontSize:       'var(--font-size-body-2)',
+        lineHeight:     'var(--line-height-body-2-normal)',
+        letterSpacing:  'var(--letter-spacing-body-2)',
+        fontWeight:     isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-regular)',
+        color:          isActive ? 'var(--color-label-strong)' : 'var(--color-label-neutral)',
+        textAlign:      'center',
+        whiteSpace:     'nowrap',
+        outline:        'none',
+      }}
+      onClick={() => onClick?.(page - 1)}
+      aria-current={isActive ? 'page' : undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
+    >
+      <div style={{
+        position:        'absolute',
+        inset:           0,
+        backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+        pointerEvents:   'none',
+        transition:      'background-color 0.15s ease',
+      }} aria-hidden="true" />
+      {page}
+    </button>
+  )
+}
+
 /* ── 서브컴포넌트: 페이지 목록 ─────────────────────────────── */
 function PageList({ items, currentPage, onPageClick }) {
   return (
-    <div style={{
-      display:    'flex',
-      alignItems: 'center',
-      gap:        'var(--spacing-16)',
-    }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-16)' }}>
       {items.map((item, i) =>
         item.ellipsis
           ? (
@@ -208,25 +233,21 @@ export default function PaginationNavigation({
   trailingContent,
   className       = '',
 }) {
-  const total      = Math.max(1, count)
-  const current    = Math.max(0, Math.min(value, total - 1))
-  const currentPage = current + 1 // 1-indexed for display
+  const total       = Math.max(1, count)
+  const current     = Math.max(0, Math.min(value, total - 1))
+  const currentPage = current + 1
 
   const isFirst = current === 0
   const isLast  = current === total - 1
 
-  const goPrev  = () => !isFirst && onChange?.(current - 1)
-  const goNext  = () => !isLast  && onChange?.(current + 1)
+  const goPrev = () => !isFirst && onChange?.(current - 1)
+  const goNext = () => !isLast  && onChange?.(current + 1)
 
   /* ── Minimize ─────────────────────────────────────────────── */
   if (variant === 'minimize') {
     return (
       <div
-        style={{
-          display:    'inline-flex',
-          alignItems: 'center',
-          gap:        'var(--spacing-12)',
-        }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-12)' }}
         className={className}
       >
         <NavButton direction="left"  disabled={isFirst} iconSize={16} onClick={goPrev} />
@@ -255,7 +276,7 @@ export default function PaginationNavigation({
       display:    'inline-flex',
       alignItems: 'center',
       gap:        'var(--spacing-4)',
-      minHeight:  '32px',
+      minHeight:  'var(--spacing-32)',
     }}>
       <NavButton direction="left"  disabled={isFirst} iconSize={iconSize} onClick={goPrev} />
       <PageList items={items} currentPage={currentPage} onPageClick={onChange} />
@@ -267,11 +288,7 @@ export default function PaginationNavigation({
   if (variant === 'compact') {
     return (
       <div
-        style={{
-          display:        'flex',
-          alignItems:     'center',
-          justifyContent: 'center',
-        }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         className={className}
       >
         {pagesAndNav}
@@ -292,14 +309,7 @@ export default function PaginationNavigation({
       className={className}
     >
       {leadingContent && (
-        <div style={{
-          position: 'absolute',
-          left:     0,
-          top:      0,
-          bottom:   0,
-          display:  'flex',
-          alignItems: 'center',
-        }}>
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center' }}>
           {leadingContent}
         </div>
       )}
@@ -307,14 +317,7 @@ export default function PaginationNavigation({
       {pagesAndNav}
 
       {trailingContent && (
-        <div style={{
-          position: 'absolute',
-          right:    0,
-          top:      0,
-          bottom:   0,
-          display:  'flex',
-          alignItems: 'center',
-        }}>
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, display: 'flex', alignItems: 'center' }}>
           {trailingContent}
         </div>
       )}

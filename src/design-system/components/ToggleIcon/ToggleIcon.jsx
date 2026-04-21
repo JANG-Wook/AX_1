@@ -27,6 +27,11 @@
  *  <ToggleIcon icon={<StarIcon />} active color="var(--color-label-normal)" aria-label="즐겨찾기" />
  */
 
+import { useState } from 'react'
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 export default function ToggleIcon({
   icon,
   activeIcon  = null,
@@ -38,6 +43,19 @@ export default function ToggleIcon({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = disabled    ? 0
+    : isPressed                      ? OVERLAY_OPACITY.pressed
+    : isFocused                      ? OVERLAY_OPACITY.focused
+    : isHovered                      ? OVERLAY_OPACITY.hovered
+    : 0
+  const overlayColor = active
+    ? 'var(--color-primary-normal)'
+    : 'var(--color-label-normal)'
+
   const currentColor = active ? activeColor : color
   const currentIcon  = (active && activeIcon) ? activeIcon : icon
 
@@ -45,6 +63,8 @@ export default function ToggleIcon({
     display:         'inline-flex',
     alignItems:      'center',
     justifyContent:  'center',
+    position:        'relative',
+    overflow:        'hidden',
     padding:         'var(--spacing-4)',
     backgroundColor: 'transparent',
     border:          'none',
@@ -57,6 +77,14 @@ export default function ToggleIcon({
     transition:      'color 0.15s ease, opacity 0.15s ease',
     outline:         'none',
     userSelect:      'none',
+  }
+
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
   }
 
   const iconWrapStyle = {
@@ -75,8 +103,16 @@ export default function ToggleIcon({
       disabled={disabled}
       onClick={!disabled ? onClick : undefined}
       aria-pressed={active}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      <div style={overlayStyle} aria-hidden="true" />
+
       <span style={iconWrapStyle} aria-hidden="true">
         {currentIcon}
       </span>

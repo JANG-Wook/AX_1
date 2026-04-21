@@ -29,7 +29,10 @@
  *  <ListCell label="비활성" disabled />
  */
 
+import { useState } from 'react'
 import Icon from '../Icon/Icon'
+
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
 
 const PADDING_Y = {
   none:   0,
@@ -53,7 +56,17 @@ export default function ListCell({
   onClick         = null,
   className       = '',
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
   const isClickable  = !!onClick && !disabled
+  const overlayOpacity = !isClickable ? 0
+    : isPressed                       ? OVERLAY_OPACITY.pressed
+    : isFocused                       ? OVERLAY_OPACITY.focused
+    : isHovered                       ? OVERLAY_OPACITY.hovered
+    : 0
+
   const alignItems   = verticalAlign === 'center' ? 'center' : 'flex-start'
   const paddingY     = PADDING_Y[verticalPadding] ?? PADDING_Y.medium
 
@@ -88,6 +101,7 @@ export default function ListCell({
     paddingTop:      paddingY,
     paddingBottom:   paddingY,
     position:        'relative',
+    overflow:        'hidden',
     opacity:         disabled ? 0.43 : 1,
     cursor:          disabled ? 'not-allowed' : (isClickable ? 'pointer' : 'default'),
     userSelect:      'none',
@@ -124,7 +138,7 @@ export default function ListCell({
     lineHeight:    'var(--line-height-body-1-normal)',
     letterSpacing: 'var(--letter-spacing-body-1)',
     color:         labelColor,
-    minHeight:     '24px',
+    minHeight:     'var(--spacing-24)',
     display:       'flex',
     alignItems:    'center',
     width:         '100%',
@@ -201,7 +215,23 @@ export default function ListCell({
         tabIndex={isClickable ? 0 : undefined}
         onClick={handleClick}
         onKeyDown={isClickable ? handleKeyDown : undefined}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       >
+        <div
+          aria-hidden="true"
+          style={{
+            position:        'absolute',
+            inset:           0,
+            backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+            pointerEvents:   'none',
+            transition:      'background-color 0.15s ease',
+          }}
+        />
         <div style={innerWrapStyle}>
           {/* 좌측 슬롯 */}
           {leadingContent && (

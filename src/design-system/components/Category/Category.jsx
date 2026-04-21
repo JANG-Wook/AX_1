@@ -24,11 +24,137 @@
  *  <Category items={tabs} value={tab} onChange={setTab} scroll horizontalPadding />
  */
 
+import { useState } from 'react'
+
 const CHIP_PADDING_Y = {
-  small:  '2px',
-  medium: '6px',
-  large:  '8px',
-  xlarge: '10px',
+  small:  'var(--spacing-2)',
+  medium: 'var(--spacing-6)',
+  large:  'var(--spacing-8)',
+  xlarge: 'var(--spacing-10)',
+}
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
+function ChipItem({ label, icon, isActive, isAlternative, paddingY, onClick }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = isPressed ? OVERLAY_OPACITY.pressed
+    : isFocused                    ? OVERLAY_OPACITY.focused
+    : isHovered                    ? OVERLAY_OPACITY.hovered
+    : 0
+  const overlayColor = (isActive && isAlternative)
+    ? 'var(--color-primary-normal)'
+    : 'var(--color-label-normal)'
+
+  const chipStyle = {
+    position:      'relative',
+    overflow:      'hidden',
+    display:       'flex',
+    alignItems:    'center',
+    gap:           'var(--spacing-2)',
+    paddingTop:    paddingY,
+    paddingBottom: paddingY,
+    paddingLeft:   'var(--spacing-8)',
+    paddingRight:  'var(--spacing-8)',
+    borderRadius:  'var(--spacing-8)',
+    flexShrink:    0,
+    cursor:        onClick ? 'pointer' : 'default',
+    background:    'none',
+    border:        'none',
+    boxSizing:     'border-box',
+    userSelect:    'none',
+    outline:       'none',
+    WebkitTapHighlightColor: 'transparent',
+  }
+
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+    zIndex:          2,
+  }
+
+  const labelStyle = {
+    fontSize:      'var(--font-size-label-1)',
+    lineHeight:    'var(--line-height-label-1-normal)',
+    fontWeight:    'var(--font-weight-medium)',
+    letterSpacing: 'var(--letter-spacing-label-1)',
+    whiteSpace:    'nowrap',
+    position:      'relative',
+    zIndex:        1,
+    color: isActive
+      ? (isAlternative ? 'var(--color-primary-normal)' : 'var(--color-inverse-label)')
+      : 'var(--color-label-alternative)',
+  }
+
+  return (
+    <button
+      style={chipStyle}
+      onClick={onClick}
+      aria-pressed={isActive}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
+    >
+      {/* 활성 배경 레이어 */}
+      {isActive && !isAlternative && (
+        <div style={{
+          position:        'absolute',
+          inset:           0,
+          borderRadius:    'var(--spacing-8)',
+          backgroundColor: 'var(--color-label-strong)',
+        }} aria-hidden="true" />
+      )}
+      {isActive && isAlternative && (
+        <>
+          <div style={{
+            position:        'absolute',
+            inset:           0,
+            borderRadius:    'var(--spacing-8)',
+            backgroundColor: 'var(--color-primary-normal)',
+            opacity:         0.05,
+          }} aria-hidden="true" />
+          <div style={{
+            position:     'absolute',
+            inset:        0,
+            borderRadius: 'var(--spacing-8)',
+            border:       '1px solid var(--color-primary-normal)',
+            opacity:      0.43,
+            boxSizing:    'border-box',
+          }} aria-hidden="true" />
+        </>
+      )}
+
+      {/* 비활성 테두리 */}
+      {!isActive && (
+        <div style={{
+          position:     'absolute',
+          inset:        0,
+          borderRadius: 'var(--spacing-8)',
+          border:       '1px solid var(--color-line-neutral)',
+          boxSizing:    'border-box',
+        }} aria-hidden="true" />
+      )}
+
+      {/* 인터랙션 오버레이 */}
+      <div style={overlayStyle} aria-hidden="true" />
+
+      {icon && (
+        <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0, position: 'relative', zIndex: 1 }}>
+          {icon}
+        </span>
+      )}
+      <span style={labelStyle}>{label}</span>
+    </button>
+  )
 }
 
 export default function Category({
@@ -44,58 +170,55 @@ export default function Category({
   className         = '',
 }) {
   const isAlternative = variant === 'alternative'
-  const paddingY      = CHIP_PADDING_Y[size] ?? '6px'
+  const paddingY      = CHIP_PADDING_Y[size] ?? 'var(--spacing-6)'
 
   const outerStyle = {
-    display:     'flex',
+    display:       'flex',
     flexDirection: 'row',
-    alignItems:  'center',
-    overflow:    'hidden',
-    width:       '100%',
-    paddingLeft:  horizontalPadding ? 'var(--spacing-20)' : undefined,
-    paddingRight: horizontalPadding ? 'var(--spacing-20)' : undefined,
-    boxSizing:   'border-box',
-    gap:         'var(--spacing-20)',
+    alignItems:    'center',
+    overflow:      'hidden',
+    width:         '100%',
+    paddingLeft:   horizontalPadding ? 'var(--spacing-20)' : undefined,
+    paddingRight:  horizontalPadding ? 'var(--spacing-20)' : undefined,
+    boxSizing:     'border-box',
+    gap:           'var(--spacing-20)',
   }
 
   const leadingStyle = {
-    display:    'flex',
+    display:       'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    flex:       '1 0 0',
-    minWidth:   0,
-    overflowX:  scroll ? 'auto' : 'hidden',
-    overflowY:  'hidden',
+    alignItems:    'center',
+    flex:          '1 0 0',
+    minWidth:      0,
+    overflowX:     scroll ? 'auto' : 'hidden',
+    overflowY:     'hidden',
   }
 
   const wrapperStyle = {
-    display:    'flex',
+    display:       'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    gap:        'var(--spacing-6)',
-    flexShrink: 0,
-    paddingTop:    verticalPadding ? '8px' : undefined,
-    paddingBottom: verticalPadding ? '8px' : undefined,
+    alignItems:    'center',
+    gap:           'var(--spacing-6)',
+    flexShrink:    0,
+    paddingTop:    verticalPadding ? 'var(--spacing-8)' : undefined,
+    paddingBottom: verticalPadding ? 'var(--spacing-8)' : undefined,
   }
 
   return (
     <div style={outerStyle} className={className}>
       <div style={leadingStyle}>
         <div style={wrapperStyle}>
-          {items.map((item, index) => {
-            const isActive = index === value
-            return (
-              <ChipItem
-                key={index}
-                label={item.label}
-                icon={item.icon}
-                isActive={isActive}
-                isAlternative={isAlternative}
-                paddingY={paddingY}
-                onClick={() => onChange?.(index)}
-              />
-            )
-          })}
+          {items.map((item, index) => (
+            <ChipItem
+              key={index}
+              label={item.label}
+              icon={item.icon}
+              isActive={index === value}
+              isAlternative={isAlternative}
+              paddingY={paddingY}
+              onClick={() => onChange?.(index)}
+            />
+          ))}
         </div>
       </div>
 
@@ -105,89 +228,5 @@ export default function Category({
         </div>
       )}
     </div>
-  )
-}
-
-function ChipItem({ label, icon, isActive, isAlternative, paddingY, onClick }) {
-  const chipStyle = {
-    position:   'relative',
-    display:    'flex',
-    alignItems: 'center',
-    gap:        'var(--spacing-2)',
-    paddingTop:    paddingY,
-    paddingBottom: paddingY,
-    paddingLeft:   'var(--spacing-8)',
-    paddingRight:  'var(--spacing-8)',
-    borderRadius:  '8px',
-    flexShrink:    0,
-    cursor:        onClick ? 'pointer' : 'default',
-    background:    'none',
-    border:        'none',
-    boxSizing:     'border-box',
-    userSelect:    'none',
-    WebkitTapHighlightColor: 'transparent',
-  }
-
-  const labelStyle = {
-    fontSize:      'var(--font-size-label-1)',
-    lineHeight:    'var(--line-height-label-1-normal)',
-    fontWeight:    'var(--font-weight-medium)',
-    letterSpacing: 'var(--letter-spacing-label-1)',
-    whiteSpace:    'nowrap',
-    position:      'relative',
-    color: isActive
-      ? (isAlternative ? 'var(--color-primary-normal)' : 'var(--color-inverse-label)')
-      : 'var(--color-label-alternative)',
-  }
-
-  return (
-    <button style={chipStyle} onClick={onClick} aria-pressed={isActive}>
-      {/* 활성 배경 레이어 */}
-      {isActive && !isAlternative && (
-        <div style={{
-          position:        'absolute',
-          inset:           0,
-          borderRadius:    '8px',
-          backgroundColor: 'var(--color-label-strong)',
-        }} aria-hidden="true" />
-      )}
-      {isActive && isAlternative && (
-        <>
-          <div style={{
-            position:        'absolute',
-            inset:           0,
-            borderRadius:    '8px',
-            backgroundColor: 'var(--color-primary-normal)',
-            opacity:         0.05,
-          }} aria-hidden="true" />
-          <div style={{
-            position:     'absolute',
-            inset:        0,
-            borderRadius: '8px',
-            border:       '1px solid var(--color-primary-normal)',
-            opacity:      0.43,
-            boxSizing:    'border-box',
-          }} aria-hidden="true" />
-        </>
-      )}
-
-      {/* 비활성 테두리 */}
-      {!isActive && (
-        <div style={{
-          position:     'absolute',
-          inset:        0,
-          borderRadius: '8px',
-          border:       '1px solid var(--color-line-neutral)',
-          boxSizing:    'border-box',
-        }} aria-hidden="true" />
-      )}
-
-      {icon && (
-        <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0, position: 'relative' }}>
-          {icon}
-        </span>
-      )}
-      <span style={labelStyle}>{label}</span>
-    </button>
   )
 }

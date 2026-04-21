@@ -23,6 +23,8 @@
  *  <Chip label="비활성" disabled />
  */
 
+import { useState } from 'react'
+
 /* ── 사이즈 스펙 ─────────────────────────────────────────────── */
 const SIZE = {
   xsmall: {
@@ -103,6 +105,14 @@ function getColorScheme(variant, active) {
   }
 }
 
+/* ── 인터랙션 오버레이 색 (variant × active) ─────────────────── */
+function getOverlayColor(variant, active) {
+  if (variant === 'outlined' && active) return 'var(--color-primary-normal)'
+  return 'var(--color-label-normal)'
+}
+
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 export default function Chip({
   variant        = 'outlined',
   size           = 'medium',
@@ -115,6 +125,17 @@ export default function Chip({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = disabled    ? 0
+    : isPressed                      ? OVERLAY_OPACITY.pressed
+    : isFocused                      ? OVERLAY_OPACITY.focused
+    : isHovered                      ? OVERLAY_OPACITY.hovered
+    : 0
+  const overlayColor = getOverlayColor(variant, active)
+
   const sz     = SIZE[size] ?? SIZE.medium
   const scheme = getColorScheme(variant, active)
 
@@ -124,6 +145,7 @@ export default function Chip({
     justifyContent:  'center',
     gap:             sz.gap,
     position:        'relative',
+    overflow:        'hidden',
     paddingTop:      sz.paddingTop,
     paddingBottom:   sz.paddingBottom,
     paddingLeft:     sz.paddingLeft,
@@ -143,7 +165,14 @@ export default function Chip({
     outline:         'none',
     fontFamily:      'inherit',
     transition:      'opacity 0.15s ease',
-    overflow:        'hidden',
+  }
+
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
   }
 
   const iconWrapStyle = {
@@ -162,8 +191,16 @@ export default function Chip({
       disabled={disabled}
       onClick={!disabled ? onClick : undefined}
       aria-pressed={active}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      <div style={overlayStyle} aria-hidden="true" />
+
       {leadingContent && (
         <span style={iconWrapStyle} aria-hidden="true">
           {leadingContent}

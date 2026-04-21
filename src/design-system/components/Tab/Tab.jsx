@@ -21,10 +21,105 @@
  *  <Tab items={tabs} value={tab} onChange={setTab} horizontalPadding trailingContent={<Icon />} />
  */
 
+import { useState } from 'react'
+
 const SIZE_HEIGHT = {
   small:  40,
   medium: 48,
   large:  56,
+}
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
+/* ── 개별 탭 아이템 (독립적인 인터랙션 상태) ─────────────────── */
+function TabItem({ item, isActive, resize, onChange }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = isPressed ? OVERLAY_OPACITY.pressed
+    : isFocused                    ? OVERLAY_OPACITY.focused
+    : isHovered                    ? OVERLAY_OPACITY.hovered
+    : 0
+
+  const tabStyle = {
+    position:       'relative',
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'center',
+    gap:            'var(--spacing-4)',
+    height:         '100%',
+    minWidth:       'var(--spacing-32)',
+    flex:           resize === 'fill' ? 1 : undefined,
+    cursor:         onChange ? 'pointer' : 'default',
+    background:     'none',
+    border:         'none',
+    padding:        `var(--spacing-12) var(--spacing-8)`,
+    boxSizing:      'border-box',
+    userSelect:     'none',
+    outline:        'none',
+    WebkitTapHighlightColor: 'transparent',
+  }
+
+  const overlayStyle = {
+    position:        'absolute',
+    top:             'var(--spacing-6)',
+    bottom:          'var(--spacing-6)',
+    left:            0,
+    right:           0,
+    backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    borderRadius:    'var(--spacing-6)',
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+  }
+
+  const labelStyle = {
+    fontSize:      'var(--font-size-headline-2)',
+    lineHeight:    'var(--line-height-headline-2)',
+    fontWeight:    'var(--font-weight-semibold)',
+    letterSpacing: 'var(--letter-spacing-headline-2)',
+    color:         isActive
+      ? 'var(--color-label-strong)'
+      : 'var(--color-label-assistive)',
+    whiteSpace:    'nowrap',
+  }
+
+  const indicatorStyle = {
+    position:        'absolute',
+    left:            0,
+    right:           0,
+    bottom:          0,
+    height:          '2px',
+    backgroundColor: 'var(--color-label-strong)',
+    zIndex:          1,
+  }
+
+  return (
+    <button
+      role="tab"
+      aria-selected={isActive}
+      style={tabStyle}
+      onClick={() => onChange?.(item._index)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
+    >
+      <div style={overlayStyle} aria-hidden="true" />
+
+      {item.icon && (
+        <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0, position: 'relative' }}>
+          {item.icon}
+        </span>
+      )}
+      <span style={{ ...labelStyle, position: 'relative' }}>{item.label}</span>
+
+      {isActive && <div style={indicatorStyle} aria-hidden="true" />}
+    </button>
+  )
 }
 
 export default function Tab({
@@ -40,34 +135,34 @@ export default function Tab({
   const height = SIZE_HEIGHT[size] ?? 48
 
   const outerStyle = {
-    position:   'relative',
-    display:    'flex',
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    width:      '100%',
-    height:     `${height}px`,
-    overflow:   'hidden',
+    position:     'relative',
+    display:      'flex',
+    flexDirection:'row',
+    alignItems:   'stretch',
+    width:        '100%',
+    height:       `${height}px`,
+    overflow:     'hidden',
     paddingLeft:  horizontalPadding ? 'var(--spacing-16)' : undefined,
     paddingRight: horizontalPadding ? 'var(--spacing-16)' : undefined,
-    boxSizing:  'border-box',
+    boxSizing:    'border-box',
   }
 
   const dividerStyle = {
-    position:     'absolute',
-    left:         0,
-    right:        0,
-    bottom:       0,
-    height:       '1px',
+    position:        'absolute',
+    left:            0,
+    right:           0,
+    bottom:          0,
+    height:          '1px',
     backgroundColor: 'var(--color-line-alternative)',
   }
 
   const listStyle = {
-    display:    'flex',
+    display:       'flex',
     flexDirection: 'row',
-    alignItems: 'stretch',
-    flex:       1,
-    minWidth:   0,
-    gap:        resize === 'fill' ? 0 : '24px',
+    alignItems:    'stretch',
+    flex:          1,
+    minWidth:      0,
+    gap:           resize === 'fill' ? 0 : 'var(--spacing-24)',
   }
 
   return (
@@ -75,68 +170,15 @@ export default function Tab({
       <div style={dividerStyle} aria-hidden="true" />
 
       <div style={listStyle}>
-        {items.map((item, index) => {
-          const isActive = index === value
-
-          const tabStyle = {
-            position:      'relative',
-            display:       'flex',
-            alignItems:    'center',
-            justifyContent: 'center',
-            gap:           'var(--spacing-4)',
-            height:        '100%',
-            minWidth:      '32px',
-            paddingTop:    'var(--spacing-12)',
-            paddingBottom: 'var(--spacing-12)',
-            flex:          resize === 'fill' ? 1 : undefined,
-            cursor:        onChange ? 'pointer' : 'default',
-            background:    'none',
-            border:        'none',
-            padding:       `var(--spacing-12) 0`,
-            boxSizing:     'border-box',
-            userSelect:    'none',
-            WebkitTapHighlightColor: 'transparent',
-          }
-
-          const labelStyle = {
-            fontSize:      'var(--font-size-headline-2)',
-            lineHeight:    'var(--line-height-headline-2)',
-            fontWeight:    'var(--font-weight-semibold)',
-            letterSpacing: 'var(--letter-spacing-headline-2)',
-            color:         isActive
-              ? 'var(--color-label-strong)'
-              : 'var(--color-label-assistive)',
-            whiteSpace:    'nowrap',
-          }
-
-          const indicatorStyle = {
-            position:        'absolute',
-            left:            0,
-            right:           0,
-            bottom:          0,
-            height:          '2px',
-            backgroundColor: 'var(--color-label-strong)',
-            zIndex:          1,
-          }
-
-          return (
-            <button
-              key={index}
-              role="tab"
-              aria-selected={isActive}
-              style={tabStyle}
-              onClick={() => onChange?.(index)}
-            >
-              {item.icon && (
-                <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                  {item.icon}
-                </span>
-              )}
-              <span style={labelStyle}>{item.label}</span>
-              {isActive && <div style={indicatorStyle} aria-hidden="true" />}
-            </button>
-          )
-        })}
+        {items.map((item, index) => (
+          <TabItem
+            key={index}
+            item={{ ...item, _index: index }}
+            isActive={index === value}
+            resize={resize}
+            onChange={onChange}
+          />
+        ))}
       </div>
 
       {trailingContent && (

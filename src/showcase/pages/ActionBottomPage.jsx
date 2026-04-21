@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import Section from '../Section'
+import Button from '../../design-system/components/Button/Button'
 
 /* ── 공통 버튼 스타일 ──────────────────────────────────────────── */
 const BTN = {
@@ -151,6 +153,8 @@ function SubLabel({ children }) {
    페이지
 ───────────────────────────────────────────────────────────────── */
 export default function ActionBottomPage() {
+  const [clicked, setClicked] = useState(0)
+
   return (
     <div>
       <h2 style={{
@@ -167,6 +171,32 @@ export default function ActionBottomPage() {
         color:        'var(--color-label-alternative)',
         marginBottom: 'var(--spacing-32)',
       }}>화면 하단에 고정되는 주요 액션 영역입니다.</p>
+
+      {/* ──────────────── 인터랙션 데모 ──────────────── */}
+      <Section title="인터랙션 데모">
+        <div style={CARD}>
+          <SubLabel>버튼에 마우스를 올리거나 클릭해보세요</SubLabel>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginTop: 'var(--spacing-16)' }}>
+            <MockFrame label="Strong — Main + Alternative">
+              <ActionArea>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+                  <Button variant="solid"    color="primary" label="메인 액션" size="large" onClick={() => setClicked(c => c + 1)} />
+                  <Button variant="outlined" color="primary" label="대체 액션" size="large" onClick={() => setClicked(c => c + 1)} />
+                </div>
+              </ActionArea>
+            </MockFrame>
+            <MockFrame label="Neutral — Alt + Main">
+              <ActionArea compact>
+                <Button variant="outlined" color="assistive" label="대체" size="large" onClick={() => setClicked(c => c + 1)} />
+                <Button variant="solid"    color="primary"   label="메인" size="large" onClick={() => setClicked(c => c + 1)} />
+              </ActionArea>
+            </MockFrame>
+          </div>
+          <div style={{ marginTop: 'var(--spacing-16)', fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-alternative)' }}>
+            총 클릭: <strong style={{ color: 'var(--color-label-normal)' }}>{clicked}회</strong>
+          </div>
+        </div>
+      </Section>
 
       {/* ──────────────── 1. extra & divider ──────────────── */}
       <Section title="extra">
@@ -242,9 +272,10 @@ export default function ActionBottomPage() {
           <SubLabel>variant = Neutral</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
 
-            <MockFrame label="Alt + Main">
+            <MockFrame label="Sub + Alt + Main">
               <ActionArea>
                 <div style={{ display: 'flex', gap: 'var(--spacing-12)' }}>
+                  <div style={{ ...BTN_NEUTRAL }}>보조</div>
                   <div style={{ ...BTN_OUTLINED, flex: 1 }}>대체</div>
                   <div style={{ ...BTN_SOLID, flex: 1 }}>메인</div>
                 </div>
@@ -260,10 +291,9 @@ export default function ActionBottomPage() {
               </ActionArea>
             </MockFrame>
 
-            <MockFrame label="Sub + Alt + Main">
+            <MockFrame label="Alt + Main">
               <ActionArea>
                 <div style={{ display: 'flex', gap: 'var(--spacing-12)' }}>
-                  <div style={{ ...BTN_NEUTRAL }}>보조</div>
                   <div style={{ ...BTN_OUTLINED, flex: 1 }}>대체</div>
                   <div style={{ ...BTN_SOLID, flex: 1 }}>메인</div>
                 </div>
@@ -276,8 +306,9 @@ export default function ActionBottomPage() {
           <SubLabel>variant = Compact (Web Only)</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
 
-            <MockFrame label="Alt + Main" width={375}>
+            <MockFrame label="Sub + Alt + Main" width={375}>
               <ActionArea compact>
+                <div style={{ ...BTN_NEUTRAL }}>보조</div>
                 <div style={{ ...BTN_OUTLINED }}>대체</div>
                 <div style={{ ...BTN_SOLID }}>메인</div>
               </ActionArea>
@@ -290,9 +321,8 @@ export default function ActionBottomPage() {
               </ActionArea>
             </MockFrame>
 
-            <MockFrame label="Sub + Alt + Main" width={375}>
+            <MockFrame label="Alt + Main" width={375}>
               <ActionArea compact>
-                <div style={{ ...BTN_NEUTRAL }}>보조</div>
                 <div style={{ ...BTN_OUTLINED }}>대체</div>
                 <div style={{ ...BTN_SOLID }}>메인</div>
               </ActionArea>
@@ -479,7 +509,209 @@ export default function ActionBottomPage() {
         </div>
       </Section>
 
-      {/* ──────────────── 6. safeArea ──────────────── */}
+      {/* ──────────────── 6. resource ──────────────── */}
+      <Section title="resource">
+        <div style={CARD}>
+
+          {/* ── extra 슬롯 프리셋 ── */}
+          <SubLabel>extra 슬롯 콘텐츠 프리셋</SubLabel>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
+
+            <MockFrame label="Custom">
+              <div>
+                <div style={{ margin: `var(--spacing-20) var(--spacing-20) 0` }}>
+                  <div style={{ height: 'calc(var(--spacing-48) + var(--spacing-24))', backgroundColor: 'var(--color-accent-bg-violet)', opacity: 0.08 }} />
+                </div>
+                <ActionArea>
+                  <div style={{ ...BTN_SOLID, width: '100%' }}>메인 액션</div>
+                </ActionArea>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Summary">
+              <div>
+                <div style={{ margin: `var(--spacing-20) var(--spacing-20) 0`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 'var(--font-size-body-1)', lineHeight: 'var(--line-height-body-1-normal)', color: 'var(--color-label-alternative)' }}>요약</span>
+                  <span style={{ fontSize: 'var(--font-size-heading-2)', lineHeight: 'var(--line-height-heading-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>값</span>
+                </div>
+                <ActionArea>
+                  <div style={{ ...BTN_SOLID, width: '100%' }}>메인 액션</div>
+                </ActionArea>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Information">
+              <div>
+                <div style={{ margin: `var(--spacing-20) var(--spacing-20) 0`, textAlign: 'center' }}>
+                  <p style={{ fontSize: 'var(--font-size-headline-2)', lineHeight: 'var(--line-height-headline-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)', marginBottom: 'var(--spacing-4)' }}>헤딩</p>
+                  <p style={{ fontSize: 'var(--font-size-label-1)', lineHeight: 'var(--line-height-label-1-normal)', color: 'var(--color-label-alternative)' }}>필요한 경우 설명을 덧붙입니다.</p>
+                </div>
+                <ActionArea>
+                  <div style={{ ...BTN_SOLID, width: '100%' }}>메인 액션</div>
+                </ActionArea>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Checkbox">
+              <div>
+                <div style={{ margin: `var(--spacing-20) var(--spacing-20) 0`, display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+                  <span style={{
+                    display:        'inline-flex',
+                    alignItems:     'center',
+                    justifyContent: 'center',
+                    width:          'var(--spacing-24)',
+                    height:         'var(--spacing-24)',
+                    border:         '2px solid var(--color-primary-normal)',
+                    borderRadius:   'var(--spacing-6)',
+                    flexShrink:     0,
+                  }}>
+                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                      <path d="M1 4L4.5 7.5L11 1" stroke="var(--color-primary-normal)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  <span style={{ fontSize: 'var(--font-size-body-1)', lineHeight: 'var(--line-height-body-1-normal)', color: 'var(--color-label-normal)' }}>텍스트</span>
+                </div>
+                <ActionArea>
+                  <div style={{ ...BTN_SOLID, width: '100%' }}>메인 액션</div>
+                </ActionArea>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Chip">
+              <div>
+                <div style={{ margin: `var(--spacing-20) var(--spacing-20) 0`, display: 'flex', gap: 'var(--spacing-6)' }}>
+                  {['텍스트', '텍스트', '텍스트'].map((t, i) => (
+                    <span key={i} style={{
+                      display:         'inline-flex',
+                      alignItems:      'center',
+                      padding:         `var(--spacing-8) var(--spacing-10)`,
+                      borderRadius:    'var(--spacing-10)',
+                      backgroundColor: 'var(--color-fill-alternative)',
+                      fontSize:        'var(--font-size-body-2)',
+                      lineHeight:      'var(--line-height-body-2-normal)',
+                      color:           'var(--color-label-alternative)',
+                      whiteSpace:      'nowrap',
+                      flexShrink:      0,
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <ActionArea>
+                  <div style={{ ...BTN_SOLID, width: '100%' }}>메인 액션</div>
+                </ActionArea>
+              </div>
+            </MockFrame>
+
+          </div>
+
+          {/* ── compactContent 슬롯 프리셋 ── */}
+          <SubLabel>compactContent 슬롯 콘텐츠 프리셋 (Compact variant)</SubLabel>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)' }}>
+
+            <MockFrame label="Custom" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1, height: 'var(--spacing-48)', backgroundColor: 'var(--color-accent-bg-violet)', opacity: 0.08 }} />
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인</div>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Summary" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 'var(--font-size-label-2)', lineHeight: 'var(--line-height-label-2)', color: 'var(--color-label-alternative)', marginBottom: 'var(--spacing-2)' }}>요약</p>
+                  <p style={{ fontSize: 'var(--font-size-body-2)', lineHeight: 'var(--line-height-body-2-normal)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>값</p>
+                </div>
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인</div>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Information" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 'var(--font-size-body-2)', lineHeight: 'var(--line-height-body-2-normal)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)', marginBottom: 'var(--spacing-2)' }}>헤딩</p>
+                  <p style={{ fontSize: 'var(--font-size-label-2)', lineHeight: 'var(--line-height-label-2)', color: 'var(--color-label-alternative)' }}>필요한 경우 설명을 덧붙입니다.</p>
+                </div>
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인</div>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Checkbox" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+                  <span style={{
+                    display:        'inline-flex',
+                    alignItems:     'center',
+                    justifyContent: 'center',
+                    width:          'var(--spacing-24)',
+                    height:         'var(--spacing-24)',
+                    border:         '2px solid var(--color-primary-normal)',
+                    borderRadius:   'var(--spacing-6)',
+                    flexShrink:     0,
+                  }}>
+                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                      <path d="M1 4L4.5 7.5L11 1" stroke="var(--color-primary-normal)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  <span style={{ fontSize: 'var(--font-size-body-1)', lineHeight: 'var(--line-height-body-1-normal)', color: 'var(--color-label-normal)' }}>텍스트</span>
+                </div>
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인</div>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Chip" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1, display: 'flex', gap: 'var(--spacing-6)', overflow: 'hidden' }}>
+                  {['텍스트', '텍스트', '텍스트'].map((t, i) => (
+                    <span key={i} style={{
+                      display:         'inline-flex',
+                      alignItems:      'center',
+                      padding:         `var(--spacing-8) var(--spacing-10)`,
+                      borderRadius:    'var(--spacing-10)',
+                      backgroundColor: 'var(--color-fill-alternative)',
+                      fontSize:        'var(--font-size-body-2)',
+                      lineHeight:      'var(--line-height-body-2-normal)',
+                      color:           'var(--color-label-alternative)',
+                      whiteSpace:      'nowrap',
+                      flexShrink:      0,
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인</div>
+              </div>
+            </MockFrame>
+
+            <MockFrame label="Button" width={375}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-12)', padding: 'var(--spacing-20)' }}>
+                <div style={{ flex: 1 }}>
+                  <span style={{
+                    display:        'inline-flex',
+                    alignItems:     'center',
+                    justifyContent: 'center',
+                    width:          'var(--spacing-48)',
+                    height:         'var(--spacing-48)',
+                    border:         '1px solid var(--color-line-neutral)',
+                    borderRadius:   '50%',
+                    color:          'var(--color-label-normal)',
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                </div>
+                <div style={{ ...BTN_OUTLINED }}>대체</div>
+                <div style={{ ...BTN_SOLID }}>메인 액션</div>
+              </div>
+            </MockFrame>
+
+          </div>
+        </div>
+      </Section>
+
+      {/* ──────────────── 7. safeArea ──────────────── */}
       <Section title="safeArea">
         <div style={CARD}>
           <SubLabel>플랫폼별 하단 Safe Area</SubLabel>

@@ -26,6 +26,7 @@
  *  <SegmentedControl items={[{ label: '홈', icon: 'home' }, { label: '검색', icon: 'search' }]} value={0} onChange={fn} />
  */
 
+import { useState } from 'react'
 import Icon from '../Icon/Icon'
 
 const SIZES = {
@@ -36,10 +37,10 @@ const SIZES = {
     knobRadius:  10,
     segPad:      9,
     iconSize:    20,
-    fontSize:        'var(--font-size-headline-2)',
-    fontWeight:      'var(--font-weight-medium)',
-    lineHeight:      'var(--line-height-headline-2)',
-    letterSpacing:   'var(--letter-spacing-headline-2)',
+    fontSize:      'var(--font-size-headline-2)',
+    fontWeight:    'var(--font-weight-medium)',
+    lineHeight:    'var(--line-height-headline-2)',
+    letterSpacing: 'var(--letter-spacing-headline-2)',
   },
   medium: {
     trackH:      40,
@@ -48,10 +49,10 @@ const SIZES = {
     knobRadius:  8,
     segPad:      9,
     iconSize:    18,
-    fontSize:        'var(--font-size-body-2)',
-    fontWeight:      'var(--font-weight-medium)',
-    lineHeight:      'var(--line-height-body-2-normal)',
-    letterSpacing:   'var(--letter-spacing-body-2)',
+    fontSize:      'var(--font-size-body-2)',
+    fontWeight:    'var(--font-weight-medium)',
+    lineHeight:    'var(--line-height-body-2-normal)',
+    letterSpacing: 'var(--letter-spacing-body-2)',
   },
   small: {
     trackH:      32,
@@ -60,11 +61,200 @@ const SIZES = {
     knobRadius:  6,
     segPad:      9,
     iconSize:    16,
-    fontSize:        'var(--font-size-label-2)',
-    fontWeight:      'var(--font-weight-medium)',
-    lineHeight:      'var(--line-height-label-2)',
-    letterSpacing:   'var(--letter-spacing-label-2)',
+    fontSize:      'var(--font-size-label-2)',
+    fontWeight:    'var(--font-weight-medium)',
+    lineHeight:    'var(--line-height-label-2)',
+    letterSpacing: 'var(--letter-spacing-label-2)',
   },
+}
+
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
+/* ── 개별 세그먼트 아이템 ────────────────────────────────────── */
+function SegmentItem({
+  item, idx, isActive, isLast,
+  isSolid, isOutlined,
+  knobRadius, segPad, iconSize,
+  fontSize, fontWeight, lineHeight, letterSpacing,
+  onChange,
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = isPressed ? OVERLAY_OPACITY.pressed
+    : isFocused                    ? OVERLAY_OPACITY.focused
+    : isHovered                    ? OVERLAY_OPACITY.hovered
+    : 0
+  const overlayColor = (isOutlined && isActive)
+    ? 'var(--color-primary-normal)'
+    : 'var(--color-label-normal)'
+
+  const handleClick = () => onChange?.(idx)
+  const handleKeyDown = (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
+  const segWrapStyle = {
+    flex:           '1 0 0',
+    height:         '100%',
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'center',
+    position:       'relative',
+    cursor:         'pointer',
+    userSelect:     'none',
+    outline:        'none',
+  }
+
+  const segInnerStyle = {
+    flex:           '1 0 0',
+    height:         '100%',
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'center',
+    padding:        `${segPad}px`,
+    position:       'relative',
+    minWidth:       0,
+  }
+
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    borderRadius:    `${knobRadius}px`,
+    backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+    zIndex:          2,
+  }
+
+  const textStyle = {
+    fontSize,
+    fontWeight,
+    lineHeight,
+    letterSpacing,
+    color:        isActive
+      ? (isSolid ? 'var(--color-label-normal)' : 'var(--color-primary-normal)')
+      : 'var(--color-label-alternative)',
+    overflow:     'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace:   'nowrap',
+    position:     'relative',
+    zIndex:       1,
+  }
+
+  return (
+    <div
+      style={segWrapStyle}
+      role="tab"
+      aria-selected={isActive}
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
+    >
+      <div style={segInnerStyle}>
+
+        {/* ── Solid: 활성 knob 배경 ── */}
+        {isSolid && isActive && (
+          <div
+            aria-hidden="true"
+            style={{
+              position:        'absolute',
+              inset:           0,
+              backgroundColor: 'var(--color-bg-elevated)',
+              borderRadius:    `${knobRadius}px`,
+              boxShadow:       'var(--shadow-segment-knob)',
+              zIndex:          1,
+            }}
+          />
+        )}
+
+        {/* ── Outlined: 활성 하이라이트 배경 ── */}
+        {isOutlined && isActive && (
+          <>
+            <div
+              aria-hidden="true"
+              style={{
+                position:        'absolute',
+                inset:           0,
+                backgroundColor: 'var(--color-primary-normal)',
+                opacity:         0.05,
+                zIndex:          1,
+              }}
+            />
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset:    0,
+                border:   '1px solid var(--color-primary-normal)',
+                opacity:  0.43,
+                zIndex:   1,
+              }}
+            />
+          </>
+        )}
+
+        {/* ── Outlined: 비활성 세그먼트 우측 구분선 (마지막 제외) ── */}
+        {isOutlined && !isActive && !isLast && (
+          <div
+            aria-hidden="true"
+            style={{
+              position:      'absolute',
+              top:           '1px',
+              bottom:        '1px',
+              right:         0,
+              left:          0,
+              borderRight:   '1px solid var(--color-line-normal)',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+
+        {/* 인터랙션 오버레이 */}
+        <div style={overlayStyle} aria-hidden="true" />
+
+        {/* ── 컨텐츠: 아이콘 + 텍스트 ── */}
+        <div
+          style={{
+            display:        'flex',
+            alignItems:     'center',
+            justifyContent: 'center',
+            gap:            'var(--spacing-4)',
+            position:       'relative',
+            zIndex:         3,
+            flex:           '1 0 0',
+            minWidth:       0,
+            overflow:       'hidden',
+          }}
+        >
+          {item.icon && (
+            <Icon
+              name={item.icon}
+              size={iconSize}
+              color={isActive
+                ? (isSolid ? 'var(--color-label-normal)' : 'var(--color-primary-normal)')
+                : 'var(--color-label-alternative)'
+              }
+            />
+          )}
+          {item.label && (
+            <span style={textStyle}>{item.label}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function SegmentedControl({
@@ -78,182 +268,28 @@ export default function SegmentedControl({
   const {
     trackH, trackPad, trackRadius, knobRadius, segPad, iconSize,
     fontSize, fontWeight, lineHeight, letterSpacing,
-  } = SIZES[size]
+  } = SIZES[size] ?? SIZES.large
 
   const isSolid    = variant === 'solid'
   const isOutlined = variant === 'outlined'
 
-  /* ── 트랙 스타일 ── */
   const trackStyle = {
-    display:         'flex',
-    alignItems:      'center',
-    height:          `${trackH}px`,
-    width:           '100%',
-    padding:         `${trackPad}px`,
-    boxSizing:       'border-box',
-    borderRadius:    `${trackRadius}px`,
-    position:        'relative',
-    flexShrink:      0,
+    display:      'flex',
+    alignItems:   'center',
+    height:       `${trackH}px`,
+    width:        '100%',
+    padding:      `${trackPad}px`,
+    boxSizing:    'border-box',
+    borderRadius: `${trackRadius}px`,
+    position:     'relative',
+    flexShrink:   0,
     ...(isSolid && {
       backgroundColor: 'var(--color-fill-normal)',
     }),
     ...(isOutlined && {
-      border:     '1px solid var(--color-line-normal)',
-      overflow:   'hidden',
+      border:   '1px solid var(--color-line-normal)',
+      overflow: 'hidden',
     }),
-  }
-
-  /* ── 세그먼트별 렌더 ── */
-  const renderSegment = (item, idx) => {
-    const isActive = idx === value
-    const isLast   = idx === items.length - 1
-
-    const handleClick = () => {
-      if (onChange) onChange(idx)
-    }
-
-    const handleKeyDown = (e) => {
-      if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault()
-        handleClick()
-      }
-    }
-
-    /* 세그먼트 래퍼 */
-    const segWrapStyle = {
-      flex:            '1 0 0',
-      height:          '100%',
-      display:         'flex',
-      alignItems:      'center',
-      justifyContent:  'center',
-      position:        'relative',
-      cursor:          'pointer',
-      userSelect:      'none',
-    }
-
-    /* 세그먼트 내부 (패딩 + 컨텐츠) */
-    const segInnerStyle = {
-      flex:            '1 0 0',
-      height:          '100%',
-      display:         'flex',
-      alignItems:      'center',
-      justifyContent:  'center',
-      padding:         `${segPad}px`,
-      position:        'relative',
-      minWidth:        0,
-    }
-
-    /* 텍스트 스타일 */
-    const textStyle = {
-      fontSize,
-      fontWeight,
-      lineHeight,
-      letterSpacing,
-      color:       isActive
-        ? (isSolid ? 'var(--color-label-normal)' : 'var(--color-primary-normal)')
-        : 'var(--color-label-alternative)',
-      overflow:    'hidden',
-      textOverflow:'ellipsis',
-      whiteSpace:  'nowrap',
-      position:    'relative',
-    }
-
-    return (
-      <div
-        key={idx}
-        style={segWrapStyle}
-        role="tab"
-        aria-selected={isActive}
-        tabIndex={0}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-      >
-        <div style={segInnerStyle}>
-
-          {/* ── Solid: 활성 knob 배경 ── */}
-          {isSolid && isActive && (
-            <div
-              aria-hidden="true"
-              style={{
-                position:        'absolute',
-                inset:           0,
-                backgroundColor: 'var(--color-bg-elevated)',
-                borderRadius:    `${knobRadius}px`,
-                boxShadow:       'var(--shadow-segment-knob)',
-              }}
-            />
-          )}
-
-          {/* ── Outlined: 활성 하이라이트 배경 ── */}
-          {isOutlined && isActive && (
-            <>
-              <div
-                aria-hidden="true"
-                style={{
-                  position:        'absolute',
-                  inset:           0,
-                  backgroundColor: 'var(--color-primary-normal)',
-                  opacity:         0.05,
-                }}
-              />
-              <div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  inset:    0,
-                  border:   '1px solid var(--color-primary-normal)',
-                  opacity:  0.43,
-                }}
-              />
-            </>
-          )}
-
-          {/* ── Outlined: 비활성 세그먼트 우측 구분선 (마지막 제외) ── */}
-          {isOutlined && !isActive && !isLast && (
-            <div
-              aria-hidden="true"
-              style={{
-                position:    'absolute',
-                top:         '1px',
-                bottom:      '1px',
-                right:       0,
-                left:        0,
-                borderRight: '1px solid var(--color-line-normal)',
-                pointerEvents: 'none',
-              }}
-            />
-          )}
-
-          {/* ── 컨텐츠: 아이콘 + 텍스트 ── */}
-          <div
-            style={{
-              display:        'flex',
-              alignItems:     'center',
-              justifyContent: 'center',
-              gap:            'var(--spacing-4)',
-              position:       'relative',
-              flex:           '1 0 0',
-              minWidth:       0,
-              overflow:       'hidden',
-            }}
-          >
-            {item.icon && (
-              <Icon
-                name={item.icon}
-                size={iconSize}
-                color={isActive
-                  ? (isSolid ? 'var(--color-label-normal)' : 'var(--color-primary-normal)')
-                  : 'var(--color-label-alternative)'
-                }
-              />
-            )}
-            {item.label && (
-              <span style={textStyle}>{item.label}</span>
-            )}
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -263,7 +299,25 @@ export default function SegmentedControl({
       style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
     >
       <div style={trackStyle}>
-        {items.map((item, idx) => renderSegment(item, idx))}
+        {items.map((item, idx) => (
+          <SegmentItem
+            key={idx}
+            item={item}
+            idx={idx}
+            isActive={idx === value}
+            isLast={idx === items.length - 1}
+            isSolid={isSolid}
+            isOutlined={isOutlined}
+            knobRadius={knobRadius}
+            segPad={segPad}
+            iconSize={iconSize}
+            fontSize={fontSize}
+            fontWeight={fontWeight}
+            lineHeight={lineHeight}
+            letterSpacing={letterSpacing}
+            onChange={onChange}
+          />
+        ))}
       </div>
     </div>
   )

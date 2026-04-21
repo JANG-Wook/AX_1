@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import FramedStyle from '../../design-system/components/FramedStyle/FramedStyle'
 import Thumbnail from '../../design-system/components/Thumbnail/Thumbnail'
 import Section, { Case } from '../Section'
@@ -13,6 +14,8 @@ function ThumbContent() {
 }
 
 export default function FramedStylePage() {
+  const [demoSel, setDemoSel] = useState(false)
+
   return (
     <div>
       <h2 style={{
@@ -22,6 +25,28 @@ export default function FramedStylePage() {
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
       }}>FramedStyle</h2>
+
+      <Section title="인터랙션 데모" gap="var(--spacing-24)">
+        <Case label="클릭해서 선택/해제해보세요">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+            <FramedStyle selected={demoSel} onClick={() => setDemoSel(s => !s)}>
+              <ThumbContent />
+            </FramedStyle>
+            <div style={{
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              textAlign: 'center',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+            }}>
+              상태: <strong style={{ color: demoSel ? 'var(--color-primary-normal)' : 'var(--color-label-normal)' }}>
+                {demoSel ? '선택됨' : '미선택'}
+              </strong>
+            </div>
+          </div>
+        </Case>
+      </Section>
 
       <Section title="Selected" gap="var(--spacing-24)">
         <Case label='selected=false (기본)'>

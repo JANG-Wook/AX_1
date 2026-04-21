@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import ListCell from '../../design-system/components/ListCell/ListCell'
 import Avatar from '../../design-system/components/Avatar/Avatar'
 import Switch from '../../design-system/components/Switch/Switch'
@@ -5,6 +6,8 @@ import Icon from '../../design-system/components/Icon/Icon'
 import Section, { Case } from '../Section'
 
 export default function ListCellPage() {
+  const [lastClicked, setLastClicked] = useState(null)
+
   return (
     <div>
       <h2 style={{
@@ -14,6 +17,35 @@ export default function ListCellPage() {
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
       }}>ListCell</h2>
+
+      <Section title="인터랙션 데모" gap="var(--spacing-8)" column>
+        <Case label="셀을 클릭하거나 마우스를 올려보세요">
+          <div style={{ width: '400px', display: 'flex', flexDirection: 'column' }}>
+            {['알림 설정', '개인정보 보호', '언어 설정'].map((label, i, arr) => (
+              <ListCell
+                key={label}
+                label={label}
+                chevron
+                divider={i < arr.length - 1}
+                onClick={() => setLastClicked(label)}
+              />
+            ))}
+            <div style={{
+              marginTop: 'var(--spacing-12)',
+              padding: 'var(--spacing-12)',
+              borderRadius: 'var(--spacing-8)',
+              backgroundColor: 'var(--color-fill-normal)',
+              fontSize: 'var(--font-size-body-2)',
+              color: 'var(--color-label-alternative)',
+            }}>
+              {lastClicked
+                ? <><strong style={{ color: 'var(--color-label-normal)' }}>"{lastClicked}"</strong> 클릭됨</>
+                : '항목을 클릭해보세요'
+              }
+            </div>
+          </div>
+        </Case>
+      </Section>
 
       <Section title="Basic" gap="var(--spacing-8)" column>
         <div style={{ width: '400px' }}>

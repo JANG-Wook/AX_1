@@ -27,6 +27,8 @@
  *  />
  */
 
+import { useState } from 'react'
+
 /* ── 사이즈 프리셋 (Outlined와 동일) ────────────────────────── */
 const SIZE_PRESET = {
   medium: {
@@ -39,6 +41,9 @@ const SIZE_PRESET = {
   },
 }
 
+/* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
+const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
+
 export default function IconButtonSolid({
   icon,
   size            = 'medium',
@@ -50,6 +55,16 @@ export default function IconButtonSolid({
   className,
   ...props
 }) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
+  const overlayOpacity = disabled    ? 0
+    : isPressed                      ? OVERLAY_OPACITY.pressed
+    : isFocused                      ? OVERLAY_OPACITY.focused
+    : isHovered                      ? OVERLAY_OPACITY.hovered
+    : 0
+
   const isCustom = size === 'custom'
 
   const resolvedButtonSize = isCustom
@@ -64,6 +79,8 @@ export default function IconButtonSolid({
     display:         'inline-flex',
     alignItems:      'center',
     justifyContent:  'center',
+    position:        'relative',
+    overflow:        'hidden',
     width:           resolvedButtonSize,
     height:          resolvedButtonSize,
     padding:         resolvedPadding,
@@ -75,18 +92,26 @@ export default function IconButtonSolid({
     color,
     flexShrink:      0,
     boxSizing:       'border-box',
-    overflow:        'hidden',
     transition:      'opacity 0.15s ease',
     outline:         'none',
     userSelect:      'none',
   }
 
+  const overlayStyle = {
+    position:        'absolute',
+    inset:           0,
+    backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+    pointerEvents:   'none',
+    transition:      'background-color 0.15s ease',
+  }
+
   const iconWrapStyle = {
-    display:    'flex',
-    alignItems: 'center',
-    width:      '100%',
-    height:     '100%',
-    flexShrink: 0,
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'center',
+    width:          '100%',
+    height:         '100%',
+    flexShrink:     0,
   }
 
   return (
@@ -96,8 +121,16 @@ export default function IconButtonSolid({
       style={buttonStyle}
       disabled={disabled}
       onClick={!disabled ? onClick : undefined}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => { setIsFocused(false); setIsPressed(false) }}
       {...props}
     >
+      <div style={overlayStyle} aria-hidden="true" />
+
       <span style={iconWrapStyle} aria-hidden="true">
         {icon}
       </span>

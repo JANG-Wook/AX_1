@@ -7,8 +7,7 @@ import ElevationPage      from './showcase/pages/ElevationPage'
 import ArtboardPage       from './showcase/pages/ArtboardPage'
 import BreakpointPage     from './showcase/pages/BreakpointPage'
 import SpacingPage        from './showcase/pages/SpacingPage'
-import LayoutGridColumnPage from './showcase/pages/LayoutGridColumnPage'
-import LayoutMaxWidthPage    from './showcase/pages/LayoutMaxWidthPage'
+import LayoutPage           from './showcase/pages/LayoutPage'
 import ThemeIconNormalPage      from './showcase/pages/ThemeIconNormalPage'
 import ThemeIconNavigationPage  from './showcase/pages/ThemeIconNavigationPage'
 import AlertPage          from './showcase/pages/AlertPage'
@@ -38,13 +37,18 @@ import TextfieldPage      from './showcase/pages/TextfieldPage'
 import ThumbnailPage      from './showcase/pages/ThumbnailPage'
 import ToastPage          from './showcase/pages/ToastPage'
 import TooltipPage        from './showcase/pages/TooltipPage'
-import ElementRatioVerticalPage    from './showcase/pages/ElementRatioVerticalPage'
-import ElementRatioHorizontalPage  from './showcase/pages/ElementRatioHorizontalPage'
+import BasicRatioPage              from './showcase/pages/BasicRatioPage'
 import ElementSafeAreaPage           from './showcase/pages/ElementSafeAreaPage'
-import DecorateGradientPage        from './showcase/pages/DecorateGradientPage'
+import DecoratePage                from './showcase/pages/DecoratePage'
 import EssentialPage              from './showcase/pages/EssentialPage'
-import DecorateInteractionPage    from './showcase/pages/DecorateInteractionPage'
 import ActionBottomPage           from './showcase/pages/ActionBottomPage'
+import ButtonPage                from './showcase/pages/ButtonPage'
+import TextButtonPage           from './showcase/pages/TextButtonPage'
+import IconButtonNormalPage     from './showcase/pages/IconButtonNormalPage'
+import IconButtonBackgroundPage from './showcase/pages/IconButtonBackgroundPage'
+import IconButtonPage           from './showcase/pages/IconButtonPage'
+import ChipPage                 from './showcase/pages/ChipPage'
+import ToggleIconPage           from './showcase/pages/ToggleIconPage'
 
 const PAGE_MAP = {
   colors:           ColorsPage,
@@ -53,8 +57,7 @@ const PAGE_MAP = {
   artboard:         ArtboardPage,
   breakpoint:       BreakpointPage,
   spacing:          SpacingPage,
-  layoutGridColumn: LayoutGridColumnPage,
-  layoutMaxWidth:   LayoutMaxWidthPage,
+  layout:           LayoutPage,
   iconNormal:       ThemeIconNormalPage,
   iconNavigation:   ThemeIconNavigationPage,
   alert:            AlertPage,
@@ -84,13 +87,18 @@ const PAGE_MAP = {
   thumbnail:        ThumbnailPage,
   toast:            ToastPage,
   tooltip:              TooltipPage,
-  elementRatioVertical:   ElementRatioVerticalPage,
-  elementRatioHorizontal: ElementRatioHorizontalPage,
+  basicRatio:             BasicRatioPage,
   elementSafeArea:        ElementSafeAreaPage,
-  decorateGradient:         DecorateGradientPage,
+  decorate:                 DecoratePage,
   essential:                EssentialPage,
-  decorateInteraction:      DecorateInteractionPage,
   actionBottom:             ActionBottomPage,
+  button:                   ButtonPage,
+  textButton:               TextButtonPage,
+  actionNormal:             IconButtonNormalPage,
+  actionBackground:         IconButtonBackgroundPage,
+  iconButton:               IconButtonPage,
+  chip:                     ChipPage,
+  toggleIcon:               ToggleIconPage,
 }
 
 export default function App() {

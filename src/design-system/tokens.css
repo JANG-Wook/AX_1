@@ -5,6 +5,10 @@
    ⚠️ 이 파일을 수정하면 tokens.js도 반드시 동기화할 것
    ============================================================ */
 
+/* ── 기본 리셋 ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; height: 100%; }
+
 :root {
 
   /* --------------------------------------------------
@@ -407,4 +411,26 @@ textarea::placeholder {
    -------------------------------------------------- */
 @keyframes ax-spin {
   to { transform: rotate(360deg); }
+}
+
+
+/* ── Sidebar 스크롤바 ─────────────────────────────────────────
+   얇고 subtle한 스크롤바. 트랙은 투명, 썸은 line-neutral.
+   ---------------------------------------------------------- */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-neutral) transparent;
+}
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-line-neutral);
+  border-radius: 2px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-label-assistive);
 }
