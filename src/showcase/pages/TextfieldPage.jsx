@@ -12,7 +12,7 @@ const CARD = {
 }
 
 const TF_W       = 280
-const TF_INTER_W = '200px'
+const TF_INTER_W = '280px'
 const LABEL_W    = '110px'
 const PH         = '텍스트를 입력해 주세요.'
 
@@ -74,17 +74,6 @@ function BtnIcon({ disabled } = {}) {
     }}>
       <Icon name="circleCloseFill" size={20} color={disabled ? 'var(--color-label-disable)' : 'var(--color-label-assistive)'} />
     </button>
-  )
-}
-
-function BtnText({ disabled } = {}) {
-  return (
-    <button disabled={disabled} tabIndex={-1} style={{
-      background: 'none', border: 'none', cursor: disabled ? 'not-allowed' : 'pointer',
-      fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)',
-      color: disabled ? 'var(--color-label-disable)' : 'var(--color-primary-normal)',
-      whiteSpace: 'nowrap', padding: '0 var(--spacing-4)',
-    }}>재발송</button>
   )
 }
 
@@ -184,7 +173,7 @@ const STATUSES = ['normal', 'positive', 'negative']
 function StatusSection() {
   function TFCol({ status, placeholder = '', value, forceFocused, disabled, trailing = null }) {
     return (
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ width: '280px', flexShrink: 0 }}>
         <Textfield
           status={status}
           heading="주제"
@@ -232,7 +221,7 @@ function StatusSection() {
         <div style={{ display: 'flex', gap: GAP, marginBottom: 'var(--spacing-16)' }}>
           <div style={{ width: '88px', flexShrink: 0 }} />
           {STATUSES.map(s => (
-            <div key={s} style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <div key={s} style={{ width: '280px', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
               <ItemLabel>{s}</ItemLabel>
             </div>
           ))}
@@ -445,7 +434,7 @@ function IconSection() {
    trailingButton
 ══════════════════════════════════════════════════════════════ */
 function TrailingButtonSection() {
-  const COL_W = '220px'
+  const COL_W = '280px'
   const colHeadStyle = {
     fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)',
     color: 'var(--color-label-normal)', textAlign: 'center',
@@ -456,6 +445,9 @@ function TrailingButtonSection() {
   }
   const ROW_LABEL_W = '100px'
   const GAP = 'var(--spacing-20)'
+
+  const TB_NORMAL = { label: '텍스트', variant: 'normal' }
+  const TB_NORMAL_DISABLED = { label: '텍스트', variant: 'normal', disabled: true }
 
   return (
     <Section title="trailingButton">
@@ -470,77 +462,77 @@ function TrailingButtonSection() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
-          {/* Row 1: normal inactive */}
+          {/* Row 1: active */}
           <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
             <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-              <span style={rowLabelStyle}>{'normal\ninactive'}</span>
+              <span style={rowLabelStyle}>active</span>
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield placeholder={PH} />
+              <Textfield defaultValue="값" />
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield placeholder={PH} trailingContent={<BtnIcon />} />
+              <Textfield defaultValue="값" trailingButton={TB_NORMAL} />
             </div>
           </div>
 
-          {/* Row 2: normal active */}
+          {/* Row 2: active + focus */}
           <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
             <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-              <span style={rowLabelStyle}>{'normal\nactive'}</span>
+              <span style={rowLabelStyle}>{'active\nfocus'}</span>
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield defaultValue="입력된 텍스트" />
+              <Textfield defaultValue="값" forceFocused trailingContent={<ClearBtn />} />
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+              <Textfield defaultValue="값" forceFocused trailingContent={<ClearBtn />} trailingButton={TB_NORMAL} />
             </div>
           </div>
 
-          {/* Row 3: positive active */}
+          {/* Row 3: disabled */}
           <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
             <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-              <span style={rowLabelStyle}>{'positive\nactive'}</span>
+              <span style={rowLabelStyle}>disabled</span>
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield status="positive" defaultValue="입력된 텍스트" trailingContent={buildTrailing('positive', false)} />
+              <Textfield placeholder={PH} disabled />
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield status="positive" defaultValue="입력된 텍스트" trailingContent={buildTrailing('positive', true)} />
+              <Textfield placeholder={PH} disabled trailingButton={TB_NORMAL} />
             </div>
           </div>
 
-          {/* Row 4: negative inactive */}
+          {/* Row 4: active + button disabled */}
           <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
             <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-              <span style={rowLabelStyle}>{'negative\ninactive'}</span>
+              <span style={rowLabelStyle}>{'button\ndisabled'}</span>
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield status="negative" placeholder={PH} />
+              <Textfield defaultValue="값" />
             </div>
             <div style={{ width: COL_W, flexShrink: 0 }}>
-              <Textfield status="negative" placeholder={PH} trailingContent={buildTrailing('negative', false)} />
+              <Textfield defaultValue="값" trailingButton={TB_NORMAL_DISABLED} />
             </div>
           </div>
         </div>
 
-        <SubSection title="trailingButton variant">
+        <SubSection title="trailingButton">
           <PropHead name="variant" values={['normal', 'assistive']} />
           <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', marginBottom: 'var(--spacing-24)' }}>
-            <TFItem label="normal">
-              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+            <TFItem label="normal" width={280}>
+              <Textfield defaultValue="값" trailingButton={{ label: '텍스트', variant: 'normal' }} />
             </TFItem>
-            <TFItem label="assistive">
-              <Textfield heading="인증번호" placeholder="6자리 입력" trailingContent={<BtnText />} />
+            <TFItem label="assistive" width={280}>
+              <Textfield defaultValue="값" trailingButton={{ label: '확인', variant: 'assistive' }} />
             </TFItem>
           </div>
 
           <PropHead name="disable" values={['false', 'true']} />
           <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
-            <TFItem label="false">
-              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+            <TFItem label="false" width={280}>
+              <Textfield defaultValue="값" trailingButton={{ label: '텍스트', variant: 'normal' }} />
             </TFItem>
-            <TFItem label="true">
-              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon disabled />} />
+            <TFItem label="true" width={280}>
+              <Textfield defaultValue="값" trailingButton={{ label: '텍스트', variant: 'normal', disabled: true }} />
             </TFItem>
           </div>
         </SubSection>
@@ -610,18 +602,23 @@ function TrailingContentSection() {
         <PropHead name="trailingContent" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
           <TFItem label="false">
-            <Textfield placeholder={PH} />
+            <Textfield defaultValue="값" forceFocused trailingContent={<TrailingIconBtn />} />
           </TFItem>
           <TFItem label="true">
-            <Textfield defaultValue="입력된 텍스트" trailingContent={<TrailingIconBtn />} />
+            <Textfield defaultValue="값" forceFocused trailingContent={
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-8)' }}>
+                <TrailingIconBtn />
+                <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-status-negative)', whiteSpace: 'nowrap' }}>3:00</span>
+              </div>
+            } />
           </TFItem>
         </div>
 
         <SubSection title="resource">
           <div style={{ display: 'flex', gap: 'var(--spacing-20)', flexWrap: 'wrap' }}>
             {resources.map(({ label, content }) => (
-              <TFItem key={label} label={label} width={200}>
-                <Textfield defaultValue="입력된 텍스트" trailingContent={content} />
+              <TFItem key={label} label={label} width={280}>
+                <Textfield defaultValue="값" trailingContent={content} />
               </TFItem>
             ))}
           </div>

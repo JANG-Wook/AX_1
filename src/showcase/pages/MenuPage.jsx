@@ -2,45 +2,50 @@ import { useState } from 'react'
 import Menu from '../../design-system/components/Menu/Menu'
 import Section, { Case } from '../Section'
 
+/* ── 공통 아이템 셋 ── */
 const basicItems = [
-  { label: '복사',    onClick: () => {} },
-  { label: '붙여넣기', onClick: () => {} },
-  { label: '삭제',    onClick: () => {} },
+  { label: '전체',    onClick: () => {} },
+  { label: '진행 중', onClick: () => {} },
+  { label: '완료',   onClick: () => {} },
+  { label: '보류',   onClick: () => {} },
+  { label: '삭제됨',  onClick: () => {} },
 ]
 
-const withCaptionItems = [
+const activeItems = [
+  { label: '전체',    active: true,  onClick: () => {} },
+  { label: '진행 중',  onClick: () => {} },
+  { label: '완료',   onClick: () => {} },
+  { label: '보류',   onClick: () => {} },
+  { label: '삭제됨',  onClick: () => {} },
+]
+
+const captionItems = [
   { label: '최신순',   caption: '최근 등록된 항목부터 표시',  onClick: () => {} },
   { label: '인기순',   caption: '조회수가 높은 항목부터 표시', onClick: () => {} },
   { label: '가나다순', caption: '알파벳 오름차순으로 정렬',   onClick: () => {} },
 ]
 
-const withStateItems = [
-  { label: '전체',   active: true,  onClick: () => {} },
-  { label: '미완료', active: false, onClick: () => {} },
-  { label: '완료',   active: false, onClick: () => {} },
-  { label: '삭제됨', disabled: true, onClick: () => {} },
+const disabledItems = [
+  { label: '전체',    onClick: () => {} },
+  { label: '진행 중', onClick: () => {} },
+  { label: '완료',   disabled: true, onClick: () => {} },
+  { label: '보류',   disabled: true, onClick: () => {} },
+  { label: '삭제됨',  disabled: true, onClick: () => {} },
+]
+
+const radioItems = [
+  { label: '높음',    active: true,  onClick: () => {} },
+  { label: '보통',   onClick: () => {} },
+  { label: '낮음',   onClick: () => {} },
+  { label: '없음',   onClick: () => {} },
 ]
 
 const checkboxItems = [
   { label: '알림 받기',   active: true,  onClick: () => {} },
   { label: '이메일 수신', active: true,  onClick: () => {} },
-  { label: '문자 수신',   active: false, onClick: () => {} },
-  { label: '푸시 알림',   active: false, disabled: true, onClick: () => {} },
-]
-
-const radioItems = [
-  { label: '높음',  active: true,  onClick: () => {} },
-  { label: '보통',  active: false, onClick: () => {} },
-  { label: '낮음',  active: false, onClick: () => {} },
-]
-
-const withTitleItems = [
-  { type: 'title', label: '편집' },
-  { label: '복사',    onClick: () => {} },
-  { label: '붙여넣기', onClick: () => {} },
-  { type: 'title', label: '관리' },
-  { label: '이름 변경', onClick: () => {} },
-  { label: '삭제',     onClick: () => {}, disabled: false },
+  { label: '문자 수신',   onClick: () => {} },
+  { label: '푸시 알림',   onClick: () => {} },
+  { label: '마케팅 수신', disabled: true, onClick: () => {} },
 ]
 
 const manyItems = Array.from({ length: 12 }, (_, i) => ({
@@ -49,13 +54,33 @@ const manyItems = Array.from({ length: 12 }, (_, i) => ({
 }))
 
 export default function MenuPage() {
-  const [lastClicked, setLastClicked] = useState(null)
+  const [activeBasic, setActiveBasic]   = useState(0)
+  const [activeRadio, setActiveRadio]   = useState(0)
+  const [activeCheck, setActiveCheck]   = useState([0, 1])
 
-  const demoItems = [
-    { label: '복사',     onClick: () => setLastClicked('복사') },
-    { label: '붙여넣기', onClick: () => setLastClicked('붙여넣기') },
-    { label: '삭제',     onClick: () => setLastClicked('삭제') },
-  ]
+  const interactiveBasic = basicItems.map((it, i) => ({
+    ...it,
+    active: i === activeBasic,
+    onClick: () => setActiveBasic(i),
+  }))
+
+  const interactiveRadio = radioItems.map((it, i) => ({
+    ...it,
+    active: i === activeRadio,
+    onClick: () => setActiveRadio(i),
+  }))
+
+  const interactiveCheck = checkboxItems.map((it, i) => ({
+    ...it,
+    active: activeCheck.includes(i),
+    disabled: i === 4,
+    onClick: () => {
+      if (i === 4) return
+      setActiveCheck(prev =>
+        prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i]
+      )
+    },
+  }))
 
   return (
     <div>
@@ -67,64 +92,104 @@ export default function MenuPage() {
         marginBottom: 'var(--spacing-32)',
       }}>Menu</h2>
 
-      <Section title="인터랙션 데모">
-        <Case label="메뉴 항목에 마우스를 올리거나 클릭해보세요">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
-            <Menu items={demoItems} />
-            <div style={{
-              padding: 'var(--spacing-12)',
-              borderRadius: 'var(--spacing-8)',
-              backgroundColor: 'var(--color-fill-normal)',
-              fontSize: 'var(--font-size-body-2)',
-              color: 'var(--color-label-alternative)',
-            }}>
-              {lastClicked
-                ? <><strong style={{ color: 'var(--color-label-normal)' }}>"{lastClicked}"</strong> 클릭됨</>
-                : '항목을 클릭해보세요'
-              }
-            </div>
-          </div>
+      {/* ── Variant ─────────────────────────────────────────── */}
+      <Section title="Variant" gap="var(--spacing-24)">
+        <Case label="Normal">
+          <Menu items={interactiveBasic} />
+        </Case>
+        <Case label="Radio">
+          <Menu variant="radio" items={interactiveRadio} />
+        </Case>
+        <Case label="Checkbox">
+          <Menu variant="checkbox" items={interactiveCheck} />
         </Case>
       </Section>
 
-      <Section title="Variant = normal">
-        <Case label='기본'>
+      {/* ── Cell Padding ─────────────────────────────────────── */}
+      <Section title="Cell Padding" gap="var(--spacing-24)">
+        <Case label="8px (기본)">
+          <Menu items={basicItems} cellPadding="8px" />
+        </Case>
+        <Case label="12px">
+          <Menu items={basicItems} cellPadding="12px" />
+        </Case>
+      </Section>
+
+      {/* ── Item/Cell State ──────────────────────────────────── */}
+      <Section title="Item/Cell State" gap="var(--spacing-24)">
+        <Case label="기본">
           <Menu items={basicItems} />
         </Case>
-        <Case label='active / disabled 상태'>
-          <Menu items={withStateItems} />
+        <Case label="Active">
+          <Menu items={activeItems} />
         </Case>
-        <Case label='caption 있음'>
-          <Menu items={withCaptionItems} />
+        <Case label="Caption">
+          <Menu items={captionItems} />
         </Case>
-      </Section>
-
-      <Section title="Variant = checkbox">
-        <Case label='checkbox'>
-          <Menu variant="checkbox" items={checkboxItems} />
-        </Case>
-        <Case label='checkbox + cellPadding="12px"'>
-          <Menu variant="checkbox" cellPadding="12px" items={checkboxItems} />
+        <Case label="Disabled">
+          <Menu items={disabledItems} />
         </Case>
       </Section>
 
-      <Section title="Variant = radio">
-        <Case label='radio'>
-          <Menu variant="radio" items={radioItems} />
+      {/* ── Checkbox State ───────────────────────────────────── */}
+      <Section title="Checkbox Item/Cell State" gap="var(--spacing-24)">
+        <Case label="기본 (unchecked)">
+          <Menu variant="checkbox" items={[
+            { label: '알림 받기',   onClick: () => {} },
+            { label: '이메일 수신', onClick: () => {} },
+            { label: '문자 수신',   onClick: () => {} },
+          ]} />
         </Case>
-        <Case label='radio + caption'>
-          <Menu variant="radio" items={withCaptionItems.map((it, i) => ({ ...it, active: i === 0 }))} />
+        <Case label="Active (checked)">
+          <Menu variant="checkbox" items={[
+            { label: '알림 받기',   active: true,  onClick: () => {} },
+            { label: '이메일 수신', active: true,  onClick: () => {} },
+            { label: '문자 수신',   onClick: () => {} },
+          ]} />
+        </Case>
+        <Case label="Disabled">
+          <Menu variant="checkbox" items={[
+            { label: '알림 받기',   onClick: () => {} },
+            { label: '이메일 수신', active: true, disabled: true, onClick: () => {} },
+            { label: '문자 수신',   disabled: true, onClick: () => {} },
+          ]} />
         </Case>
       </Section>
 
-      <Section title="With Title Items">
-        <Case label='type="title" 구분선'>
-          <Menu items={withTitleItems} />
+      {/* ── Radio State ──────────────────────────────────────── */}
+      <Section title="Radio Item/Cell State" gap="var(--spacing-24)">
+        <Case label="기본 (unselected)">
+          <Menu variant="radio" items={[
+            { label: '높음', onClick: () => {} },
+            { label: '보통', onClick: () => {} },
+            { label: '낮음', onClick: () => {} },
+          ]} />
+        </Case>
+        <Case label="Active (selected)">
+          <Menu variant="radio" items={[
+            { label: '높음', active: true, onClick: () => {} },
+            { label: '보통', onClick: () => {} },
+            { label: '낮음', onClick: () => {} },
+          ]} />
+        </Case>
+        <Case label="Disabled">
+          <Menu variant="radio" items={[
+            { label: '높음', active: true, onClick: () => {} },
+            { label: '보통', disabled: true, onClick: () => {} },
+            { label: '낮음', disabled: true, onClick: () => {} },
+          ]} />
         </Case>
       </Section>
 
-      <Section title="With Action Area">
-        <Case label='checkbox + actionArea'>
+      {/* ── Menu Action Area ─────────────────────────────────── */}
+      <Section title="Menu Action Area" gap="var(--spacing-24)">
+        <Case label="actionArea = false">
+          <Menu
+            variant="checkbox"
+            items={checkboxItems}
+          />
+        </Case>
+        <Case label="actionArea = true">
           <Menu
             variant="checkbox"
             items={checkboxItems}
@@ -138,9 +203,10 @@ export default function MenuPage() {
         </Case>
       </Section>
 
+      {/* ── Scrollable ───────────────────────────────────────── */}
       <Section title="Scrollable">
-        <Case label='scrollable (maxHeight: 400px)' >
-          <div style={{ width: '200px' }}>
+        <Case label="스크롤 가능 (maxHeight: 400px)">
+          <div style={{ width: '240px' }}>
             <Menu items={manyItems} scrollable />
           </div>
         </Case>

@@ -121,6 +121,7 @@ export default function App() {
         padding:    'var(--spacing-48)',
         boxSizing:  'border-box',
         maxWidth:   'calc(100vw - 220px)',
+        minWidth:   '900px',
       }}>
         <PageComponent />
       </main>

@@ -402,14 +402,12 @@ export default function Menu({
 
   const innerStyle = {
     display:         'flex',
-    flex:            '1 0 0',
     flexDirection:   'column',
     alignItems:      'flex-start',
     width:           '100%',
     backgroundColor: 'var(--color-bg-elevated)',
     border:          '1px solid var(--color-line-solid-neutral)',
     borderRadius:    'var(--spacing-16)',
-    maxHeight:       '400px',
     overflow:        'hidden',
     boxShadow:       'var(--shadow-normal-small)',
     boxSizing:       'border-box',
@@ -417,7 +415,6 @@ export default function Menu({
 
   const scrollAreaStyle = {
     display:       'flex',
-    flex:          '1 0 0',
     flexDirection: 'column',
     alignItems:    'flex-start',
     width:         '100%',
@@ -426,9 +423,9 @@ export default function Menu({
     paddingTop:    'var(--spacing-8)',
     paddingBottom: 'var(--spacing-8)',
     overflowY:     scrollable ? 'auto' : 'visible',
+    maxHeight:     scrollable ? '400px' : undefined,
     boxSizing:     'border-box',
     position:      'relative',
-    minHeight:     0,
   }
 
   const contentsStyle = {
