@@ -24,20 +24,21 @@ import Icon from '../Icon/Icon'
 
 const BORDER_COLOR = {
   normal:   'var(--color-line-neutral)',
-  positive: 'var(--color-status-positive)',
+  positive: 'var(--color-line-neutral)',
   negative: 'var(--color-status-negative)',
 }
 
 export default function Textfield({
-  status       = 'normal',
-  disabled     = false,
-  heading      = '',
-  required     = false,
-  description  = '',
-  placeholder  = '',
-  icon         = '',
+  status          = 'normal',
+  disabled        = false,
+  heading         = '',
+  required        = false,
+  description     = '',
+  placeholder     = '',
+  icon            = '',
   trailingContent = null,
-  className    = '',
+  forceFocused    = false,
+  className       = '',
   ...props
 }) {
   const containerStyle = {
@@ -46,13 +47,19 @@ export default function Textfield({
     gap:           'var(--spacing-8)',
   }
 
+  const borderColor = disabled
+    ? 'var(--color-line-neutral)'
+    : (forceFocused && status !== 'negative')
+      ? 'var(--color-primary-normal)'
+      : BORDER_COLOR[status]
+
   const inputBoxStyle = {
     display:        'flex',
     alignItems:     'center',
     gap:            'var(--spacing-8)',
     padding:        'var(--spacing-12)',
     borderRadius:   'var(--spacing-12)',
-    border:         `1px solid ${disabled ? 'var(--color-line-neutral)' : BORDER_COLOR[status]}`,
+    border:         `1px solid ${borderColor}`,
     backgroundColor: disabled
       ? 'var(--color-fill-alternative)'
       : 'var(--color-bg-transparent)',
@@ -100,9 +107,7 @@ export default function Textfield({
     letterSpacing: 'var(--letter-spacing-caption-1)',
     color: status === 'negative' && !disabled
       ? 'var(--color-status-negative)'
-      : status === 'positive' && !disabled
-        ? 'var(--color-status-positive)'
-        : 'var(--color-label-alternative)',
+      : 'var(--color-label-alternative)',
   }
 
   return (

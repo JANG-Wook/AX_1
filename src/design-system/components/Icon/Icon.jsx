@@ -69,7 +69,7 @@ export default function Icon({
     <SvgComponent
       width={resolvedSize}
       height={resolvedSize}
-      fill={color}
+      style={{ color }}
       className={className}
       aria-hidden="true"
       {...props}

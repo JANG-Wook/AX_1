@@ -1,7 +1,744 @@
 import Textfield from '../../design-system/components/Textfield/Textfield'
-import Icon from '../../design-system/components/Icon/Icon'
-import Section, { Case } from '../Section'
+import Icon      from '../../design-system/components/Icon/Icon'
+import Section   from '../Section'
 
+/* ── 공용 상수 ────────────────────────────────────────────────── */
+const CARD = {
+  width:           '100%',
+  backgroundColor: 'var(--color-fill-normal)',
+  borderRadius:    'var(--spacing-12)',
+  padding:         'var(--spacing-32)',
+  boxSizing:       'border-box',
+}
+
+const TF_W       = 280
+const TF_INTER_W = '200px'
+const LABEL_W    = '110px'
+const PH         = '텍스트를 입력해 주세요.'
+
+/* ── 공용 헬퍼 ────────────────────────────────────────────────── */
+function CodeBadge({ children }) {
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', position: 'relative',
+      fontSize: 'var(--font-size-caption-2)', fontWeight: 'var(--font-weight-semibold)',
+      lineHeight: 1, borderRadius: 'var(--spacing-4)',
+      padding: 'var(--spacing-2) var(--spacing-6)', whiteSpace: 'nowrap' }}>
+      <span style={{ position: 'absolute', inset: 0, borderRadius: 'var(--spacing-4)', backgroundColor: 'var(--color-fill-strong)' }} />
+      <span style={{ position: 'relative', color: 'var(--color-label-normal)' }}>{children}</span>
+    </span>
+  )
+}
+
+function PropHead({ name, values }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-24)' }}>
+      <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>{name} =</span>
+      {values.map(v => <CodeBadge key={v}>{v}</CodeBadge>)}
+    </div>
+  )
+}
+
+function ItemLabel({ children }) {
+  return (
+    <span style={{
+      fontSize: 'var(--font-size-caption-1)', lineHeight: 'var(--line-height-caption-1)',
+      fontWeight: 'var(--font-weight-regular)', color: 'var(--color-label-assistive)',
+    }}>{children}</span>
+  )
+}
+
+function TFItem({ label, width = TF_W, children }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--spacing-8)' }}>
+      <div style={{ width: `${width}px` }}>{children}</div>
+      {label && <ItemLabel>{label}</ItemLabel>}
+    </div>
+  )
+}
+
+function SubSection({ title, children }) {
+  return (
+    <div style={{ marginTop: 'var(--spacing-32)', paddingTop: 'var(--spacing-24)', borderTop: '1px solid var(--color-line-alternative)' }}>
+      <p style={{ fontSize: 'var(--font-size-label-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)', marginBottom: 'var(--spacing-20)' }}>{title}</p>
+      {children}
+    </div>
+  )
+}
+
+/* ── trailing 버튼 헬퍼 ──────────────────────────────────────── */
+function BtnIcon({ disabled } = {}) {
+  return (
+    <button disabled={disabled} tabIndex={-1} style={{
+      background: 'none', border: 'none', cursor: disabled ? 'not-allowed' : 'pointer',
+      padding: 'var(--spacing-4)', display: 'flex', alignItems: 'center',
+    }}>
+      <Icon name="circleCloseFill" size={20} color={disabled ? 'var(--color-label-disable)' : 'var(--color-label-assistive)'} />
+    </button>
+  )
+}
+
+function BtnText({ disabled } = {}) {
+  return (
+    <button disabled={disabled} tabIndex={-1} style={{
+      background: 'none', border: 'none', cursor: disabled ? 'not-allowed' : 'pointer',
+      fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)',
+      color: disabled ? 'var(--color-label-disable)' : 'var(--color-primary-normal)',
+      whiteSpace: 'nowrap', padding: '0 var(--spacing-4)',
+    }}>재발송</button>
+  )
+}
+
+/* ── status 아이콘 / trailing 헬퍼 ───────────────────────────── */
+function StatusIcon({ status }) {
+  if (status === 'positive') return <Icon name="circleCheckFill" size={20} color="var(--color-primary-normal)" />
+  if (status === 'negative') return <Icon name="circleExclamationFill" size={20} color="var(--color-status-negative)" />
+  return null
+}
+
+function ClearBtn() {
+  return (
+    <button tabIndex={-1} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center' }}>
+      <Icon name="circleCloseFill" size={20} color="var(--color-label-assistive)" />
+    </button>
+  )
+}
+
+function buildTrailing(status, showClear) {
+  const hasIcon = status !== 'normal'
+  if (!hasIcon && !showClear) return null
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+      {hasIcon && <StatusIcon status={status} />}
+      {showClear && <ClearBtn />}
+    </div>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   인터랙션
+══════════════════════════════════════════════════════════════ */
+const INTER_STATES = [
+  { label: 'Inactive',     value: '',           forceFocused: false },
+  { label: 'Active',       value: '입력된 텍스트',   forceFocused: false },
+  { label: 'Focus',        value: '',           forceFocused: true  },
+  { label: 'Active Focus', value: '입력된 텍스트',   forceFocused: true  },
+]
+
+function InteractionSection() {
+  const rowLabelStyle = {
+    fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)',
+  }
+
+  return (
+    <Section title="인터랙션">
+      <div style={CARD}>
+        {/* 열 헤더 */}
+        <div style={{ display: 'flex', gap: 'var(--spacing-16)', marginBottom: 'var(--spacing-16)' }}>
+          <div style={{ width: LABEL_W, flexShrink: 0 }} />
+          {INTER_STATES.map(s => (
+            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
+              <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)' }}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Row 1: trailingButton=false */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-16)', marginBottom: 'var(--spacing-20)' }}>
+          <div style={{ width: LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+            <span style={rowLabelStyle}>trailing=false</span>
+          </div>
+          {INTER_STATES.map(s => (
+            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0 }}>
+              <Textfield placeholder={PH} defaultValue={s.value} forceFocused={s.forceFocused} />
+            </div>
+          ))}
+        </div>
+
+        {/* Row 2: trailingButton=true */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-16)' }}>
+          <div style={{ width: LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+            <span style={rowLabelStyle}>trailing=true</span>
+          </div>
+          {INTER_STATES.map(s => (
+            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0 }}>
+              <Textfield placeholder={PH} defaultValue={s.value} forceFocused={s.forceFocused}
+                trailingContent={<BtnIcon />} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   status
+══════════════════════════════════════════════════════════════ */
+const STATUS_DESC = {
+  normal:   '메시지에 마침표를 찍어요.',
+  positive: '성공 메시지를 나타내요.',
+  negative: '에러 메시지를 나타내요.',
+}
+const STATUSES = ['normal', 'positive', 'negative']
+
+function StatusSection() {
+  function TFCol({ status, placeholder = '', value, forceFocused, disabled, trailing = null }) {
+    return (
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <Textfield
+          status={status}
+          heading="주제"
+          placeholder={placeholder}
+          defaultValue={value}
+          description={STATUS_DESC[status]}
+          disabled={disabled}
+          forceFocused={forceFocused}
+          trailingContent={trailing}
+        />
+      </div>
+    )
+  }
+
+  const statusIcon = (s) => s === 'positive'
+    ? <Icon name="circleCheckFill" size={20} color="var(--color-primary-normal)" />
+    : s === 'negative'
+      ? <Icon name="circleExclamationFill" size={20} color="var(--color-status-negative)" />
+      : null
+
+  const withClear = (icon) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-4)' }}>
+      {icon}
+      <ClearBtn />
+    </div>
+  )
+
+  function RowHead({ label }) {
+    return (
+      <div style={{ width: '88px', flexShrink: 0, paddingTop: 'var(--spacing-20)' }}>
+        <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)', whiteSpace: 'pre-line' }}>{label}</span>
+      </div>
+    )
+  }
+
+  const GAP = 'var(--spacing-20)'
+  const rowStyle = { display: 'flex', gap: GAP, alignItems: 'flex-start' }
+
+  return (
+    <Section title="status">
+      <div style={CARD}>
+        <PropHead name="status" values={STATUSES} />
+
+        {/* 열 헤더 */}
+        <div style={{ display: 'flex', gap: GAP, marginBottom: 'var(--spacing-16)' }}>
+          <div style={{ width: '88px', flexShrink: 0 }} />
+          {STATUSES.map(s => (
+            <div key={s} style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+              <ItemLabel>{s}</ItemLabel>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
+          {/* Row 1: inactive — negative만 아이콘 */}
+          <div style={rowStyle}>
+            <RowHead label="inactive" />
+            <TFCol status="normal"   placeholder={PH} />
+            <TFCol status="positive" placeholder={PH} />
+            <TFCol status="negative" placeholder={PH} trailing={statusIcon('negative')} />
+          </div>
+
+          {/* Row 2: focus — normal/positive=파란테두리, negative=빨간테두리+아이콘 */}
+          <div style={rowStyle}>
+            <RowHead label="focus" />
+            <TFCol status="normal"   placeholder={PH} forceFocused />
+            <TFCol status="positive" placeholder={PH} forceFocused />
+            <TFCol status="negative" placeholder={PH} forceFocused trailing={statusIcon('negative')} />
+          </div>
+
+          {/* Row 3: active — positive/negative 아이콘 표시 */}
+          <div style={rowStyle}>
+            <RowHead label="active" />
+            <TFCol status="normal"   value="값" />
+            <TFCol status="positive" value="값" trailing={statusIcon('positive')} />
+            <TFCol status="negative" value="값" trailing={statusIcon('negative')} />
+          </div>
+
+          {/* Row 4: active focus + trailing — forceFocused + 아이콘 + clear */}
+          <div style={rowStyle}>
+            <RowHead label={'active +\ntrailing'} />
+            <TFCol status="normal"   value="값" forceFocused trailing={withClear(null)} />
+            <TFCol status="positive" value="값" forceFocused trailing={withClear(statusIcon('positive'))} />
+            <TFCol status="negative" value="값" forceFocused trailing={withClear(statusIcon('negative'))} />
+          </div>
+
+          {/* Row 5: disabled */}
+          <div style={rowStyle}>
+            <RowHead label="disabled" />
+            <TFCol status="normal"   placeholder={PH} disabled />
+            <TFCol status="positive" value="값"       disabled trailing={statusIcon('positive')} />
+            <TFCol status="negative" placeholder={PH} disabled trailing={statusIcon('negative')} />
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   active
+══════════════════════════════════════════════════════════════ */
+function ActiveSection() {
+  return (
+    <Section title="active">
+      <div style={CARD}>
+        <PropHead name="active" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+          <TFItem label="false">
+            <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." />
+          </TFItem>
+          <TFItem label="true">
+            <Textfield heading="주제" defaultValue="입력된 텍스트" description="메시지에 마침표를 찍어요." />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   focus
+══════════════════════════════════════════════════════════════ */
+function FocusSection() {
+  return (
+    <Section title="focus">
+      <div style={CARD}>
+        <PropHead name="focus" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <TFItem label="false">
+            <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." />
+          </TFItem>
+          <TFItem label="true">
+            <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." forceFocused />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   disable
+══════════════════════════════════════════════════════════════ */
+function DisableSection() {
+  return (
+    <Section title="disable">
+      <div style={CARD}>
+        <PropHead name="disable" values={['false', 'true']} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-20)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+            <TFItem label="false">
+              <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." />
+            </TFItem>
+            <TFItem label="true">
+              <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." disabled />
+            </TFItem>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+            <TFItem label="false (active)">
+              <Textfield heading="주제" defaultValue="입력된 텍스트" description="메시지에 마침표를 찍어요." />
+            </TFItem>
+            <TFItem label="true (active)">
+              <Textfield heading="주제" defaultValue="입력된 텍스트" description="메시지에 마침표를 찍어요." disabled />
+            </TFItem>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   heading
+══════════════════════════════════════════════════════════════ */
+function HeadingSection() {
+  return (
+    <Section title="heading">
+      <div style={CARD}>
+        <PropHead name="heading" values={['none', '"string"']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <TFItem label="none">
+            <Textfield placeholder={PH} />
+          </TFItem>
+          <TFItem label='"string"'>
+            <Textfield heading="이름" placeholder="실명을 입력해 주세요." />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   requiredBadge
+══════════════════════════════════════════════════════════════ */
+function RequiredBadgeSection() {
+  return (
+    <Section title="requiredBadge">
+      <div style={CARD}>
+        <PropHead name="requiredBadge" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          <TFItem label="false">
+            <Textfield heading="이메일" placeholder="example@email.com" />
+          </TFItem>
+          <TFItem label="true">
+            <Textfield heading="이메일" required placeholder="example@email.com" />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   description
+══════════════════════════════════════════════════════════════ */
+function DescriptionSection() {
+  return (
+    <Section title="description">
+      <div style={CARD}>
+        <PropHead name="description" values={['none', '"string"']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <TFItem label="none">
+            <Textfield heading="비밀번호" placeholder={PH} />
+          </TFItem>
+          <TFItem label='"string"'>
+            <Textfield heading="비밀번호" description="영문, 숫자, 특수문자 포함 8자 이상" placeholder={PH} />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   icon
+══════════════════════════════════════════════════════════════ */
+function IconSection() {
+  return (
+    <Section title="icon">
+      <div style={CARD}>
+        <PropHead name="icon" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+          <TFItem label="false">
+            <Textfield placeholder="검색어를 입력해 주세요." />
+          </TFItem>
+          <TFItem label="true">
+            <Textfield icon="search" placeholder="검색어를 입력해 주세요." />
+          </TFItem>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   trailingButton
+══════════════════════════════════════════════════════════════ */
+function TrailingButtonSection() {
+  const COL_W = '220px'
+  const colHeadStyle = {
+    fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)',
+    color: 'var(--color-label-normal)', textAlign: 'center',
+  }
+  const rowLabelStyle = {
+    fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)',
+    color: 'var(--color-label-normal)', whiteSpace: 'pre-line',
+  }
+  const ROW_LABEL_W = '100px'
+  const GAP = 'var(--spacing-20)'
+
+  return (
+    <Section title="trailingButton">
+      <div style={CARD}>
+        <PropHead name="trailingButton" values={['false', 'true']} />
+
+        {/* 열 헤더 */}
+        <div style={{ display: 'flex', gap: GAP, marginBottom: 'var(--spacing-16)' }}>
+          <div style={{ width: ROW_LABEL_W, flexShrink: 0 }} />
+          <div style={{ width: COL_W, flexShrink: 0 }}><span style={colHeadStyle}>false</span></div>
+          <div style={{ width: COL_W, flexShrink: 0 }}><span style={colHeadStyle}>true</span></div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: GAP }}>
+          {/* Row 1: normal inactive */}
+          <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
+            <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+              <span style={rowLabelStyle}>{'normal\ninactive'}</span>
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield placeholder={PH} />
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield placeholder={PH} trailingContent={<BtnIcon />} />
+            </div>
+          </div>
+
+          {/* Row 2: normal active */}
+          <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
+            <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+              <span style={rowLabelStyle}>{'normal\nactive'}</span>
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield defaultValue="입력된 텍스트" />
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+            </div>
+          </div>
+
+          {/* Row 3: positive active */}
+          <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
+            <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+              <span style={rowLabelStyle}>{'positive\nactive'}</span>
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield status="positive" defaultValue="입력된 텍스트" trailingContent={buildTrailing('positive', false)} />
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield status="positive" defaultValue="입력된 텍스트" trailingContent={buildTrailing('positive', true)} />
+            </div>
+          </div>
+
+          {/* Row 4: negative inactive */}
+          <div style={{ display: 'flex', gap: GAP, alignItems: 'flex-start' }}>
+            <div style={{ width: ROW_LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
+              <span style={rowLabelStyle}>{'negative\ninactive'}</span>
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield status="negative" placeholder={PH} />
+            </div>
+            <div style={{ width: COL_W, flexShrink: 0 }}>
+              <Textfield status="negative" placeholder={PH} trailingContent={buildTrailing('negative', false)} />
+            </div>
+          </div>
+        </div>
+
+        <SubSection title="trailingButton variant">
+          <PropHead name="variant" values={['normal', 'assistive']} />
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', marginBottom: 'var(--spacing-24)' }}>
+            <TFItem label="normal">
+              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+            </TFItem>
+            <TFItem label="assistive">
+              <Textfield heading="인증번호" placeholder="6자리 입력" trailingContent={<BtnText />} />
+            </TFItem>
+          </div>
+
+          <PropHead name="disable" values={['false', 'true']} />
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+            <TFItem label="false">
+              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon />} />
+            </TFItem>
+            <TFItem label="true">
+              <Textfield defaultValue="입력된 텍스트" trailingContent={<BtnIcon disabled />} />
+            </TFItem>
+          </div>
+        </SubSection>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   trailingContent
+══════════════════════════════════════════════════════════════ */
+function TrailingContentSection() {
+  /* 뱃지 */
+  function CountBadge() {
+    return (
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        minWidth: 'var(--spacing-20)', height: 'var(--spacing-20)',
+        padding: '0 var(--spacing-4)',
+        borderRadius: 'var(--spacing-20)',
+        backgroundColor: 'var(--color-status-negative)',
+        fontSize: 'var(--font-size-caption-2)', fontWeight: 'var(--font-weight-semibold)',
+        color: 'var(--color-static-white)', lineHeight: 1,
+      }}>3</span>
+    )
+  }
+
+  /* 아이콘 버튼 */
+  function TrailingIconBtn() {
+    return (
+      <button tabIndex={-1} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center' }}>
+        <Icon name="circleCloseFill" size={20} color="var(--color-label-assistive)" />
+      </button>
+    )
+  }
+
+  const resources = [
+    {
+      label: 'Icon',
+      content: <Icon name="bookmarkFill" size={20} color="var(--color-label-assistive)" />,
+    },
+    {
+      label: 'Text',
+      content: (
+        <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-regular)', color: 'var(--color-label-normal)', whiteSpace: 'nowrap' }}>원</span>
+      ),
+    },
+    {
+      label: 'Timer',
+      content: (
+        <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-status-negative)', whiteSpace: 'nowrap' }}>3:00</span>
+      ),
+    },
+    {
+      label: 'Badge',
+      content: <CountBadge />,
+    },
+    {
+      label: 'Icon Button',
+      content: <TrailingIconBtn />,
+    },
+  ]
+
+  return (
+    <Section title="trailingContent">
+      <div style={CARD}>
+        <PropHead name="trailingContent" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+          <TFItem label="false">
+            <Textfield placeholder={PH} />
+          </TFItem>
+          <TFItem label="true">
+            <Textfield defaultValue="입력된 텍스트" trailingContent={<TrailingIconBtn />} />
+          </TFItem>
+        </div>
+
+        <SubSection title="resource">
+          <div style={{ display: 'flex', gap: 'var(--spacing-20)', flexWrap: 'wrap' }}>
+            {resources.map(({ label, content }) => (
+              <TFItem key={label} label={label} width={200}>
+                <Textfield defaultValue="입력된 텍스트" trailingContent={content} />
+              </TFItem>
+            ))}
+          </div>
+        </SubSection>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   autoComplete
+══════════════════════════════════════════════════════════════ */
+const AUTO_SUGGESTIONS = ['서울특별시 강남구', '서울특별시 마포구', '서울특별시 종로구', '경기도 성남시']
+
+function AutoCompleteSection() {
+  const dropdownStyle = {
+    marginTop: 'var(--spacing-4)',
+    backgroundColor: 'var(--color-bg-elevated)',
+    border: '1px solid var(--color-line-neutral)',
+    borderRadius: 'var(--spacing-8)',
+    boxShadow: 'var(--shadow-normal-medium)',
+    overflow: 'hidden',
+  }
+
+  const itemStyle = {
+    padding: 'var(--spacing-12) var(--spacing-16)',
+    fontSize: 'var(--font-size-body-1)',
+    fontWeight: 'var(--font-weight-regular)',
+    lineHeight: 'var(--line-height-body-1-normal)',
+    color: 'var(--color-label-normal)',
+    cursor: 'pointer',
+  }
+
+  return (
+    <Section title="autoComplete">
+      <div style={CARD}>
+        <PropHead name="autoComplete" values={['false', 'true']} />
+        <div style={{ display: 'flex', gap: 'var(--spacing-40)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          {/* false */}
+          <TFItem label="false">
+            <Textfield heading="주소" placeholder="주소를 입력해 주세요." defaultValue="서울" />
+          </TFItem>
+
+          {/* true — 드롭다운 mock */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--spacing-8)' }}>
+            <div style={{ width: `${TF_W}px` }}>
+              <Textfield heading="주소" placeholder="주소를 입력해 주세요." defaultValue="서울" forceFocused />
+              <div style={dropdownStyle}>
+                {AUTO_SUGGESTIONS.map((s, i) => (
+                  <div
+                    key={s}
+                    style={{
+                      ...itemStyle,
+                      backgroundColor: i === 0 ? 'var(--color-fill-normal)' : 'transparent',
+                      borderTop: i > 0 ? '1px solid var(--color-line-alternative)' : 'none',
+                    }}
+                  >{s}</div>
+                ))}
+              </div>
+            </div>
+            <ItemLabel>true</ItemLabel>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   preview
+══════════════════════════════════════════════════════════════ */
+function PreviewSection() {
+  const artboardBase = {
+    borderRadius: 'var(--spacing-16)',
+    padding: 'var(--spacing-32)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'var(--spacing-20)',
+    flex: 1,
+    minWidth: '300px',
+  }
+
+  return (
+    <Section title="preview">
+      <div style={{ display: 'flex', gap: 'var(--spacing-20)', flexWrap: 'wrap' }}>
+        {/* Light */}
+        <div style={{
+          ...artboardBase,
+          backgroundColor: 'var(--color-bg-normal)',
+          border: '1px solid var(--color-line-alternative)',
+        }}>
+          <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-assistive)' }}>Light</span>
+          <Textfield heading="이름" placeholder={PH} />
+          <Textfield heading="이메일" required placeholder="example@email.com" defaultValue="user@infobank.net" />
+          <Textfield status="negative" heading="비밀번호" placeholder={PH} description="올바르지 않은 형식입니다." trailingContent={buildTrailing('negative', false)} />
+          <Textfield status="positive" heading="인증번호" placeholder="6자리 입력" defaultValue="123456" description="인증이 완료되었습니다." trailingContent={buildTrailing('positive', false)} />
+        </div>
+
+        {/* Dark */}
+        <div style={{
+          ...artboardBase,
+          backgroundColor: 'var(--color-label-normal)',
+        }}>
+          <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-static-white)', opacity: 0.5 }}>Dark</span>
+          <Textfield heading="이름" placeholder={PH} />
+          <Textfield heading="이메일" required placeholder="example@email.com" defaultValue="user@infobank.net" />
+          <Textfield status="negative" heading="비밀번호" placeholder={PH} description="올바르지 않은 형식입니다." trailingContent={buildTrailing('negative', false)} />
+          <Textfield status="positive" heading="인증번호" placeholder="6자리 입력" defaultValue="123456" description="인증이 완료되었습니다." trailingContent={buildTrailing('positive', false)} />
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════════════
+   페이지
+══════════════════════════════════════════════════════════════ */
 export default function TextfieldPage() {
   return (
     <div>
@@ -11,148 +748,21 @@ export default function TextfieldPage() {
         fontWeight:   'var(--font-weight-bold)',
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
-      }}>Textfield</h2>
+      }}>Textinput_Textfield</h2>
 
-      <Section title="Status" gap="var(--spacing-24)">
-        <Case label='status="normal"'>
-          <div style={{ width: '280px' }}>
-            <Textfield status="normal" placeholder="입력하세요" />
-          </div>
-        </Case>
-        <Case label='status="positive"'>
-          <div style={{ width: '280px' }}>
-            <Textfield status="positive" placeholder="입력하세요" defaultValue="올바른 입력값" />
-          </div>
-        </Case>
-        <Case label='status="negative"'>
-          <div style={{ width: '280px' }}>
-            <Textfield status="negative" placeholder="입력하세요" defaultValue="잘못된 입력값" />
-          </div>
-        </Case>
-      </Section>
-
-      <Section title="Disabled" gap="var(--spacing-24)">
-        <Case label="disabled (비어 있음)">
-          <div style={{ width: '280px' }}>
-            <Textfield disabled placeholder="비활성화 상태" />
-          </div>
-        </Case>
-        <Case label="disabled (값 있음)">
-          <div style={{ width: '280px' }}>
-            <Textfield disabled defaultValue="변경 불가 값" />
-          </div>
-        </Case>
-      </Section>
-
-      <Section title="With Heading" gap="var(--spacing-24)" column>
-        <Case label="heading만">
-          <div style={{ width: '360px' }}>
-            <Textfield heading="이름" placeholder="실명을 입력하세요" />
-          </div>
-        </Case>
-        <Case label="heading + required">
-          <div style={{ width: '360px' }}>
-            <Textfield heading="이메일" required placeholder="example@email.com" />
-          </div>
-        </Case>
-        <Case label="heading + required + description">
-          <div style={{ width: '360px' }}>
-            <Textfield
-              heading="비밀번호"
-              required
-              description="영문, 숫자, 특수문자를 포함해 8자 이상 입력하세요"
-              placeholder="비밀번호를 입력하세요"
-            />
-          </div>
-        </Case>
-        <Case label="heading + status=negative + description">
-          <div style={{ width: '360px' }}>
-            <Textfield
-              heading="이메일"
-              status="negative"
-              description="올바르지 않은 이메일 형식입니다"
-              defaultValue="notanemail"
-            />
-          </div>
-        </Case>
-        <Case label="heading + status=positive + description">
-          <div style={{ width: '360px' }}>
-            <Textfield
-              heading="사용자명"
-              status="positive"
-              description="사용 가능한 사용자명입니다"
-              defaultValue="john_doe"
-            />
-          </div>
-        </Case>
-      </Section>
-
-      <Section title="With Leading Icon" gap="var(--spacing-24)">
-        <Case label='icon="search"'>
-          <div style={{ width: '280px' }}>
-            <Textfield icon="search" placeholder="검색어를 입력하세요" />
-          </div>
-        </Case>
-        <Case label='icon="person"'>
-          <div style={{ width: '280px' }}>
-            <Textfield icon="person" placeholder="이름을 입력하세요" />
-          </div>
-        </Case>
-        <Case label='icon="lock"'>
-          <div style={{ width: '280px' }}>
-            <Textfield icon="lock" placeholder="비밀번호를 입력하세요" />
-          </div>
-        </Case>
-      </Section>
-
-      <Section title="With Trailing Content" gap="var(--spacing-24)">
-        <Case label="trailingContent: 버튼">
-          <div style={{ width: '280px' }}>
-            <Textfield
-              placeholder="검색어를 입력하세요"
-              trailingContent={
-                <button style={{
-                  background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--spacing-4)',
-                  display: 'flex', alignItems: 'center', color: 'var(--color-label-assistive)',
-                }}>
-                  <Icon name="xCircle" size={20} />
-                </button>
-              }
-            />
-          </div>
-        </Case>
-        <Case label="trailingContent: 텍스트 버튼">
-          <div style={{ width: '280px' }}>
-            <Textfield
-              heading="인증번호"
-              placeholder="6자리 입력"
-              trailingContent={
-                <button style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)',
-                  color: 'var(--color-primary-normal)', whiteSpace: 'nowrap', padding: '0 var(--spacing-4)',
-                }}>재발송</button>
-              }
-            />
-          </div>
-        </Case>
-        <Case label="icon + trailing">
-          <div style={{ width: '280px' }}>
-            <Textfield
-              icon="search"
-              placeholder="검색어를 입력하세요"
-              trailingContent={
-                <button style={{
-                  background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--spacing-4)',
-                  display: 'flex', alignItems: 'center', color: 'var(--color-label-assistive)',
-                }}>
-                  <Icon name="xCircle" size={20} />
-                </button>
-              }
-            />
-          </div>
-        </Case>
-      </Section>
+      <InteractionSection />
+      <StatusSection />
+      <ActiveSection />
+      <FocusSection />
+      <DisableSection />
+      <HeadingSection />
+      <RequiredBadgeSection />
+      <DescriptionSection />
+      <IconSection />
+      <TrailingButtonSection />
+      <TrailingContentSection />
+      <AutoCompleteSection />
+      <PreviewSection />
     </div>
   )
 }
