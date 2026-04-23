@@ -43,7 +43,7 @@
 function CheckboxOff() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-      <rect x="1" y="1" width="18" height="18" rx="4" stroke="var(--color-line-normal)" strokeWidth="1.5" />
+      <rect x="1" y="1" width="18" height="18" rx="5" stroke="var(--color-line-normal)" strokeWidth="1.5" />
     </svg>
   )
 }
@@ -65,7 +65,7 @@ function CheckboxDisabled({ active }) {
             <rect width="20" height="20" rx="5" fill="var(--color-label-disable)" />
             <path d="M5 10L8.5 13.5L15 7" stroke="var(--color-static-white)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
           </>
-        : <rect x="1" y="1" width="18" height="18" rx="4" stroke="var(--color-label-disable)" strokeWidth="1.5" />
+        : <rect x="1" y="1" width="18" height="18" rx="5" stroke="var(--color-label-disable)" strokeWidth="1.5" />
       }
     </svg>
   )
@@ -98,7 +98,7 @@ function RadioDisabled({ active }) {
   )
 }
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 /* ── 인터랙션 오버레이 opacity ───────────────────────────────── */
 const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
@@ -206,6 +206,7 @@ function MenuItem({ item, variant, cellPadding }) {
   const labelTextStyle = {
     flex:          '1 0 0',
     minWidth:      0,
+    margin:        0,
     fontSize:      'var(--font-size-body-1)',
     lineHeight:    'var(--line-height-body-1-normal)',
     letterSpacing: 'var(--letter-spacing-body-1)',
@@ -220,6 +221,7 @@ function MenuItem({ item, variant, cellPadding }) {
     letterSpacing: 'var(--letter-spacing-label-2)',
     fontWeight:    'var(--font-weight-regular)',
     color:         isDisabled ? 'var(--color-label-disable)' : 'var(--color-label-alternative)',
+    margin:        0,
     width:         '100%',
     flexShrink:    0,
     overflow:      'hidden',
@@ -230,17 +232,38 @@ function MenuItem({ item, variant, cellPadding }) {
 
   return (
     <div style={cellStyle}>
+      {/* 인터랙션 오버레이 — 메뉴 카드 전체 너비로 확장 (20px padding 보상) */}
+      <div
+        aria-hidden="true"
+        style={{
+          position:      'absolute',
+          top:           0,
+          bottom:        0,
+          left:          'calc(-1 * var(--spacing-20))',
+          right:         'calc(-1 * var(--spacing-20))',
+          padding:       '0 var(--spacing-8)',
+          pointerEvents: 'none',
+        }}
+      >
+        <div style={{
+          width:           '100%',
+          height:          '100%',
+          backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
+          borderRadius:    'var(--spacing-12)',
+          transition:      'background-color 0.15s ease',
+        }} />
+      </div>
+
       <div style={innerStyle}>
         <button
           style={{
-            background:  'none',
-            border:      'none',
-            padding:     0,
-            width:       '100%',
-            textAlign:   'left',
-            cursor:      isDisabled ? 'not-allowed' : 'pointer',
-            position:    'relative',
-            overflow:    'hidden',
+            background: 'none',
+            border:     'none',
+            padding:    0,
+            width:      '100%',
+            textAlign:  'left',
+            cursor:     isDisabled ? 'not-allowed' : 'pointer',
+            position:   'relative',
           }}
           onClick={isDisabled ? undefined : item.onClick}
           disabled={isDisabled}
@@ -252,21 +275,11 @@ function MenuItem({ item, variant, cellPadding }) {
           onFocus={() => setIsFocused(true)}
           onBlur={() => { setIsFocused(false); setIsPressed(false) }}
         >
-          <div
-            aria-hidden="true"
-            style={{
-              position:        'absolute',
-              inset:           0,
-              backgroundColor: `color-mix(in srgb, var(--color-label-normal) ${Math.round(overlayOpacity * 100)}%, transparent)`,
-              pointerEvents:   'none',
-              transition:      'background-color 0.15s ease',
-            }}
-          />
           <div style={containerStyle}>
             <div style={wrapperStyle}>
               {/* leading indicator (checkbox/radio) */}
               {variant !== 'normal' && (
-                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', paddingTop: 'var(--spacing-2)' }}>
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', paddingTop: 'var(--spacing-2)', paddingBottom: 'var(--spacing-2)' }}>
                   <LeadingIndicator variant={variant} active={isActive} disabled={isDisabled} />
                 </div>
               )}
@@ -305,11 +318,69 @@ function MenuTitle({ label }) {
         letterSpacing: 'var(--letter-spacing-label-2)',
         fontWeight:    'var(--font-weight-medium)',
         color:         'var(--color-label-alternative)',
+        margin:        0,
         flex:          '1 0 0',
         minWidth:      0,
       }}>
         {label}
       </p>
+    </div>
+  )
+}
+
+/* ── 커스텀 스크롤바 ─────────────────────────────────────────── */
+function CustomScrollBar({ scrollRef }) {
+  const [thumbTop,    setThumbTop]    = useState(0)
+  const [thumbHeight, setThumbHeight] = useState(0)
+  const [visible,     setVisible]     = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el
+      if (scrollHeight <= clientHeight) { setVisible(false); return }
+      setVisible(true)
+      const trackHeight   = clientHeight - 16 // 8px inset top + bottom
+      const ratio         = clientHeight / scrollHeight
+      const newThumbH     = Math.max(Math.round(trackHeight * ratio), 20)
+      const maxTop        = trackHeight - newThumbH
+      const scrollRatio   = scrollTop / (scrollHeight - clientHeight)
+      setThumbHeight(newThumbH)
+      setThumbTop(Math.round(scrollRatio * maxTop))
+    }
+
+    update()
+    el.addEventListener('scroll', update)
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => { el.removeEventListener('scroll', update); ro.disconnect() }
+  }, [scrollRef])
+
+  if (!visible) return null
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position:      'absolute',
+        top:           'var(--spacing-8)',
+        bottom:        'var(--spacing-8)',
+        right:         'var(--spacing-4)',
+        width:         '3px',
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{
+        position:        'absolute',
+        top:             `${thumbTop}px`,
+        left:            0,
+        width:           '100%',
+        height:          `${thumbHeight}px`,
+        backgroundColor: 'var(--color-fill-strong)',
+        borderRadius:    '1000px',
+      }} />
     </div>
   )
 }
@@ -322,7 +393,7 @@ function ActionArea({ leadingLabel, onLeadingAction, trailingLabel, onTrailingAc
       alignItems:       'center',
       gap:              'var(--spacing-24)',
       padding:          'var(--spacing-12)',
-      borderTop:        '1px solid var(--color-line-solid-alternative)',
+      borderTop:        '1px solid var(--color-line-alternative)',
       backgroundColor:  'var(--color-bg-elevated)',
       flexShrink:       0,
       width:            '100%',
@@ -360,8 +431,8 @@ function ActionArea({ leadingLabel, onLeadingAction, trailingLabel, onTrailingAc
           justifyContent:  'center',
           paddingTop:      '7px',
           paddingBottom:   '7px',
-          paddingLeft:     '14px',
-          paddingRight:    '14px',
+          paddingLeft:     'var(--spacing-14)',
+          paddingRight:    'var(--spacing-14)',
           borderRadius:    'var(--spacing-8)',
           border:          'none',
           cursor:          'pointer',
@@ -392,6 +463,8 @@ export default function Menu({
   scrollable  = false,
   className   = '',
 }) {
+  const scrollRef = useRef(null)
+
   const containerStyle = {
     display:         'flex',
     flexDirection:   'column',
@@ -413,19 +486,25 @@ export default function Menu({
     boxSizing:       'border-box',
   }
 
+  const scrollWrapperStyle = {
+    position: 'relative',
+    width:    '100%',
+  }
+
   const scrollAreaStyle = {
-    display:       'flex',
-    flexDirection: 'column',
-    alignItems:    'flex-start',
-    width:         '100%',
-    paddingLeft:   'var(--spacing-20)',
-    paddingRight:  'var(--spacing-20)',
-    paddingTop:    'var(--spacing-8)',
-    paddingBottom: 'var(--spacing-8)',
-    overflowY:     scrollable ? 'auto' : 'visible',
-    maxHeight:     scrollable ? '400px' : undefined,
-    boxSizing:     'border-box',
-    position:      'relative',
+    display:          'flex',
+    flexDirection:    'column',
+    alignItems:       'flex-start',
+    width:            '100%',
+    paddingLeft:      'var(--spacing-20)',
+    paddingRight:     'var(--spacing-20)',
+    paddingTop:       'var(--spacing-8)',
+    paddingBottom:    'var(--spacing-8)',
+    overflowY:        scrollable ? 'auto' : 'visible',
+    maxHeight:        scrollable ? '400px' : undefined,
+    boxSizing:        'border-box',
+    scrollbarWidth:   scrollable ? 'none' : undefined,
+    msOverflowStyle:  scrollable ? 'none' : undefined,
   }
 
   const contentsStyle = {
@@ -440,21 +519,24 @@ export default function Menu({
   return (
     <div style={containerStyle} className={className}>
       <div style={innerStyle}>
-        <div style={scrollAreaStyle}>
-          <div style={contentsStyle}>
-            {items.map((item, i) =>
-              item.type === 'title'
-                ? <MenuTitle key={i} label={item.label} />
-                : (
-                  <MenuItem
-                    key={i}
-                    item={item}
-                    variant={variant}
-                    cellPadding={cellPadding}
-                  />
-                )
-            )}
+        <div style={scrollWrapperStyle}>
+          <div ref={scrollRef} style={scrollAreaStyle}>
+            <div style={contentsStyle}>
+              {items.map((item, i) =>
+                item.type === 'title'
+                  ? <MenuTitle key={i} label={item.label} />
+                  : (
+                    <MenuItem
+                      key={i}
+                      item={item}
+                      variant={variant}
+                      cellPadding={cellPadding}
+                    />
+                  )
+              )}
+            </div>
           </div>
+          {scrollable && <CustomScrollBar scrollRef={scrollRef} />}
         </div>
 
         {actionArea && (
