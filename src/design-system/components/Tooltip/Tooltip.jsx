@@ -118,8 +118,8 @@ const SIZE_SPEC = {
   small: {
     paddingLeft:   'var(--spacing-8)',
     paddingRight:  'var(--spacing-8)',
-    paddingTop:    '5px',
-    paddingBottom: '5px',
+    paddingTop:    'var(--spacing-5)',
+    paddingBottom: 'var(--spacing-5)',
     borderRadius:  'var(--spacing-6)',
     minWidth:      '36px',
     maxWidth:      '264px',
@@ -127,7 +127,7 @@ const SIZE_SPEC = {
     lineHeight:    'var(--line-height-caption-2)',
     letterSpacing: 'var(--letter-spacing-caption-2)',
     gap:           'var(--spacing-2)',
-    arrowEdgeOffset: '5px',
+    arrowEdgeOffset: 'var(--spacing-5)',
   },
 }
 
@@ -246,6 +246,7 @@ export default function Tooltip({
     color:         'var(--color-inverse-label)',
     flex:          '1 0 0',
     minWidth:      0,
+    margin:        0,
     position:      'relative',
   }
 
@@ -258,6 +259,7 @@ export default function Tooltip({
     opacity:       0.61,
     flexShrink:    0,
     whiteSpace:    'nowrap',
+    margin:        0,
     position:      'relative',
   }
 

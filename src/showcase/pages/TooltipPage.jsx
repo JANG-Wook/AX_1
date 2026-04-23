@@ -1,9 +1,18 @@
 import Tooltip from '../../design-system/components/Tooltip/Tooltip'
 import Section, { Case } from '../Section'
 
-const POSITIONS = ['bottom', 'top', 'right', 'left']
-const ALIGNS   = ['start', 'center', 'end']
-const SIZES    = ['medium', 'small']
+/* ── 앵커 박스 (포지션/얼라인 데모용) ─────────────────────────── */
+function AnchorBox() {
+  return (
+    <div style={{
+      width:        '96px',
+      height:       '96px',
+      border:       '1px dashed var(--color-line-normal)',
+      borderRadius: 'var(--spacing-8)',
+      flexShrink:   0,
+    }} />
+  )
+}
 
 export default function TooltipPage() {
   return (
@@ -16,58 +25,116 @@ export default function TooltipPage() {
         marginBottom: 'var(--spacing-32)',
       }}>Tooltip</h2>
 
-      <Section title="Size" gap="var(--spacing-24)">
-        {SIZES.map(size => (
-          <Case key={size} label={`size="${size}"`} center>
-            <Tooltip size={size} label="저장" position="bottom" />
-          </Case>
-        ))}
+      {/* ── size ─────────────────────────────────────────────── */}
+      <Section title="size" gap="var(--spacing-24)">
+        <Case label='size="medium" (default)' center>
+          <Tooltip size="medium" label="메시지에 마침표를 찍어요." position="bottom" />
+        </Case>
+        <Case label='size="small"' center>
+          <Tooltip size="small" label="역할" position="bottom" />
+        </Case>
       </Section>
 
-      <Section title="Position" gap="var(--spacing-32)">
-        {POSITIONS.map(pos => (
-          <Case key={pos} label={`position="${pos}"`} center>
-            <Tooltip position={pos} label="툴팁" align="center" />
-          </Case>
-        ))}
+      {/* ── position ─────────────────────────────────────────── */}
+      <Section title="position">
+        <div style={{
+          display:         'flex',
+          flexDirection:   'column',
+          alignItems:      'center',
+          gap:             'var(--spacing-24)',
+          backgroundColor: 'var(--color-fill-alternative)',
+          borderRadius:    'var(--spacing-16)',
+          padding:         'var(--spacing-48)',
+          width:           '100%',
+          boxSizing:       'border-box',
+        }}>
+          {/* top */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Tooltip position="top" label="툴팁" />
+            <AnchorBox />
+          </div>
+
+          {/* middle row: left · spacer · right */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-24)' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Tooltip position="left" label="툴팁" />
+              <AnchorBox />
+            </div>
+            <div style={{ width: '96px', height: '96px', flexShrink: 0 }} />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <AnchorBox />
+              <Tooltip position="right" label="툴팁" />
+            </div>
+          </div>
+
+          {/* bottom */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <AnchorBox />
+            <Tooltip position="bottom" label="툴팁" />
+          </div>
+        </div>
       </Section>
 
-      <Section title="Align (position=bottom 기준)" gap="var(--spacing-24)">
-        {ALIGNS.map(align => (
+      {/* ── align — arrow = vertical (position = top, bottom) ── */}
+      <Section title="align  —  arrow = vertical" gap="var(--spacing-32)">
+        {['start', 'center', 'end'].map(align => (
           <Case key={align} label={`align="${align}"`} center>
-            <Tooltip position="bottom" align={align} label="정렬 예시" />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--spacing-24)' }}>
+              {/* position=top */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Tooltip position="top" align={align} label="툴팁" />
+                <AnchorBox />
+              </div>
+              {/* position=bottom */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <AnchorBox />
+                <Tooltip position="bottom" align={align} label="툴팁" />
+              </div>
+            </div>
           </Case>
         ))}
       </Section>
 
-      <Section title="Align (position=right 기준)" gap="var(--spacing-24)">
-        {ALIGNS.map(align => (
+      {/* ── align — arrow = horizontal (position = left, right) ─ */}
+      <Section title="align  —  arrow = horizontal" gap="var(--spacing-48)">
+        {['start', 'center', 'end'].map(align => (
           <Case key={align} label={`align="${align}"`} center>
-            <Tooltip position="right" align={align} label="정렬 예시" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+              {/* position=right */}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <AnchorBox />
+                <Tooltip position="right" align={align} label="툴팁" />
+              </div>
+              {/* position=left */}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Tooltip position="left" align={align} label="툴팁" />
+                <AnchorBox />
+              </div>
+            </div>
           </Case>
         ))}
       </Section>
 
-      <Section title="Shortcut" gap="var(--spacing-24)">
-        <Case label="shortcut 없음" center>
-          <Tooltip label="복사" position="bottom" />
-        </Case>
-        <Case label='shortcut shortcutText="⌘C"' center>
-          <Tooltip label="복사" position="bottom" shortcut shortcutText="⌘C" />
-        </Case>
-        <Case label='shortcut shortcutText="⌘⇧Z"' center>
-          <Tooltip label="다시 실행" position="bottom" shortcut shortcutText="⌘⇧Z" />
-        </Case>
-      </Section>
-
-      <Section title="Size × Position Matrix" gap="var(--spacing-32)">
-        {SIZES.map(size =>
-          POSITIONS.map(pos => (
-            <Case key={`${size}-${pos}`} label={`${size} · ${pos}`} center>
-              <Tooltip size={size} position={pos} label="예시" align="center" />
-            </Case>
-          ))
-        )}
+      {/* ── shortcut ──────────────────────────────────────────── */}
+      <Section title="shortcut" column gap="var(--spacing-24)">
+        {/* medium */}
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <Case label='size="medium"  shortcut=false (default)' center>
+            <Tooltip label="메시지에 마침표를 찍어요." position="bottom" />
+          </Case>
+          <Case label='size="medium"  shortcut=true  shortcutText="⌘C"' center>
+            <Tooltip label="메시지에 마침표를 찍어요." position="bottom" shortcut shortcutText="⌘C" />
+          </Case>
+        </div>
+        {/* small */}
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+          <Case label='size="small"  shortcut=false (default)' center>
+            <Tooltip size="small" label="역할" position="bottom" />
+          </Case>
+          <Case label='size="small"  shortcut=true  shortcutText="⌘C"' center>
+            <Tooltip size="small" label="역할" position="bottom" shortcut shortcutText="⌘C" />
+          </Case>
+        </div>
       </Section>
     </div>
   )

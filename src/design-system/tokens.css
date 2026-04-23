@@ -380,6 +380,7 @@ html, body, #root { margin: 0; padding: 0; height: 100%; }
   --spacing-1:   1px;
   --spacing-2:   2px;
   --spacing-4:   4px;
+  --spacing-5:   5px;
   --spacing-6:   6px;
   --spacing-8:   8px;
   --spacing-10:  10px;

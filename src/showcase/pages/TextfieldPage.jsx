@@ -1,6 +1,7 @@
 import Textfield from '../../design-system/components/Textfield/Textfield'
 import Icon      from '../../design-system/components/Icon/Icon'
 import Section   from '../Section'
+import Menu      from '../../design-system/components/Menu/Menu'
 
 /* ── 공용 상수 ────────────────────────────────────────────────── */
 const CARD = {
@@ -631,27 +632,19 @@ function TrailingContentSection() {
 /* ══════════════════════════════════════════════════════════════
    autoComplete
 ══════════════════════════════════════════════════════════════ */
-const AUTO_SUGGESTIONS = ['서울특별시 강남구', '서울특별시 마포구', '서울특별시 종로구', '경기도 성남시']
+const AUTO_SUGGESTIONS = [
+  "'서울' 사용하기",
+  '서울특별시 강남구',
+  '서울특별시 마포구',
+  '서울특별시 종로구',
+  '서울특별시 서초구',
+  '서울특별시 송파구',
+  '서울특별시 용산구',
+  '서울특별시 성동구',
+  '서울특별시 광진구',
+].map(label => ({ label, onClick: () => {} }))
 
 function AutoCompleteSection() {
-  const dropdownStyle = {
-    marginTop: 'var(--spacing-4)',
-    backgroundColor: 'var(--color-bg-elevated)',
-    border: '1px solid var(--color-line-neutral)',
-    borderRadius: 'var(--spacing-8)',
-    boxShadow: 'var(--shadow-normal-medium)',
-    overflow: 'hidden',
-  }
-
-  const itemStyle = {
-    padding: 'var(--spacing-12) var(--spacing-16)',
-    fontSize: 'var(--font-size-body-1)',
-    fontWeight: 'var(--font-weight-regular)',
-    lineHeight: 'var(--line-height-body-1-normal)',
-    color: 'var(--color-label-normal)',
-    cursor: 'pointer',
-  }
-
   return (
     <Section title="autoComplete">
       <div style={CARD}>
@@ -662,22 +655,11 @@ function AutoCompleteSection() {
             <Textfield heading="주소" placeholder="주소를 입력해 주세요." defaultValue="서울" />
           </TFItem>
 
-          {/* true — 드롭다운 mock */}
+          {/* true — Menu 컴포넌트로 드롭다운 표시 */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--spacing-8)' }}>
-            <div style={{ width: `${TF_W}px` }}>
+            <div style={{ width: `${TF_W}px`, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
               <Textfield heading="주소" placeholder="주소를 입력해 주세요." defaultValue="서울" forceFocused />
-              <div style={dropdownStyle}>
-                {AUTO_SUGGESTIONS.map((s, i) => (
-                  <div
-                    key={s}
-                    style={{
-                      ...itemStyle,
-                      backgroundColor: i === 0 ? 'var(--color-fill-normal)' : 'transparent',
-                      borderTop: i > 0 ? '1px solid var(--color-line-alternative)' : 'none',
-                    }}
-                  >{s}</div>
-                ))}
-              </div>
+              <Menu scrollable items={AUTO_SUGGESTIONS} />
             </div>
             <ItemLabel>true</ItemLabel>
           </div>
