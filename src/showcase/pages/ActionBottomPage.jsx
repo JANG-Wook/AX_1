@@ -173,7 +173,7 @@ export default function ActionBottomPage() {
       }}>화면 하단에 고정되는 주요 액션 영역입니다.</p>
 
       {/* ──────────────── 인터랙션 데모 ──────────────── */}
-      <Section title="인터랙션 데모">
+      <Section title="test">
         <div style={CARD}>
           <SubLabel>버튼에 마우스를 올리거나 클릭해보세요</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginTop: 'var(--spacing-16)' }}>

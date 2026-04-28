@@ -10,12 +10,14 @@
  *                  chip: 다중 선택값을 칩으로 표시
  *  status        — 'normal' | 'negative'      기본: 'normal'
  *  disabled      — true | false               기본: false
+ *  forceFocused  — true 시 포커스 스타일 강제 적용 (쇼케이스용)
  *  heading       — 라벨 텍스트. 없으면 숨김
  *  required      — true 시 * 배지 표시        기본: false
  *  description   — 하단 설명. 없으면 숨김
  *  placeholder   — 미선택 시 표시 텍스트      기본: '선택해주세요.'
  *  value         — 선택된 값 (text: string, chip: string[])
  *  leadingIcon   — leading Icon name
+ *  overflow      — true 시 텍스트 줄바꿈 / 칩 전체 표시 (쇼케이스용)  기본: false
  *  onRemoveChip  — chip × 버튼 핸들러 (value: string) => void
  *  onClick       — 트리거 클릭 핸들러 (드롭다운 열기)
  *  className     — 추가 클래스
@@ -28,12 +30,13 @@
 
 import Icon from '../Icon/Icon'
 
-const MAX_VISIBLE_CHIPS = 3
 
 export default function Select({
   render       = 'text',
   status       = 'normal',
   disabled     = false,
+  forceFocused = false,
+  overflow     = false,
   heading      = '',
   required     = false,
   description  = '',
@@ -47,8 +50,23 @@ export default function Select({
   const isChipMode   = render === 'chip'
   const chips        = isChipMode ? (Array.isArray(value) ? value : []) : []
   const hasValue     = isChipMode ? chips.length > 0 : Boolean(value)
-  const visibleChips = chips.slice(0, MAX_VISIBLE_CHIPS)
-  const hiddenCount  = chips.length - MAX_VISIBLE_CHIPS
+  const visibleChips = chips
+
+  const isFocused = forceFocused && !disabled
+
+  const focusBorderColor = status === 'negative'
+    ? 'color-mix(in srgb, var(--color-status-negative) 43%, transparent)'
+    : 'color-mix(in srgb, var(--color-primary-normal) 43%, transparent)'
+
+  const borderColor = disabled
+    ? 'var(--color-line-alternative)'
+    : isFocused
+      ? focusBorderColor
+      : status === 'negative'
+        ? 'color-mix(in srgb, var(--color-status-negative) 28%, transparent)'
+        : 'var(--color-line-neutral)'
+
+  const borderWidth = isFocused ? '2px' : '1px'
 
   const containerStyle = {
     display:       'flex',
@@ -61,13 +79,12 @@ export default function Select({
     display:         'flex',
     alignItems:      'center',
     gap:             'var(--spacing-12)',
-    padding:         'var(--spacing-12)',
+    padding:         isFocused ? 'calc(var(--spacing-12) - 1px)' : 'var(--spacing-12)',
     borderRadius:    'var(--spacing-12)',
-    border:          `1px solid ${status === 'negative' && !disabled ? 'var(--color-status-negative)' : 'var(--color-line-neutral)'}`,
-    backgroundColor: disabled ? 'var(--color-fill-alternative)' : 'var(--color-bg-transparent)',
-    backdropFilter:  'blur(32px)',
+    border:          `${borderWidth} solid ${borderColor}`,
+    backgroundColor: disabled ? 'var(--color-interaction-disable)' : 'var(--color-bg-transparent)',
+    backdropFilter:  disabled ? 'none' : 'blur(32px)',
     boxShadow:       disabled ? 'none' : 'var(--shadow-normal-xsmall)',
-    opacity:         disabled ? 0.4 : 1,
     cursor:          disabled ? 'not-allowed' : 'pointer',
     userSelect:      'none',
   }
@@ -106,21 +123,25 @@ export default function Select({
     fontWeight:    'var(--font-weight-regular)',
     lineHeight:    'var(--line-height-body-1-normal)',
     letterSpacing: 'var(--letter-spacing-body-1)',
-    color:         hasValue ? 'var(--color-label-normal)' : 'var(--color-label-assistive)',
-    overflow:      'hidden',
-    textOverflow:  'ellipsis',
-    whiteSpace:    'nowrap',
+    color:         disabled
+      ? (hasValue ? 'var(--color-label-alternative)' : 'var(--color-label-disable)')
+      : (hasValue ? 'var(--color-label-normal)'      : 'var(--color-label-assistive)'),
+    overflow:      overflow ? 'visible' : 'hidden',
+    textOverflow:  overflow ? 'unset'   : 'ellipsis',
+    whiteSpace:    overflow ? 'normal'  : 'nowrap',
+    wordBreak:     overflow ? 'break-all' : undefined,
     paddingLeft:   'var(--spacing-4)',
     paddingRight:  'var(--spacing-4)',
   }
 
   const chipsWrapStyle = {
-    flex:       '1 0 0',
-    display:    'flex',
-    flexWrap:   'wrap',
-    alignItems: 'center',
-    gap:        'var(--spacing-4)',
-    minWidth:   0,
+    flex:        '1 0 0',
+    display:     'flex',
+    flexWrap:    overflow ? 'wrap' : 'nowrap',
+    alignItems:  overflow ? 'flex-start' : 'center',
+    gap:         'var(--spacing-4)',
+    minWidth:    0,
+    overflow:    overflow ? 'visible' : 'hidden',
     paddingLeft: 'var(--spacing-4)',
   }
 
@@ -138,15 +159,10 @@ export default function Select({
     fontWeight:      'var(--font-weight-medium)',
     lineHeight:      'var(--line-height-caption-1)',
     letterSpacing:   'var(--letter-spacing-caption-1)',
-    color:           'var(--color-label-alternative)',
+    color:           disabled ? 'var(--color-label-disable)' : 'var(--color-label-alternative)',
     flexShrink:      0,
   }
 
-  const overflowBadgeStyle = {
-    ...chipStyle,
-    backgroundColor: 'var(--color-fill-normal)',
-    color:           'var(--color-label-assistive)',
-  }
 
   const placeholderChipStyle = {
     ...textStyle,
@@ -224,9 +240,6 @@ export default function Select({
                     </button>
                   </span>
                 ))}
-                {hiddenCount > 0 && (
-                  <span style={overflowBadgeStyle}>+{hiddenCount}</span>
-                )}
               </div>
             ) : (
               <span style={placeholderChipStyle}>{placeholder}</span>
@@ -238,10 +251,17 @@ export default function Select({
           )}
         </div>
 
+        {/* Negative status icon — unfocused 상태에서만 표시 */}
+        {status === 'negative' && !isFocused && !disabled && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Icon name="circleExclamationFill" size={22} color="var(--color-status-negative)" />
+          </div>
+        )}
+
         {/* Trailing Chevron */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--spacing-4)', flexShrink: 0 }}>
           <Icon
-            name="chevronDown"
+            name={isFocused ? 'chevronUp' : 'chevronDown'}
             size={16}
             color={disabled ? 'var(--color-label-disable)' : 'var(--color-label-alternative)'}
           />

@@ -101,7 +101,7 @@ export default function ButtonPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-48)' }}>
 
       {/* ── 인터랙션 데모 ── */}
-      <Section title="인터랙션 데모">
+      <Section title="test">
         <div style={{ ...CARD, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
           <SubLabel>마우스를 올리거나 클릭해보세요</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-16)', alignItems: 'center' }}>

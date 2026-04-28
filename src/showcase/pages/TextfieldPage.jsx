@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Textfield from '../../design-system/components/Textfield/Textfield'
 import Icon      from '../../design-system/components/Icon/Icon'
 import Section   from '../Section'
@@ -85,9 +86,9 @@ function StatusIcon({ status }) {
   return null
 }
 
-function ClearBtn() {
+function ClearBtn({ onClick }) {
   return (
-    <button tabIndex={-1} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center' }}>
+    <button tabIndex={-1} onClick={onClick} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center' }}>
       <Icon name="circleCloseFill" size={20} color="var(--color-label-assistive)" />
     </button>
   )
@@ -107,54 +108,33 @@ function buildTrailing(status, showClear) {
 /* ══════════════════════════════════════════════════════════════
    인터랙션
 ══════════════════════════════════════════════════════════════ */
-const INTER_STATES = [
-  { label: 'Inactive',     value: '',           forceFocused: false },
-  { label: 'Active',       value: '입력된 텍스트',   forceFocused: false },
-  { label: 'Focus',        value: '',           forceFocused: true  },
-  { label: 'Active Focus', value: '입력된 텍스트',   forceFocused: true  },
-]
-
 function InteractionSection() {
-  const rowLabelStyle = {
-    fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)',
-  }
+  const [value,   setValue]   = useState('')
+  const [focused, setFocused] = useState(false)
+
+  const stateLabel =
+    focused && value ? 'active + focus' :
+    focused          ? 'focus'          :
+    value            ? 'active'         :
+                       'inactive'
 
   return (
-    <Section title="인터랙션">
+    <Section title="test">
       <div style={CARD}>
-        {/* 열 헤더 */}
-        <div style={{ display: 'flex', gap: 'var(--spacing-16)', marginBottom: 'var(--spacing-16)' }}>
-          <div style={{ width: LABEL_W, flexShrink: 0 }} />
-          {INTER_STATES.map(s => (
-            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
-              <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)' }}>{s.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Row 1: trailingButton=false */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-16)', marginBottom: 'var(--spacing-20)' }}>
-          <div style={{ width: LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-            <span style={rowLabelStyle}>trailing=false</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)', width: `${TF_W}px` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-6)' }}>
+            <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-normal)' }}>state</span>
+            <CodeBadge>{stateLabel}</CodeBadge>
           </div>
-          {INTER_STATES.map(s => (
-            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0 }}>
-              <Textfield placeholder={PH} defaultValue={s.value} forceFocused={s.forceFocused} />
-            </div>
-          ))}
-        </div>
-
-        {/* Row 2: trailingButton=true */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-16)' }}>
-          <div style={{ width: LABEL_W, flexShrink: 0, paddingTop: 'var(--spacing-12)' }}>
-            <span style={rowLabelStyle}>trailing=true</span>
-          </div>
-          {INTER_STATES.map(s => (
-            <div key={s.label} style={{ width: TF_INTER_W, flexShrink: 0 }}>
-              <Textfield placeholder={PH} defaultValue={s.value} forceFocused={s.forceFocused}
-                trailingContent={<BtnIcon />} />
-            </div>
-          ))}
+          <Textfield
+            placeholder={PH}
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            forceFocused={focused}
+            trailingContent={value ? <ClearBtn onClick={() => setValue('')} /> : null}
+          />
         </div>
       </div>
     </Section>
@@ -670,52 +650,6 @@ function AutoCompleteSection() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   preview
-══════════════════════════════════════════════════════════════ */
-function PreviewSection() {
-  const artboardBase = {
-    borderRadius: 'var(--spacing-16)',
-    padding: 'var(--spacing-32)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--spacing-20)',
-    flex: 1,
-    minWidth: '300px',
-  }
-
-  return (
-    <Section title="preview">
-      <div style={{ display: 'flex', gap: 'var(--spacing-20)', flexWrap: 'wrap' }}>
-        {/* Light */}
-        <div style={{
-          ...artboardBase,
-          backgroundColor: 'var(--color-bg-normal)',
-          border: '1px solid var(--color-line-alternative)',
-        }}>
-          <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-assistive)' }}>Light</span>
-          <Textfield heading="이름" placeholder={PH} />
-          <Textfield heading="이메일" required placeholder="example@email.com" defaultValue="user@infobank.net" />
-          <Textfield status="negative" heading="비밀번호" placeholder={PH} description="올바르지 않은 형식입니다." trailingContent={buildTrailing('negative', false)} />
-          <Textfield status="positive" heading="인증번호" placeholder="6자리 입력" defaultValue="123456" description="인증이 완료되었습니다." trailingContent={buildTrailing('positive', false)} />
-        </div>
-
-        {/* Dark */}
-        <div style={{
-          ...artboardBase,
-          backgroundColor: 'var(--color-label-normal)',
-        }}>
-          <span style={{ fontSize: 'var(--font-size-caption-1)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-static-white)', opacity: 0.5 }}>Dark</span>
-          <Textfield heading="이름" placeholder={PH} />
-          <Textfield heading="이메일" required placeholder="example@email.com" defaultValue="user@infobank.net" />
-          <Textfield status="negative" heading="비밀번호" placeholder={PH} description="올바르지 않은 형식입니다." trailingContent={buildTrailing('negative', false)} />
-          <Textfield status="positive" heading="인증번호" placeholder="6자리 입력" defaultValue="123456" description="인증이 완료되었습니다." trailingContent={buildTrailing('positive', false)} />
-        </div>
-      </div>
-    </Section>
-  )
-}
-
-/* ══════════════════════════════════════════════════════════════
    페이지
 ══════════════════════════════════════════════════════════════ */
 export default function TextfieldPage() {
@@ -741,7 +675,6 @@ export default function TextfieldPage() {
       <TrailingButtonSection />
       <TrailingContentSection />
       <AutoCompleteSection />
-      <PreviewSection />
     </div>
   )
 }
