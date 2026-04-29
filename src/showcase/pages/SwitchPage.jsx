@@ -180,8 +180,8 @@ function PlatformSubLists({ platform }) {
       <SubList
         propName="size"
         values={[
-          { label: 'small',  isDefault: true  },
-          { label: 'medium', isDefault: false },
+          { label: 'small',  isDefault: false },
+          { label: 'medium', isDefault: true  },
         ]}
       >
         <ContentBox>

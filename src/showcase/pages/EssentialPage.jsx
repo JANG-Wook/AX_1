@@ -10,7 +10,7 @@ function PhoneMockup({ label, statusH, homeH, homeLabel, isIOS }) {
       {/* 플랫폼 레이블 */}
       <span style={{
         fontSize:   'var(--font-size-label-1)',
-        lineHeight: 'var(--line-height-label-1)',
+        lineHeight: 'var(--line-height-label-1-normal)',
         fontWeight: 'var(--font-weight-semibold)',
         color:      'var(--color-label-normal)',
       }}>{label}</span>
@@ -129,7 +129,7 @@ export default function EssentialPage() {
 
       <p style={{
         fontSize:     'var(--font-size-body-2)',
-        lineHeight:   'var(--line-height-body-2)',
+        lineHeight:   'var(--line-height-body-2-normal)',
         fontWeight:   'var(--font-weight-regular)',
         color:        'var(--color-label-alternative)',
         marginBottom: 'var(--spacing-32)',

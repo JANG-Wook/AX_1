@@ -1,68 +1,63 @@
-/**
- * FramedStyle 컴포넌트
- *
- * 여러 요소를 프레임으로 감싸 그룹화하고,
- * 그룹 단위의 선택 상태를 강조할 때 사용합니다.
- *
- * Props:
- *  selected  — true | false              기본: false
- *  status    — 'normal' | 'negative'     기본: 'normal'
- *  disabled  — true | false              기본: false
- *  onClick   — 클릭 핸들러 () => void
- *  className — 추가 클래스
- *  children  — 카드 내부 콘텐츠 (slot)
- *
- * 사용 예:
- *  <FramedStyle onClick={toggle}>
- *    <MyContent />
- *  </FramedStyle>
- *
- *  <FramedStyle selected onClick={toggle}>
- *    <MyContent />
- *  </FramedStyle>
- *
- *  <FramedStyle selected status="negative">
- *    <MyContent />
- *  </FramedStyle>
- *
- *  <FramedStyle disabled>
- *    <MyContent />
- *  </FramedStyle>
- */
-
 import { useState } from 'react'
 
 const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
 
+const FRAME_SIZE = {
+  medium: { radius: 'var(--spacing-14)', paddingH: 'var(--spacing-16)', paddingV: 'var(--spacing-4)' },
+  small:  { radius: 'var(--spacing-12)', paddingH: 'var(--spacing-12)', paddingV: 'var(--spacing-4)' },
+  large:  { radius: 'var(--spacing-16)', paddingH: 'var(--spacing-20)', paddingV: 'var(--spacing-4)' },
+  xlarge: { radius: 'var(--spacing-20)', paddingH: 'var(--spacing-24)', paddingV: 'var(--spacing-8)' },
+}
+
+const SHADOW_TOKEN = {
+  xsmall: 'var(--shadow-normal-xsmall)',
+  small:  'var(--shadow-normal-small)',
+  medium: 'var(--shadow-normal-medium)',
+  large:  'var(--shadow-normal-large)',
+  xlarge: 'var(--shadow-normal-xlarge)',
+  none:   'none',
+}
+
 export default function FramedStyle({
-  selected  = false,
-  status    = 'normal',
-  disabled  = false,
-  onClick   = null,
-  className = '',
+  selected      = false,
+  status        = 'normal',
+  disabled      = false,
+  onClick       = null,
+  className     = '',
+  frame         = 'medium',
+  shadow        = 'xsmall',
+  forceHovered  = false,
+  forceFocused  = false,
   children,
 }) {
   const [isHovered, setIsHovered] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [isPressed, setIsPressed] = useState(false)
 
-  const isClickable  = !!onClick && !disabled
-  const isNegative   = status === 'negative'
+  const isClickable = !!onClick && !disabled
+  const isNegative  = status === 'negative'
+
+  const hovered = isHovered || forceHovered
+  const focused  = isFocused || forceFocused
 
   const overlayOpacity = !isClickable ? 0
-    : isPressed          ? OVERLAY_OPACITY.pressed
-    : isFocused          ? OVERLAY_OPACITY.focused
-    : isHovered          ? OVERLAY_OPACITY.hovered
+    : isPressed ? OVERLAY_OPACITY.pressed
+    : focused   ? OVERLAY_OPACITY.focused
+    : hovered   ? OVERLAY_OPACITY.hovered
     : 0
-  const showRing     = selected && !disabled
-  const ringColor    = isNegative
+
+  const showRing  = selected && !disabled
+  const ringColor = isNegative
     ? 'var(--color-status-negative)'
     : 'var(--color-primary-normal)'
 
+  const { radius, paddingH, paddingV } = FRAME_SIZE[frame] ?? FRAME_SIZE.medium
+  const boxShadow = SHADOW_TOKEN[shadow] ?? SHADOW_TOKEN.xsmall
+
   const outerStyle = {
-    position:  'relative',
-    isolation: 'isolate',
-    display:   'flex',
+    position:   'relative',
+    isolation:  'isolate',
+    display:    'flex',
     alignItems: 'center',
   }
 
@@ -74,13 +69,13 @@ export default function FramedStyle({
     backgroundColor: disabled
       ? 'var(--color-interaction-disable)'
       : 'var(--color-bg-normal)',
-    borderRadius:    'var(--spacing-14)',
+    borderRadius:    radius,
     overflow:        'hidden',
-    paddingTop:      'var(--spacing-4)',
-    paddingBottom:   'var(--spacing-4)',
-    paddingLeft:     'var(--spacing-16)',
-    paddingRight:    'var(--spacing-16)',
-    boxShadow:       'var(--shadow-normal-xsmall)',
+    paddingTop:      paddingV,
+    paddingBottom:   paddingV,
+    paddingLeft:     paddingH,
+    paddingRight:    paddingH,
+    boxShadow,
     position:        'relative',
     zIndex:          1,
     cursor:          disabled ? 'not-allowed' : (onClick ? 'pointer' : 'default'),
@@ -88,27 +83,29 @@ export default function FramedStyle({
   }
 
   const innerBorderStyle = {
-    position:     'absolute',
-    inset:        0,
-    borderRadius: 'var(--spacing-14)',
-    border:       '1px solid var(--color-line-neutral)',
+    position:      'absolute',
+    inset:         0,
+    borderRadius:  radius,
+    border:        isNegative && !selected
+      ? '1px solid color-mix(in srgb, var(--color-status-negative) 28%, transparent)'
+      : '1px solid var(--color-line-neutral)',
     pointerEvents: 'none',
   }
 
   const ringBaseStyle = {
-    position:     'absolute',
-    inset:        0,
-    borderRadius: 'var(--spacing-14)',
-    border:       '2px solid var(--color-bg-normal)',
+    position:      'absolute',
+    inset:         0,
+    borderRadius:  radius,
+    border:        '2px solid var(--color-bg-normal)',
     pointerEvents: 'none',
   }
 
   const ringStyle = {
-    position:     'absolute',
-    inset:        0,
-    borderRadius: 'var(--spacing-14)',
-    border:       `2px solid ${ringColor}`,
-    opacity:      0.43,
+    position:      'absolute',
+    inset:         0,
+    borderRadius:  radius,
+    border:        `2px solid ${ringColor}`,
+    opacity:       0.43,
     pointerEvents: 'none',
   }
 
@@ -163,14 +160,10 @@ export default function FramedStyle({
         <div aria-hidden="true" style={innerBorderStyle} />
 
         {/* 선택 링 — Base (흰색 gap) */}
-        {showRing && (
-          <div aria-hidden="true" style={ringBaseStyle} />
-        )}
+        {showRing && <div aria-hidden="true" style={ringBaseStyle} />}
 
         {/* 선택 링 — Ring (primary / negative, opacity 43%) */}
-        {showRing && (
-          <div aria-hidden="true" style={ringStyle} />
-        )}
+        {showRing && <div aria-hidden="true" style={ringStyle} />}
 
         {/* 콘텐츠 슬롯 */}
         <div style={contentStyle}>

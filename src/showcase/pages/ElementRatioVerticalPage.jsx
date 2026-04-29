@@ -134,8 +134,7 @@ function HeightDemoCard({ height }) {
         <div style={{
           position:  'absolute',
           top:       0,
-          right:     `-var(--spacing-20)`,
-          right:     '-28px',
+          right:     'calc(-1 * var(--spacing-20))',
           height:    `${height}px`,
           display:   'flex',
           alignItems: 'center',

@@ -1,21 +1,39 @@
-import { useState } from 'react'
 import FramedStyle from '../../design-system/components/FramedStyle/FramedStyle'
-import Thumbnail from '../../design-system/components/Thumbnail/Thumbnail'
 import Section, { Case } from '../Section'
 
-const IMG = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'
-
-function ThumbContent() {
+function SlotPlaceholder() {
   return (
-    <div style={{ width: '100px' }}>
-      <Thumbnail src={IMG} alt="예시" ratio="1/1" radius />
+    <div style={{ height: '64px', minWidth: '200px', position: 'relative' }}>
+      <div style={{
+        position:        'absolute',
+        inset:           0,
+        backgroundColor: 'var(--color-accent-bg-violet)',
+        opacity:         0.08,
+      }} />
+    </div>
+  )
+}
+
+function FrameLabel({ children }) {
+  return (
+    <div style={{
+      fontSize:        'var(--font-size-caption-1)',
+      lineHeight:      'var(--line-height-caption-1)',
+      color:           'var(--color-label-normal)',
+      backgroundColor: 'var(--color-fill-strong)',
+      borderRadius:    'var(--spacing-4)',
+      paddingTop:      'var(--spacing-2)',
+      paddingBottom:   'var(--spacing-2)',
+      paddingLeft:     'var(--spacing-6)',
+      paddingRight:    'var(--spacing-6)',
+      fontFamily:      "'SF Mono', 'Consolas', monospace",
+    }}>
+      {children}
     </div>
   )
 }
 
 export default function FramedStylePage() {
-  const [demoSel, setDemoSel] = useState(false)
-
   return (
     <div>
       <h2 style={{
@@ -26,78 +44,124 @@ export default function FramedStylePage() {
         marginBottom: 'var(--spacing-32)',
       }}>FramedStyle</h2>
 
-      <Section title="인터랙션 데모" gap="var(--spacing-24)">
-        <Case label="클릭해서 선택/해제해보세요">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
-            <FramedStyle selected={demoSel} onClick={() => setDemoSel(s => !s)}>
-              <ThumbContent />
-            </FramedStyle>
-            <div style={{
-              padding: 'var(--spacing-12)',
-              borderRadius: 'var(--spacing-8)',
-              backgroundColor: 'var(--color-fill-normal)',
-              textAlign: 'center',
-              fontSize: 'var(--font-size-body-2)',
-              color: 'var(--color-label-alternative)',
-            }}>
-              상태: <strong style={{ color: demoSel ? 'var(--color-primary-normal)' : 'var(--color-label-normal)' }}>
-                {demoSel ? '선택됨' : '미선택'}
-              </strong>
-            </div>
+      {/* ── Selected ── */}
+      <Section title="Selected =" gap="var(--spacing-16)">
+        <Case label="false (default)">
+          <FramedStyle selected={false}><SlotPlaceholder /></FramedStyle>
+        </Case>
+        <Case label="true">
+          <FramedStyle selected={true}><SlotPlaceholder /></FramedStyle>
+        </Case>
+      </Section>
+
+      {/* ── disable ── */}
+      <Section title="disable =" gap="var(--spacing-16)">
+        <Case label="false (default)">
+          <FramedStyle selected={false} disabled={false}><SlotPlaceholder /></FramedStyle>
+        </Case>
+        <Case label="true">
+          <FramedStyle selected={false} disabled={true}><SlotPlaceholder /></FramedStyle>
+        </Case>
+      </Section>
+
+      {/* ── Status ── */}
+      <Section title="Status =" gap="var(--spacing-16)">
+        <Case label="normal (default)">
+          <FramedStyle selected={false} status="normal"><SlotPlaceholder /></FramedStyle>
+        </Case>
+        <Case label="negative">
+          <FramedStyle selected={false} status="negative"><SlotPlaceholder /></FramedStyle>
+        </Case>
+      </Section>
+
+      {/* ── interaction ── */}
+      <Section title="interaction =" column gap="var(--spacing-24)">
+        {/* selected=false 행 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-8)' }}>
+            <FrameLabel>normal</FrameLabel>
+            <FrameLabel>hovered</FrameLabel>
+            <FrameLabel>focused</FrameLabel>
           </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
+            <FramedStyle selected={false} onClick={() => {}}><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={false} onClick={() => {}} forceHovered><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={false} onClick={() => {}} forceFocused><SlotPlaceholder /></FramedStyle>
+          </div>
+        </div>
+
+        {/* selected=true 행 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-8)' }}>
+            <FrameLabel>normal</FrameLabel>
+            <FrameLabel>hovered</FrameLabel>
+            <FrameLabel>focused</FrameLabel>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
+            <FramedStyle selected={true} onClick={() => {}}><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={true} onClick={() => {}} forceHovered><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={true} onClick={() => {}} forceFocused><SlotPlaceholder /></FramedStyle>
+          </div>
+        </div>
+
+        {/* status=negative 행 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-8)' }}>
+            <FrameLabel>normal</FrameLabel>
+            <FrameLabel>hovered</FrameLabel>
+            <FrameLabel>focused</FrameLabel>
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
+            <FramedStyle selected={false} status="negative" onClick={() => {}}><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={false} status="negative" onClick={() => {}} forceHovered><SlotPlaceholder /></FramedStyle>
+            <FramedStyle selected={false} status="negative" onClick={() => {}} forceFocused><SlotPlaceholder /></FramedStyle>
+          </div>
+        </div>
+
+        {/* disabled */}
+        <Case label="disabled">
+          <FramedStyle selected={false} disabled><SlotPlaceholder /></FramedStyle>
         </Case>
       </Section>
 
-      <Section title="Selected" gap="var(--spacing-24)">
-        <Case label='selected=false (기본)'>
-          <FramedStyle selected={false}>
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-        <Case label='selected=true'>
-          <FramedStyle selected={true}>
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
+      {/* ── customize = radius / padding ── */}
+      <Section title="customize = radius / padding" gap="var(--spacing-16)">
+        <p style={{
+          fontSize:   'var(--font-size-body-1)',
+          lineHeight: 'var(--line-height-body-1-normal)',
+          color:      'var(--color-label-neutral)',
+          margin:     0,
+        }}>
+          Variables에 등록된 Frame 모드로 Radius, Padding을 변경할 수 있습니다.
+        </p>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+          {['medium', 'small', 'large', 'xlarge'].map(f => (
+            <div key={f} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+              <FrameLabel>{f}</FrameLabel>
+              <FramedStyle frame={f}><SlotPlaceholder /></FramedStyle>
+            </div>
+          ))}
+        </div>
       </Section>
 
-      <Section title="Status" gap="var(--spacing-24)">
-        <Case label='status="normal" + selected'>
-          <FramedStyle selected status="normal">
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-        <Case label='status="negative" + selected'>
-          <FramedStyle selected status="negative">
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-        <Case label='status="negative" (미선택)'>
-          <FramedStyle selected={false} status="negative">
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-      </Section>
-
-      <Section title="Disabled" gap="var(--spacing-24)">
-        <Case label='disabled=false'>
-          <FramedStyle selected={true} disabled={false}>
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-        <Case label='disabled=true'>
-          <FramedStyle selected={true} disabled={true}>
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
-      </Section>
-
-      <Section title="Clickable" gap="var(--spacing-24)">
-        <Case label='onClick 제공 (커서: pointer)'>
-          <FramedStyle selected={false} onClick={() => {}}>
-            <ThumbContent />
-          </FramedStyle>
-        </Case>
+      {/* ── customize = shadow ── */}
+      <Section title="customize = shadow" gap="var(--spacing-16)">
+        <p style={{
+          fontSize:   'var(--font-size-body-1)',
+          lineHeight: 'var(--line-height-body-1-normal)',
+          color:      'var(--color-label-neutral)',
+          margin:     0,
+        }}>
+          3 color - semantic에 등록된 Shadow styles를 사용해 shadow를 변경할 수 있습니다.
+        </p>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
+          {['xsmall', 'small', 'medium', 'large', 'xlarge'].map(s => (
+            <div key={s} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+              <FrameLabel>{s}</FrameLabel>
+              <FramedStyle shadow={s}><SlotPlaceholder /></FramedStyle>
+            </div>
+          ))}
+        </div>
       </Section>
     </div>
   )

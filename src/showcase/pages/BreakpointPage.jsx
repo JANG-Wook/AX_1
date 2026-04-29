@@ -205,7 +205,7 @@ function BreakpointCard({ bp, scale = 0.25 }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-8)' }}>
           <span style={{
-            fontSize:        'var(--font-size-label-1-normal)',
+            fontSize:        'var(--font-size-label-1)',
             lineHeight:      'var(--line-height-label-1-normal)',
             fontWeight:      'var(--font-weight-bold)',
             color:           'var(--color-label-normal)',

@@ -7,7 +7,7 @@ const BTN = {
   borderRadius: 'var(--spacing-12)',
   padding:      `var(--spacing-12) var(--spacing-24)`,
   fontSize:     'var(--font-size-body-1)',
-  lineHeight:   'var(--line-height-body-1)',
+  lineHeight:   'var(--line-height-body-1-normal)',
   fontWeight:   'var(--font-weight-semibold)',
   textAlign:    'center',
   boxSizing:    'border-box',
@@ -166,7 +166,7 @@ export default function ActionBottomPage() {
       }}>Bottom</h2>
       <p style={{
         fontSize:     'var(--font-size-body-2)',
-        lineHeight:   'var(--line-height-body-2)',
+        lineHeight:   'var(--line-height-body-2-normal)',
         fontWeight:   'var(--font-weight-regular)',
         color:        'var(--color-label-alternative)',
         marginBottom: 'var(--spacing-32)',

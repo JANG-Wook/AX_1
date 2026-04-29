@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Textarea from '../../design-system/components/Textfield/Textarea'
 import Icon    from '../../design-system/components/Icon/Icon'
+import Chip    from '../../design-system/components/Chip/Chip'
 import Section from '../Section'
 
 /* ── 공용 상수 ────────────────────────────────────────────────── */
@@ -474,6 +475,7 @@ function BottomSection() {
     { label: 'iconButton',       trailingContent: <NormalIconBtn /> },
     { label: 'icon',             trailingContent: <Icon name="bookmarkFill" size={24} color="var(--color-label-assistive)" /> },
     { label: 'badge',            trailingContent: <ContentBadge /> },
+    { label: 'chip',             trailingContent: <Chip label="칩" /> },
   ]
 
   return (
