@@ -661,7 +661,7 @@ export default function TextfieldPage() {
         fontWeight:   'var(--font-weight-bold)',
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
-      }}>Textinput_Textfield</h2>
+      }}>Text field</h2>
 
       <InteractionSection />
       <StatusSection />

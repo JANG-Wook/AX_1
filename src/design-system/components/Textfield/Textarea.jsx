@@ -1,3 +1,6 @@
+import { useRef, useState, useEffect } from 'react'
+import './Textarea.css'
+
 /**
  * Textarea 컴포넌트
  *
@@ -27,9 +30,70 @@
  *  <Textarea resize="fixed" heading="고정 높이 입력" />
  */
 
+function CustomScrollBar({ scrollRef }) {
+  const [thumbTop,    setThumbTop]    = useState(0)
+  const [thumbHeight, setThumbHeight] = useState(0)
+  const [visible,     setVisible]     = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const update = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el
+      if (scrollHeight <= clientHeight) { setVisible(false); return }
+      setVisible(true)
+      const trackHeight = clientHeight - 16
+      const ratio       = clientHeight / scrollHeight
+      const newThumbH   = Math.max(Math.round(trackHeight * ratio), 20)
+      const maxTop      = trackHeight - newThumbH
+      const scrollRatio = scrollTop / (scrollHeight - clientHeight)
+      setThumbHeight(newThumbH)
+      setThumbTop(Math.round(scrollRatio * maxTop))
+    }
+
+    update()
+    el.addEventListener('scroll', update)
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => { el.removeEventListener('scroll', update); ro.disconnect() }
+  }, [scrollRef])
+
+  if (!visible) return null
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position:      'absolute',
+        top:           'var(--spacing-8)',
+        bottom:        'var(--spacing-8)',
+        right:         'calc(-1 * var(--spacing-6))',
+        width:         '3px',
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{
+        position:        'absolute',
+        top:             `${thumbTop}px`,
+        left:            0,
+        width:           '100%',
+        height:          `${thumbHeight}px`,
+        backgroundColor: 'var(--color-fill-strong)',
+        borderRadius:    '1000px',
+      }} />
+    </div>
+  )
+}
+
 const BORDER_COLOR = {
   normal:   'var(--color-line-neutral)',
-  negative: 'var(--color-status-negative)',
+  negative: 'color-mix(in srgb, var(--color-status-negative) 28%, transparent)',
+}
+
+const FOCUS_BORDER_COLOR = {
+  normal:   'color-mix(in srgb, var(--color-primary-normal) 43%, transparent)',
+  negative: 'color-mix(in srgb, var(--color-status-negative) 43%, transparent)',
 }
 
 const RESIZE_STYLE = {
@@ -43,13 +107,13 @@ const RESIZE_STYLE = {
   limit: {
     resize:    'vertical',
     minHeight: '90px',
-    maxHeight: '120px',
+    maxHeight: '208px',
     height:    'auto',
     overflowY: 'auto',
   },
   fixed: {
     resize:    'none',
-    height:    '114px',
+    height:    '78px',
     minHeight: 'unset',
     maxHeight: 'none',
     overflowY: 'auto',
@@ -69,11 +133,14 @@ export default function Textarea({
   onChange,
   leadingContent  = null,
   trailingContent = null,
+  forceFocused    = false,
   className       = '',
   ...props
 }) {
+  const textareaRef = useRef(null)
   const currentLength = value !== undefined ? String(value).length : 0
   const showBottom = maxLength > 0 || leadingContent || trailingContent
+  const isFocused = forceFocused && !disabled
 
   const containerStyle = {
     display:       'flex',
@@ -104,13 +171,16 @@ export default function Textarea({
     gap:           'var(--spacing-12)',
     padding:       'var(--spacing-12)',
     borderRadius:  'var(--spacing-12)',
-    border:        `1px solid ${disabled ? 'var(--color-line-neutral)' : BORDER_COLOR[status]}`,
+    border: disabled
+      ? '1px solid var(--color-line-neutral)'
+      : isFocused
+        ? `2px solid ${FOCUS_BORDER_COLOR[status]}`
+        : `1px solid ${BORDER_COLOR[status]}`,
     boxShadow:     disabled ? 'none' : 'var(--shadow-normal-xsmall)',
     opacity:       disabled ? 0.4 : 1,
   }
 
   const textareaStyle = {
-    flex:          '1 0 0',
     border:        'none',
     outline:       'none',
     background:    'transparent',
@@ -189,17 +259,22 @@ export default function Textarea({
         <div style={backgroundStyle} aria-hidden="true" />
 
         <div style={inputBoxStyle}>
-          <textarea
-            style={textareaStyle}
-            placeholder={placeholder}
-            disabled={disabled}
-            maxLength={maxLength > 0 ? maxLength : undefined}
-            value={value}
-            onChange={onChange}
-            aria-invalid={status === 'negative'}
-            aria-required={required}
-            {...props}
-          />
+          <div style={{ position: 'relative', flex: '1 0 0' }}>
+            <textarea
+              ref={textareaRef}
+              className="ax-textarea"
+              style={textareaStyle}
+              placeholder={placeholder}
+              disabled={disabled}
+              maxLength={maxLength > 0 ? maxLength : undefined}
+              value={value}
+              onChange={onChange}
+              aria-invalid={status === 'negative'}
+              aria-required={required}
+              {...props}
+            />
+            <CustomScrollBar scrollRef={textareaRef} />
+          </div>
 
           {showBottom && (
             <div style={bottomStyle}>
