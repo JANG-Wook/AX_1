@@ -15,6 +15,7 @@ import AvatarPage         from './showcase/pages/AvatarPage'
 import CardPage           from './showcase/pages/CardPage'
 import CategoryPage       from './showcase/pages/CategoryPage'
 import CheckboxPage       from './showcase/pages/CheckboxPage'
+import CheckMarkPage      from './showcase/pages/CheckMarkPage'
 import ContentBadgePage   from './showcase/pages/ContentBadgePage'
 import DividerPage        from './showcase/pages/DividerPage'
 import FramedStylePage    from './showcase/pages/FramedStylePage'
@@ -34,6 +35,7 @@ import SpinnerPage        from './showcase/pages/SpinnerPage'
 import SwitchPage         from './showcase/pages/SwitchPage'
 import TabPage            from './showcase/pages/TabPage'
 import TextfieldPage      from './showcase/pages/TextfieldPage'
+import TextareaPage       from './showcase/pages/TextareaPage'
 import ThumbnailPage      from './showcase/pages/ThumbnailPage'
 import ToastPage          from './showcase/pages/ToastPage'
 import TooltipPage        from './showcase/pages/TooltipPage'
@@ -65,6 +67,7 @@ const PAGE_MAP = {
   card:             CardPage,
   category:         CategoryPage,
   checkbox:         CheckboxPage,
+  checkMark:        CheckMarkPage,
   contentBadge:     ContentBadgePage,
   divider:          DividerPage,
   framedStyle:      FramedStylePage,
@@ -84,6 +87,7 @@ const PAGE_MAP = {
   switch:           SwitchPage,
   tab:              TabPage,
   textfield:        TextfieldPage,
+  textarea:         TextareaPage,
   thumbnail:        ThumbnailPage,
   toast:            ToastPage,
   tooltip:              TooltipPage,
