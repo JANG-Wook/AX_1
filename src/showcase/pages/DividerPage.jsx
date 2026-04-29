@@ -1,54 +1,96 @@
 import Divider from '../../design-system/components/Divider/Divider'
-import Section, { Case } from '../Section'
+
+const SECTION_HEADING = {
+  fontSize:      'var(--font-size-label-1)',
+  lineHeight:    'var(--line-height-label-1-normal)',
+  letterSpacing: 'var(--letter-spacing-label-1)',
+  fontWeight:    'var(--font-weight-semibold)',
+  color:         'var(--color-label-strong)',
+  whiteSpace:    'nowrap',
+}
+
+const BADGE = {
+  display:         'inline-flex',
+  alignItems:      'center',
+  justifyContent:  'center',
+  padding:         'var(--spacing-2) var(--spacing-6)',
+  borderRadius:    'var(--spacing-4)',
+  backgroundColor: 'var(--color-fill-strong)',
+  fontSize:        'var(--font-size-caption-1)',
+  lineHeight:      'var(--line-height-caption-1)',
+  fontWeight:      'var(--font-weight-medium)',
+  color:           'var(--color-label-normal)',
+  fontFamily:      'monospace',
+  whiteSpace:      'nowrap',
+}
+
+const CONTENT_BOX = {
+  padding:         'var(--spacing-24)',
+  borderRadius:    'var(--spacing-16)',
+  backgroundColor: 'var(--color-fill-alternative)',
+}
 
 export default function DividerPage() {
   return (
     <div>
       <h2 style={{
-        fontSize:     'var(--font-size-title-3)',
-        lineHeight:   'var(--line-height-title-3)',
-        fontWeight:   'var(--font-weight-bold)',
-        color:        'var(--color-label-normal)',
-        marginBottom: 'var(--spacing-32)',
+        fontSize:      'var(--font-size-title-1)',
+        lineHeight:    'var(--line-height-title-1)',
+        letterSpacing: 'var(--letter-spacing-title-1)',
+        fontWeight:    'var(--font-weight-bold)',
+        color:         'var(--color-label-strong)',
+        marginBottom:  'var(--spacing-8)',
       }}>Divider</h2>
+      <p style={{
+        fontSize:      'var(--font-size-body-1)',
+        lineHeight:    'var(--line-height-body-1-normal)',
+        letterSpacing: 'var(--letter-spacing-body-1)',
+        fontWeight:    'var(--font-weight-medium)',
+        color:         'var(--color-label-normal)',
+        marginBottom:  'var(--spacing-32)',
+      }}>디자인 요소와 정보를 구분하는 데 사용합니다. 이를 통해 각 요소의 디자인 가독성이 향상됩니다.</p>
 
-      <Section title="Variant (Horizontal)" gap="var(--spacing-24)" column background="var(--color-fill-normal)">
-        <Case label='variant="normal" (1px)'>
-          <div style={{ width: '400px' }}>
-            <Divider variant="normal" />
+      <div style={{
+        display:         'flex',
+        flexDirection:   'column',
+        gap:             'var(--spacing-24)',
+        backgroundColor: 'var(--color-bg-normal)',
+        borderRadius:    'var(--spacing-16)',
+        padding:         'var(--spacing-24)',
+        overflow:        'hidden',
+      }}>
+
+        {/* variant = */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-6)', alignItems: 'center' }}>
+            <span style={SECTION_HEADING}>variant =</span>
+            <span style={BADGE}>normal</span>
+            <span style={BADGE}>thick</span>
           </div>
-        </Case>
-        <Case label='variant="thick" (12px)'>
-          <div style={{ width: '400px' }}>
+          <div style={{ ...CONTENT_BOX, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+            <Divider variant="normal" />
             <Divider variant="thick" />
           </div>
-        </Case>
-      </Section>
+        </div>
 
-      <Section title="Vertical" gap="var(--spacing-24)" background="var(--color-fill-normal)">
-        <Case label='vertical=true'>
-          <div style={{ display: 'flex', alignItems: 'center', height: '64px', gap: 'var(--spacing-16)' }}>
-            <span style={{ fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-normal)' }}>항목 A</span>
-            <Divider vertical />
-            <span style={{ fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-normal)' }}>항목 B</span>
-            <Divider vertical />
-            <span style={{ fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-normal)' }}>항목 C</span>
+        {/* vertical = */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-6)', alignItems: 'center' }}>
+            <span style={SECTION_HEADING}>vertical =</span>
+            <span style={BADGE}>false</span>
+            <span style={BADGE}>true</span>
           </div>
-        </Case>
-      </Section>
+          <div style={{ ...CONTENT_BOX, display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
+            <div style={{ width: 'var(--spacing-32)' }}>
+              <Divider />
+            </div>
+            <div style={{ height: 'var(--spacing-32)', display: 'flex' }}>
+              <Divider vertical />
+            </div>
+          </div>
+        </div>
 
-      <Section title="In Context" gap="var(--spacing-16)" column background="var(--color-fill-normal)">
-        <Case label="리스트 항목 구분">
-          <div style={{ width: '360px', backgroundColor: 'var(--color-bg-elevated)', borderRadius: 'var(--spacing-12)', overflow: 'hidden', border: '1px solid var(--color-line-neutral)' }}>
-            {['첫 번째 항목', '두 번째 항목', '세 번째 항목'].map((item, i, arr) => (
-              <div key={item}>
-                <div style={{ padding: 'var(--spacing-16)', fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-normal)' }}>{item}</div>
-                {i < arr.length - 1 && <Divider />}
-              </div>
-            ))}
-          </div>
-        </Case>
-      </Section>
+      </div>
     </div>
   )
 }
