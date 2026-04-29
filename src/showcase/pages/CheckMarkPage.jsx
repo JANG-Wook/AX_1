@@ -1,14 +1,15 @@
 import { useState } from 'react'
+import CheckMark from '../../design-system/components/Checkbox/CheckMark'
 import Checkbox from '../../design-system/components/Checkbox/Checkbox'
 import Section, { Case } from '../Section'
 
-const ITEMS = [
+const CM_ITEMS = [
   { id: 1, label: '알림 이메일 수신에 동의합니다' },
   { id: 2, label: '마케팅 정보 수신에 동의합니다' },
   { id: 3, label: '개인정보 제3자 제공에 동의합니다' },
 ]
 
-function CheckboxTest() {
+function CheckMarkTest() {
   const [checked, setChecked] = useState({ 1: false, 2: true, 3: false })
 
   const values      = Object.values(checked)
@@ -16,8 +17,8 @@ function CheckboxTest() {
   const someChecked = values.some(Boolean)
   const headerState = allChecked ? 'checked' : someChecked ? 'indeterminate' : 'unchecked'
 
-  const toggleAll  = () => setChecked(Object.fromEntries(ITEMS.map(i => [i.id, !allChecked])))
-  const toggleItem = (id) => setChecked(prev => ({ ...prev, [id]: !prev[id] }))
+  const toggleAll  = () => setChecked(Object.fromEntries(CM_ITEMS.map(i => [i.id, !allChecked])))
+  const toggle     = (id) => setChecked(prev => ({ ...prev, [id]: !prev[id] }))
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
@@ -28,19 +29,19 @@ function CheckboxTest() {
         onChange={toggleAll}
       />
       <div style={{ height: '1px', backgroundColor: 'var(--color-line-normal)', margin: `var(--spacing-4) 0` }} />
-      {ITEMS.map(item => (
-        <Checkbox
+      {CM_ITEMS.map(item => (
+        <CheckMark
           key={item.id}
-          state={checked[item.id] ? 'checked' : 'unchecked'}
+          checked={checked[item.id]}
           label={item.label}
-          onChange={() => toggleItem(item.id)}
+          onChange={() => toggle(item.id)}
         />
       ))}
     </div>
   )
 }
 
-export default function CheckboxPage() {
+export default function CheckMarkPage() {
   return (
     <div>
       <h2 style={{
@@ -49,79 +50,65 @@ export default function CheckboxPage() {
         fontWeight:   'var(--font-weight-bold)',
         color:        'var(--color-label-normal)',
         marginBottom: 'var(--spacing-32)',
-      }}>Checkbox</h2>
+      }}>Check mark</h2>
 
       <Section title="test" column gap="var(--spacing-16)">
-        <CheckboxTest />
+        <CheckMarkTest />
       </Section>
 
       <Section title="size" gap="var(--spacing-24)">
         <Case label='size="small"'>
-          <Checkbox state="checked" size="small" label={"텍스트\n텍스트"} />
+          <CheckMark checked size="small" label={"텍스트\n텍스트"} />
         </Case>
         <Case label='size="medium" (default)'>
-          <Checkbox state="checked" size="medium" label={"텍스트\n텍스트"} />
+          <CheckMark checked size="medium" label={"텍스트\n텍스트"} />
         </Case>
       </Section>
 
       <Section title="state" gap="var(--spacing-24)">
-        <Case label='state="unchecked"'>
-          <Checkbox state="unchecked" label={"텍스트\n텍스트"} />
+        <Case label='checked=false'>
+          <CheckMark checked={false} label={"텍스트\n텍스트"} />
         </Case>
-        <Case label='state="checked"'>
-          <Checkbox state="checked" label={"텍스트\n텍스트"} />
-        </Case>
-        <Case label='state="indeterminate"'>
-          <Checkbox state="indeterminate" label={"텍스트\n텍스트"} />
-        </Case>
-      </Section>
-
-      <Section title="label" gap="var(--spacing-24)">
-        <Case label='label="텍스트" (default)'>
-          <Checkbox state="checked" label="텍스트" />
-        </Case>
-        <Case label='label={undefined}'>
-          <Checkbox state="checked" />
+        <Case label='checked=true'>
+          <CheckMark checked label={"텍스트\n텍스트"} />
         </Case>
       </Section>
 
       <Section title="tight" gap="var(--spacing-24)">
         <Case label='tight=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="checked" size="medium" tight={false} label={"텍스트\n텍스트"} />
-            <Checkbox state="checked" size="small"  tight={false} label={"텍스트\n텍스트"} />
+            <CheckMark checked size="medium" tight={false} label={"텍스트\n텍스트"} />
+            <CheckMark checked size="small"  tight={false} label={"텍스트\n텍스트"} />
           </div>
         </Case>
         <Case label='tight=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="checked" size="medium" tight={true} label={"텍스트\n텍스트"} />
-            <Checkbox state="checked" size="small"  tight={true} label={"텍스트\n텍스트"} />
+            <CheckMark checked size="medium" tight label={"텍스트\n텍스트"} />
+            <CheckMark checked size="small"  tight label={"텍스트\n텍스트"} />
           </div>
         </Case>
       </Section>
 
-      <Section title="bold" gap="var(--spacing-24)">
-        <Case label='bold=false (default)'>
-          <Checkbox state="checked" bold={false} label={"텍스트\n텍스트"} />
+      <Section title="label" gap="var(--spacing-24)">
+        <Case label='label="텍스트" (default)'>
+          <CheckMark checked label="텍스트" />
         </Case>
-        <Case label='bold=true'>
-          <Checkbox state="checked" bold label={"텍스트\n텍스트"} />
+        <Case label='label={undefined}'>
+          <CheckMark checked />
         </Case>
       </Section>
 
       <Section title="disable" gap="var(--spacing-24)">
         <Case label='disable=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="unchecked"     label="텍스트" />
-            <Checkbox state="checked"       label="텍스트" />
-            <Checkbox state="indeterminate" label="텍스트" />
+            <CheckMark checked={false} label="텍스트" />
+            <CheckMark checked       label="텍스트" />
           </div>
         </Case>
         <Case label='disable=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="unchecked"     disabled label="텍스트" />
-            <Checkbox state="checked"       disabled label="텍스트" />
-            <Checkbox state="indeterminate" disabled label="텍스트" />
+            <CheckMark checked={false} disabled label="텍스트" />
+            <CheckMark checked       disabled label="텍스트" />
           </div>
         </Case>
       </Section>
@@ -138,73 +125,68 @@ export default function CheckboxPage() {
 
       <Section title="size" gap="var(--spacing-24)">
         <Case label='size="small"'>
-          <Checkbox state="checked" size="small" />
+          <CheckMark checked size="small" />
         </Case>
         <Case label='size="medium" (default)'>
-          <Checkbox state="checked" size="medium" />
+          <CheckMark checked size="medium" />
         </Case>
       </Section>
 
       <Section title="state" gap="var(--spacing-24)">
-        <Case label='state="unchecked"'>
-          <Checkbox state="unchecked" />
+        <Case label='checked=false'>
+          <CheckMark checked={false} />
         </Case>
-        <Case label='state="checked"'>
-          <Checkbox state="checked" />
-        </Case>
-        <Case label='state="indeterminate"'>
-          <Checkbox state="indeterminate" />
+        <Case label='checked=true'>
+          <CheckMark checked />
         </Case>
       </Section>
 
       <Section title="tight" column gap="var(--spacing-24)">
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
-          <Checkbox state="checked" size="medium" tight={false} />
-          <Checkbox state="checked" size="medium" tight />
+          <CheckMark checked size="medium" tight={false} />
+          <CheckMark checked size="medium" tight />
         </div>
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
-          <Checkbox state="checked" size="medium" tight={false} forceInteraction="pressed" />
-          <Checkbox state="checked" size="medium" tight       forceInteraction="pressed" />
+          <CheckMark checked size="medium" tight={false} forceInteraction="pressed" />
+          <CheckMark checked size="medium" tight       forceInteraction="pressed" />
         </div>
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
-          <Checkbox state="checked" size="small" tight={false} />
-          <Checkbox state="checked" size="small" tight />
+          <CheckMark checked size="small" tight={false} />
+          <CheckMark checked size="small" tight />
         </div>
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', alignItems: 'center' }}>
-          <Checkbox state="checked" size="small" tight={false} forceInteraction="pressed" />
-          <Checkbox state="checked" size="small" tight       forceInteraction="pressed" />
+          <CheckMark checked size="small" tight={false} forceInteraction="pressed" />
+          <CheckMark checked size="small" tight       forceInteraction="pressed" />
         </div>
       </Section>
 
       <Section title="disable" gap="var(--spacing-24)">
         <Case label='disable=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="unchecked" />
-            <Checkbox state="checked" />
-            <Checkbox state="indeterminate" />
+            <CheckMark checked={false} />
+            <CheckMark checked />
           </div>
         </Case>
         <Case label='disable=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
-            <Checkbox state="unchecked"     disabled />
-            <Checkbox state="checked"       disabled />
-            <Checkbox state="indeterminate" disabled />
+            <CheckMark checked={false} disabled />
+            <CheckMark checked       disabled />
           </div>
         </Case>
       </Section>
 
       <Section title="interaction" gap="var(--spacing-24)">
         <Case label='interaction="normal"'>
-          <Checkbox state="checked" forceInteraction="normal" />
+          <CheckMark checked forceInteraction="normal" />
         </Case>
         <Case label='interaction="hovered"'>
-          <Checkbox state="checked" forceInteraction="hovered" />
+          <CheckMark checked forceInteraction="hovered" />
         </Case>
         <Case label='interaction="focused"'>
-          <Checkbox state="checked" forceInteraction="focused" />
+          <CheckMark checked forceInteraction="focused" />
         </Case>
         <Case label='interaction="pressed"'>
-          <Checkbox state="checked" forceInteraction="pressed" />
+          <CheckMark checked forceInteraction="pressed" />
         </Case>
       </Section>
     </div>

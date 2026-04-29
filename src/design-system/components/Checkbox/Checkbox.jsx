@@ -2,16 +2,18 @@
  * Checkbox 컴포넌트
  *
  * Props:
- *  state    — 'unchecked' | 'checked' | 'indeterminate'  기본: 'unchecked'
- *  size     — 'medium' | 'small'                         기본: 'medium'
- *             medium: 박스 18×18px (터치 영역 24×24px)
- *             small:  박스 14×14px (터치 영역 20×20px)
- *  tight    — true | false   좌우 padding 축소            기본: false
- *  bold     — true | false   라벨 semibold                기본: false
- *  disabled — true | false                               기본: false
- *  label    — 라벨 텍스트. 없으면 숨김
- *  onChange — 클릭/변경 핸들러 () => void
- *  className — 추가 클래스
+ *  state           — 'unchecked' | 'checked' | 'indeterminate'  기본: 'unchecked'
+ *  size            — 'medium' | 'small'                         기본: 'medium'
+ *                    medium: 박스 18×18px (터치 영역 24×24px)
+ *                    small:  박스 16×16px (터치 영역 20×20px)
+ *  tight           — true | false   좌우 padding 축소            기본: false
+ *  bold            — true | false   라벨 semibold                기본: false
+ *  disabled        — true | false                               기본: false
+ *  label           — 라벨 텍스트. 없으면 숨김
+ *  forceInteraction — 'normal' | 'hovered' | 'focused' | 'pressed'
+ *                     쇼케이스용 강제 인터랙션 상태. 미설정 시 실제 이벤트로 결정.
+ *  onChange        — 클릭/변경 핸들러 () => void
+ *  className       — 추가 클래스
  *
  * 사용 예:
  *  <Checkbox label="동의합니다" onChange={toggle} />
@@ -21,42 +23,56 @@
  *  <Checkbox bold label="굵은 라벨" />
  */
 
+import { useState } from 'react'
 import Icon from '../Icon/Icon'
 
 const BOX_SIZE = {
   medium: 18,
-  small:  14,
+  small:  16,
 }
 
 const ICON_SIZE = {
   medium: 16,
-  small:  12,
+  small:  14,
+}
+
+const OVERLAY_OPACITY = {
+  normal:  0,
+  hovered: 0.05,
+  focused: 0.08,
+  pressed: 0.12,
 }
 
 export default function Checkbox({
-  state     = 'unchecked',
-  size      = 'medium',
-  tight     = false,
-  bold      = false,
-  disabled  = false,
-  label     = '',
-  onChange  = null,
-  className = '',
+  state            = 'unchecked',
+  size             = 'medium',
+  tight            = false,
+  bold             = false,
+  disabled         = false,
+  label            = '',
+  forceInteraction = undefined,
+  onChange         = null,
+  className        = '',
 }) {
+  const [interactionState, setInteractionState] = useState('normal')
+
   const isChecked       = state === 'checked'
   const isIndeterminate = state === 'indeterminate'
   const isActive        = isChecked || isIndeterminate
 
-  const boxPx = BOX_SIZE[size]
+  const effectiveInteraction = disabled ? 'normal' : (forceInteraction ?? interactionState)
+
+  const boxPx  = BOX_SIZE[size]
   const iconPx = ICON_SIZE[size]
 
-  /* 터치 영역 패딩: tight 모드에서는 수평 1px, 수직 3px */
-  const padH = tight ? '1px' : '3px'
-  const padV = '3px'
+  const padV = size === 'small' ? '2px' : '3px'
+  const padH = size === 'small'
+    ? (tight ? '0px' : '2px')
+    : (tight ? '1px' : '3px')
 
   const wrapperStyle = {
     display:    'flex',
-    gap:        'var(--spacing-8)',
+    gap:        tight ? 'var(--spacing-10)' : 'var(--spacing-8)',
     alignItems: 'flex-start',
     cursor:     disabled ? 'not-allowed' : 'pointer',
     opacity:    disabled ? 0.4 : 1,
@@ -86,6 +102,18 @@ export default function Checkbox({
     boxSizing:       'border-box',
   }
 
+  const overlayStyle = {
+    position:        'absolute',
+    top:             tight ? '-5px' : '-4px',
+    right:           tight ? '-7px' : '-4px',
+    bottom:          tight ? '-5px' : '-4px',
+    left:            tight ? '-7px' : '-4px',
+    borderRadius:    '1000px',
+    backgroundColor: 'var(--color-label-normal)',
+    opacity:         OVERLAY_OPACITY[effectiveInteraction] ?? 0,
+    pointerEvents:   'none',
+  }
+
   const labelStyle = {
     flex:          '1 0 0',
     fontSize:      'var(--font-size-body-2)',
@@ -93,6 +121,7 @@ export default function Checkbox({
     lineHeight:    'var(--line-height-body-2-normal)',
     letterSpacing: 'var(--letter-spacing-body-2)',
     color:         'var(--color-label-normal)',
+    whiteSpace:    'pre-line',
     paddingTop:    '1px',
     paddingBottom: '1px',
   }
@@ -108,6 +137,13 @@ export default function Checkbox({
     }
   }
 
+  const handleMouseEnter = () => { if (!disabled) setInteractionState('hovered') }
+  const handleMouseLeave = () => { if (!disabled) setInteractionState('normal') }
+  const handleFocus      = () => { if (!disabled) setInteractionState('focused') }
+  const handleBlur       = () => { if (!disabled) setInteractionState('normal') }
+  const handleMouseDown  = () => { if (!disabled) setInteractionState('pressed') }
+  const handleMouseUp    = () => { if (!disabled) setInteractionState('hovered') }
+
   return (
     <div
       style={wrapperStyle}
@@ -118,6 +154,12 @@ export default function Checkbox({
       tabIndex={disabled ? -1 : 0}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
       <div style={controlStyle}>
         <div style={boxStyle}>
@@ -136,6 +178,7 @@ export default function Checkbox({
             />
           )}
         </div>
+        <div style={overlayStyle} />
       </div>
 
       {label && (
