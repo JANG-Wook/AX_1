@@ -249,6 +249,7 @@ export const spacing = {
   '4':   '4px',
   '5':   '5px',
   '6':   '6px',
+  '7':   '7px',
   '8':   '8px',
   '10':  '10px',
   '12':  '12px',
@@ -325,6 +326,7 @@ export const shadow = {
     medium: '0px 15px 75px 0px rgba(23, 23, 23, 0.16)',
   },
   segmentKnob:         '0px 0px 4px 0px rgba(0, 0, 0, 0.08)',
+  switchIosKnob:       '0px 3px 8px 0px rgba(0, 0, 0, 0.12), 0px 3px 1px 0px rgba(0, 0, 0, 0.04)',
   textOverlay:         '0px 0px 12px rgba(0, 0, 0, 0.16)',
   pageIndicatorText:   '0px 0px 6px rgba(0, 0, 0, 0.08)',
 }

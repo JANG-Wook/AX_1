@@ -243,6 +243,10 @@ html, body, #root { margin: 0; padding: 0; height: 100%; }
   --shadow-segment-knob:
     0px 0px 4px 0px rgba(0, 0, 0, 0.08);
 
+  --shadow-switch-ios-knob:
+    0px 3px 8px 0px rgba(0, 0, 0, 0.12),
+    0px 3px 1px 0px rgba(0, 0, 0, 0.04);
+
   --shadow-text-overlay:
     0px 0px 12px rgba(0, 0, 0, 0.16);
 
@@ -382,6 +386,7 @@ html, body, #root { margin: 0; padding: 0; height: 100%; }
   --spacing-4:   4px;
   --spacing-5:   5px;
   --spacing-6:   6px;
+  --spacing-7:   7px;
   --spacing-8:   8px;
   --spacing-10:  10px;
   --spacing-12:  12px;
