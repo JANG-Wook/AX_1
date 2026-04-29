@@ -73,9 +73,9 @@ const OVERLAY_OPACITY = { hovered: 0.05, focused: 0.08, pressed: 0.12 }
 
 /* ── 개별 세그먼트 아이템 ────────────────────────────────────── */
 function SegmentItem({
-  item, idx, isActive, isLast,
+  item, idx, isActive, isFirst, isLast,
   isSolid, isOutlined,
-  knobRadius, segPad, iconSize,
+  trackRadius, knobRadius, segPad, iconSize,
   fontSize, fontWeight, lineHeight, letterSpacing,
   onChange,
 }) {
@@ -98,6 +98,13 @@ function SegmentItem({
       handleClick()
     }
   }
+
+  // outlined: position 기반 border-radius. container의 overflow:hidden이 외곽 클리핑 처리
+  const outlinedActiveRadius = isFirst
+    ? `${trackRadius}px 0 0 ${trackRadius}px`
+    : isLast
+    ? `0 ${trackRadius}px ${trackRadius}px 0`
+    : '0'
 
   const segWrapStyle = {
     flex:           '1 0 0',
@@ -125,7 +132,8 @@ function SegmentItem({
   const overlayStyle = {
     position:        'absolute',
     inset:           0,
-    borderRadius:    `${knobRadius}px`,
+    // solid: knob 모서리 맞춤 / outlined: 0으로 두고 container가 외곽 클리핑
+    borderRadius:    isSolid ? `${knobRadius}px` : 0,
     backgroundColor: `color-mix(in srgb, ${overlayColor} ${Math.round(overlayOpacity * 100)}%, transparent)`,
     pointerEvents:   'none',
     transition:      'background-color 0.15s ease',
@@ -159,7 +167,7 @@ function SegmentItem({
       onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
       onMouseDown={() => setIsPressed(true)}
       onMouseUp={() => setIsPressed(false)}
-      onFocus={() => setIsFocused(true)}
+      onFocus={(e) => setIsFocused(e.target.matches(':focus-visible'))}
       onBlur={() => { setIsFocused(false); setIsPressed(false) }}
     >
       <div style={segInnerStyle}>
@@ -189,17 +197,19 @@ function SegmentItem({
                 inset:           0,
                 backgroundColor: 'var(--color-primary-normal)',
                 opacity:         0.05,
+                borderRadius:    outlinedActiveRadius,
                 zIndex:          1,
               }}
             />
             <div
               aria-hidden="true"
               style={{
-                position: 'absolute',
-                inset:    0,
-                border:   '1px solid var(--color-primary-normal)',
-                opacity:  0.43,
-                zIndex:   1,
+                position:     'absolute',
+                inset:        0,
+                border:       '1px solid var(--color-primary-normal)',
+                opacity:      0.43,
+                borderRadius: outlinedActiveRadius,
+                zIndex:       1,
               }}
             />
           </>
@@ -278,16 +288,16 @@ export default function SegmentedControl({
     alignItems:   'center',
     height:       `${trackH}px`,
     width:        '100%',
-    padding:      `${trackPad}px`,
     boxSizing:    'border-box',
     borderRadius: `${trackRadius}px`,
     position:     'relative',
     flexShrink:   0,
     ...(isSolid && {
       backgroundColor: 'var(--color-fill-normal)',
+      padding:         `${trackPad}px`,
     }),
     ...(isOutlined && {
-      border:   '1px solid var(--color-line-normal)',
+      // border는 외부 overlay로 분리. container는 overflow:hidden만 담당
       overflow: 'hidden',
     }),
   }
@@ -296,8 +306,22 @@ export default function SegmentedControl({
     <div
       className={className}
       role="tablist"
-      style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+      style={{ display: 'flex', flexDirection: 'column', width: '100%', position: 'relative' }}
     >
+      {/* outlined: gray border를 overlay로 분리 → container가 full-size로 채워져 active blue border와 크기 일치 */}
+      {isOutlined && (
+        <div
+          aria-hidden="true"
+          style={{
+            position:      'absolute',
+            inset:         0,
+            border:        '1px solid var(--color-line-normal)',
+            borderRadius:  `${trackRadius}px`,
+            pointerEvents: 'none',
+            zIndex:        10,
+          }}
+        />
+      )}
       <div style={trackStyle}>
         {items.map((item, idx) => (
           <SegmentItem
@@ -305,9 +329,11 @@ export default function SegmentedControl({
             item={item}
             idx={idx}
             isActive={idx === value}
+            isFirst={idx === 0}
             isLast={idx === items.length - 1}
             isSolid={isSolid}
             isOutlined={isOutlined}
+            trackRadius={trackRadius}
             knobRadius={knobRadius}
             segPad={segPad}
             iconSize={iconSize}
