@@ -145,6 +145,23 @@ export default function DecorateGradientMaskPage() {
         </div>
       </Section>
 
+      {/* 섹션 2: 사용 예시 */}
+      <Section title="사용 예시">
+        <div style={{
+          width:           '100%',
+          backgroundColor: 'var(--color-fill-normal)',
+          borderRadius:    'var(--spacing-12)',
+          padding:         'var(--spacing-32)',
+          boxSizing:       'border-box',
+        }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)' }}>
+            {USAGE_CASES.map(c => (
+              <UsageCard key={c.edge} {...c} />
+            ))}
+          </div>
+        </div>
+      </Section>
+
     </div>
   )
 }

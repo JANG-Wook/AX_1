@@ -34,20 +34,18 @@ export default function DividerPage() {
   return (
     <div>
       <h2 style={{
-        fontSize:      'var(--font-size-title-1)',
-        lineHeight:    'var(--line-height-title-1)',
-        letterSpacing: 'var(--letter-spacing-title-1)',
-        fontWeight:    'var(--font-weight-bold)',
-        color:         'var(--color-label-strong)',
-        marginBottom:  'var(--spacing-8)',
+        fontSize:     'var(--font-size-title-3)',
+        lineHeight:   'var(--line-height-title-3)',
+        fontWeight:   'var(--font-weight-bold)',
+        color:        'var(--color-label-normal)',
+        marginBottom: 'var(--spacing-8)',
       }}>Divider</h2>
       <p style={{
-        fontSize:      'var(--font-size-body-1)',
-        lineHeight:    'var(--line-height-body-1-normal)',
-        letterSpacing: 'var(--letter-spacing-body-1)',
-        fontWeight:    'var(--font-weight-medium)',
-        color:         'var(--color-label-normal)',
-        marginBottom:  'var(--spacing-32)',
+        fontSize:     'var(--font-size-body-2)',
+        lineHeight:   'var(--line-height-body-2-normal)',
+        fontWeight:   'var(--font-weight-regular)',
+        color:        'var(--color-label-alternative)',
+        marginBottom: 'var(--spacing-32)',
       }}>디자인 요소와 정보를 구분하는 데 사용합니다. 이를 통해 각 요소의 디자인 가독성이 향상됩니다.</p>
 
       <div style={{

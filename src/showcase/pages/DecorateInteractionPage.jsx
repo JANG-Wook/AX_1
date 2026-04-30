@@ -94,7 +94,7 @@ export default function DecorateInteractionPage() {
         marginBottom:  'var(--spacing-32)',
       }}>투명도를 규칙적인 수준으로 표현합니다. 이를 통해 디자인의 깊이감을 조절하고 조화를 유지할 수 있습니다.</p>
 
-      <Section title="종류">
+      <Section title="Types">
         <div style={{
           width:           '100%',
           backgroundColor: 'var(--color-fill-normal)',

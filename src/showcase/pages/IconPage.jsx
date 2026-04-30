@@ -2,32 +2,123 @@ import Icon from '../../design-system/components/Icon/Icon'
 import Section, { Case } from '../Section'
 
 const ICON_NAMES = [
-  'agent','aiReview','alignCenter','alignJustify','alignLeft','alignRight',
-  'android','apps','arrowDown','arrowDownThick','arrowLeft','arrowLeftThick',
-  'arrowRight','arrowRightThick','arrowUp','arrowUpRight','arrowUpThick',
-  'attachment','bell','bellFill','bellPlus','bold','book','bookFill',
-  'bookmark','bookmarkFill','bubble','bubbleFill','bubblePlus','bulb',
-  'businessBag','businessBagFill','calendar','calendarPerson','camera','cameraFill',
-  'caretDown','caretUp','certificate','change','chat','check','checkThick',
-  'chevronDoubleLeft','chevronDown','chevronLeft','chevronRight','chevronUp',
-  'circle','circleFill','clock','clockFill','close','code','copy',
-  'creditCard','crop','delete','document','documentFill','download',
-  'edit','emoji','eye','eyeOff','faceSmile','faceSad','filter',
-  'flag','flagFill','folder','folderFill','gear','globe','grid',
-  'heart','heartFill','help','helpCircle','home','homeFill',
-  'image','info','infoCircle','italic','key','layers','link',
-  'list','location','locationFill','lock','lockOpen','logout',
-  'map','maximize','menu','message','mic','minimize','minus',
-  'moon','more','moreHorizontal','move','notification',
-  'pause','person','personFill','personPlus','phone','phoneFill',
-  'play','playFill','plus','plusCircle','plusSquare',
-  'print','questionCircle','refresh','reply','rotate',
-  'search','send','sendFill','share','shield','shieldFill',
-  'sidebar','slash','slider','sort','sparkle','star','starFill',
-  'sun','switch','tag','tagFill','thumbDown','thumbUp',
-  'trash','trashFill','trending','underline','unlock',
-  'upload','video','videoFill','wallet','warning','warningFill',
-  'wifi','wifiFill','xCircle','xSmall','xSmallThick','zoom',
+  // agent / ai
+  'agent', 'aiReview', 'aiReview-1',
+  // align
+  'alignCenter', 'alignJustify', 'alignLeft', 'alignRight',
+  // android / apps
+  'android', 'apps',
+  // arrow
+  'arrowDown', 'arrowDownThick', 'arrowLeft', 'arrowLeftThick',
+  'arrowRight', 'arrowRightThick', 'arrowTurnDownLeft', 'arrowTurnDownRight',
+  'arrowUp', 'arrowUpRight', 'arrowUpRightThick', 'arrowUpThick',
+  // attachment / bell / bold
+  'attachment', 'bell', 'bellFill', 'bellPlus', 'bold',
+  // book / bookmark
+  'book', 'bookFill', 'bookmark', 'bookmarkFill',
+  // bubble
+  'bubble', 'bubbleFill', 'bubblePlus', 'bubblePlusFill',
+  // bulb / businessBag
+  'bulb', 'businessBag', 'businessBagFill',
+  // calendar / camera / caret / certificate / change / chat / check
+  'calendar', 'calendarPerson',
+  'camera', 'cameraFill',
+  'caretDown', 'caretUp', 'certificate', 'change', 'chat', 'check', 'checkThick',
+  // chevron
+  'chevronDoubleLeft', 'chevronDoubleLeftSmall', 'chevronDoubleLeftThick', 'chevronDoubleLeftThickSmall',
+  'chevronDoubleRight', 'chevronDoubleRightSmall', 'chevronDoubleRightThick', 'chevronDoubleRightThickSmall',
+  'chevronDown', 'chevronDownSmall', 'chevronDownThick', 'chevronDownThickSmall',
+  'chevronLeft', 'chevronLeftSmall', 'chevronLeftThick', 'chevronLeftThickSmall',
+  'chevronLeftTight', 'chevronLeftTightSmall', 'chevronLeftTightThick', 'chevronLeftTightThickSmall',
+  'chevronRight', 'chevronRightSmall', 'chevronRightThick', 'chevronRightThickSmall',
+  'chevronRightTight', 'chevronRightTightSmall', 'chevronRightTightThick', 'chevronRightTightThickSmall',
+  'chevronUp', 'chevronUpSmall', 'chevronUpThick', 'chevronUpThickSmall',
+  // circle
+  'circle', 'circleBlock', 'circleCheck', 'circleCheckFill',
+  'circleClose', 'circleCloseFill', 'circleDot',
+  'circleExclamation', 'circleExclamationFill', 'circleFill',
+  'circleInfo', 'circleInfoFill', 'circlePlus', 'circlePlusFill',
+  'circlePoint', 'circleQuestion', 'circleQuestionFill',
+  'circleUpRight', 'circleUpRightFill',
+  // clock / close / code / coffee / coins / column / company / compass / component / copy / crown
+  'clock', 'clockFill', 'close', 'closeThick', 'code',
+  'coffee', 'coffeeFill', 'coins', 'coinsFill', 'column',
+  'company', 'companyCheck', 'companyCheckFill', 'companyFill', 'companyPlus', 'companyPlusFill',
+  'compass', 'compassFill', 'component', 'componentFill',
+  'copy', 'crown', 'crownFill',
+  // deep / desktop / diamond / dislike / document / dot / download
+  'deepSearch', 'desktop', 'desktopFill', 'diamond', 'diamondFill',
+  'dislike', 'dislikeFill',
+  'document', 'documentFill', 'documentPerson', 'documentPersonFill',
+  'documentSearch', 'documentText', 'documentTextFill',
+  'dot', 'download',
+  // exclamation / externalLink / eye / face / filter / fire / flag / folder / full
+  'exclamation', 'externalLink',
+  'eye', 'eyeFill', 'eyeSlash', 'eyeSlashFill',
+  'faceSmile', 'faceSmileFill',
+  'filter', 'filterFill', 'fire', 'fireFill',
+  'flag', 'flagFill', 'flipBackward',
+  'folder', 'folderFill', 'folderJob', 'folderJobFill', 'folderStar', 'folderStarFill',
+  'full',
+  // globe / graduation / handle / heart / history / home / hourglass
+  'globe', 'globeFill', 'graduation', 'graduationFill',
+  'handle', 'handleDesktop',
+  'heart', 'heartFill', 'heartInHeart', 'heartInHeartFill',
+  'history', 'home', 'homeFill', 'hourglass',
+  // image / inbox / instance / keyboard / leftSide
+  'image', 'inbox', 'instance', 'keyboard', 'leftSide',
+  // like / line / link / list / location / lock / login / logo / logout
+  'like', 'likeFill',
+  'lineHorizontal', 'lineHorizontalThick',
+  'link', 'list', 'listCategory', 'listOrdered',
+  'location', 'locationFill',
+  'lock', 'lockFill', 'lockOpen', 'lockOpenFill',
+  'login',
+  'logoApple', 'logoBrunch', 'logoFacebook', 'logoGooglePlay',
+  'logoInstagram', 'logoKakao', 'logoLinkedIn', 'logoMicrosoft',
+  'logoNaverBlog', 'logoX', 'logoYoutube',
+  'logout',
+  // magicWand / mail / medal / megaphone / menu / message / microphone / minus / mobile / moon / more
+  'magicWand', 'mail', 'mailOpen',
+  'medal', 'megaphone', 'megaphoneFill',
+  'menu', 'menuThick',
+  'message', 'messageFill',
+  'microphone', 'microphoneFill', 'microphoneSlash', 'microphoneSlashFill',
+  'minus', 'minusThick',
+  'mobile', 'mobileFill', 'moon',
+  'moreHorizontal', 'moreVertical', 'moreVerticalTight',
+  'musicMicrophone',
+  // palette / passport / pause / pencil / person / phone / pin / play / plus / presentation / printer
+  'palette', 'paletteFill', 'passport', 'passportFill',
+  'pause', 'pencil', 'pencilFill',
+  'person', 'personFill', 'personPlus', 'personPlusFill', 'persons', 'personsFill',
+  'phone', 'phoneFill', 'pin', 'pinFill',
+  'play', 'plus', 'plusThick', 'presentation', 'printer',
+  // question / quote / refresh / regex / replace / reset
+  'question', 'quote',
+  'refresh', 'regex', 'replace', 'replaceAll', 'reset',
+  // search / send / setting / share / sparkle / square / star / storage / strikethrough / sun
+  'search', 'searchThick', 'send', 'sendFill', 'setting', 'share', 'shareIos',
+  'sparkle', 'sparkleAlt', 'sparkleFill',
+  'square', 'squareCaret', 'squareCheck', 'squareFill',
+  'squareHan', 'squareHangul', 'squareKana',
+  'squareLatin', 'squareLatinFill', 'squareMore', 'squarePlay',
+  'squarePlus', 'squarePlusFill',
+  'star', 'starFill', 'storage', 'strikethrough', 'sun',
+  // tag / telescope / template / text
+  'tag', 'tagFill', 'telescope', 'template', 'templateFill', 'textFormat', 'textVariable',
+  // thumbnail / thunder / ticket / trash / triangle / trophy / tune
+  'thumbnail', 'thunder', 'thunderFill', 'ticket', 'ticketFill',
+  'trash', 'triangle', 'triangleExclamation', 'triangleExclamationFill', 'triangleFill',
+  'trophy', 'trophyFill', 'tune',
+  // umbrella / underline / upload / utility / verified / video
+  'umbrella', 'umbrellaFill', 'underline', 'upload',
+  'utility', 'utilityFill',
+  'verifiedCheck', 'verifiedCheckFill', 'verifiedStar', 'verifiedStarFill',
+  'video',
+  // webinar / wholeWord / write / zep
+  'webinar', 'wholeWord', 'write',
+  'zepFast', 'zepFastFill',
 ]
 
 const SIZES = [16, 20, 24, 28, 32]

@@ -134,7 +134,7 @@ function HeightDemoCard({ height }) {
 function VerticalContent() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-32)' }}>
-      <Section title="비율 종류">
+      <Section title="Ratio Types">
         <div style={CARD}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-24)' }}>
             <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>ratio =</span>
@@ -154,7 +154,7 @@ function VerticalContent() {
         </div>
       </Section>
 
-      <Section title="높이에 따른 크기 변화">
+      <Section title="Size Change by Height">
         <div style={CARD}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-24)' }}>
             <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>customize =</span>
@@ -222,7 +222,7 @@ function WidthDemoCard({ width }) {
 function HorizontalContent() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-32)' }}>
-      <Section title="비율 종류">
+      <Section title="Ratio Types">
         <div style={CARD}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-24)' }}>
             <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)', marginTop: '1px' }}>ratio =</span>
@@ -253,7 +253,7 @@ function HorizontalContent() {
         </div>
       </Section>
 
-      <Section title="너비에 따른 크기 변화">
+      <Section title="Size Change by Width">
         <div style={CARD}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-6)', marginBottom: 'var(--spacing-24)' }}>
             <span style={{ fontSize: 'var(--font-size-label-2)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--color-label-strong)' }}>customize =</span>

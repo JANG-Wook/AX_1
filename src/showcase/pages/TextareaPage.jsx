@@ -290,7 +290,6 @@ function ActiveSection() {
   return (
     <Section title="active">
       <div style={CARD}>
-        <PropHead name="active" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <TAItem label="false">
             <Textarea heading="주제" placeholder={PH} maxLength={2000}
@@ -313,7 +312,7 @@ function FocusSection() {
   return (
     <Section title="focus">
       <div style={CARD}>
-        <PropHead name="focus" values={['false', 'true']} />
+        <PropHead name="forceFocused" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <TAItem label="false">
             <Textarea heading="주제" defaultValue={ACTIVE_VAL} maxLength={2000}
@@ -337,7 +336,7 @@ function DisableSection() {
   return (
     <Section title="disable">
       <div style={CARD}>
-        <PropHead name="disable" values={['false', 'true']} />
+        <PropHead name="disabled" values={['false', 'true']} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-20)' }}>
           <div style={{ display: 'flex', gap: GAP, flexWrap: 'wrap' }}>
             <TAItem label="false">
@@ -395,7 +394,7 @@ function RequiredBadgeSection() {
   return (
     <Section title="requiredBadge">
       <div style={CARD}>
-        <PropHead name="requiredBadge" values={['false', 'true']} />
+        <PropHead name="required" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <TAItem label="false">
             <Textarea heading="주제" defaultValue={ACTIVE_VAL} maxLength={2000}

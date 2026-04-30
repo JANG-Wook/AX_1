@@ -213,7 +213,7 @@ function InteractionContent() {
         margin:       0,
       }}>투명도를 규칙적인 수준으로 표현합니다. 이를 통해 디자인의 깊이감을 조절하고 조화를 유지할 수 있습니다.</p>
 
-      <Section title="종류">
+      <Section title="Types">
         <div style={CARD}>
           <div style={{ display: 'flex', marginBottom: 'var(--spacing-24)' }}>
             <div style={{ width: '72px', flexShrink: 0 }} />

@@ -135,7 +135,7 @@ export default function EssentialPage() {
         marginBottom: 'var(--spacing-32)',
       }}>오토레이아웃을 사용하지 않고 Status Bar와 Home Bar를 표시할 때 사용합니다.</p>
 
-      <Section title="platform 종류">
+      <Section title="Platform Types">
         <div style={{
           width:           '100%',
           backgroundColor: 'var(--color-fill-normal)',

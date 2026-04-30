@@ -153,7 +153,7 @@ export default function LayoutGridColumnPage() {
       }}>Layout_Grid Column</h2>
 
       {/* 모바일 */}
-      <Section title="모바일" column>
+      <Section title="Mobile" column>
         <GridPreview description="모바일에서는 2단 컬럼 그리드를 사용합니다.">
           <GridScreen
             viewportW={375} viewportH={560} gnbH={56}
@@ -164,7 +164,7 @@ export default function LayoutGridColumnPage() {
       </Section>
 
       {/* 태블릿 */}
-      <Section title="태블릿" column>
+      <Section title="Tablet" column>
         <GridPreview description="태블릿 대응이 필요한 경우에는 3단 컬럼 그리드를 쓰며, 컬럼을 묶어 사용할 수 있습니다.">
           <GridScreen
             viewportW={768} viewportH={480} gnbH={56}
@@ -180,7 +180,7 @@ export default function LayoutGridColumnPage() {
       </Section>
 
       {/* 데스크톱 */}
-      <Section title="데스크톱" column>
+      <Section title="Desktop" column>
         <GridPreview>
           <GridScreen
             viewportW={1200} viewportH={400} gnbH={60}

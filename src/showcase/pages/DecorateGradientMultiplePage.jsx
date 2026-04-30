@@ -125,6 +125,37 @@ export default function DecorateGradientMultiplePage() {
         </div>
       </Section>
 
+      {/* 섹션 2: 사용 예시 */}
+      <Section title="사용 예시">
+        <div style={{
+          width:           '100%',
+          backgroundColor: 'var(--color-fill-normal)',
+          borderRadius:    'var(--spacing-12)',
+          padding:         'var(--spacing-32)',
+          boxSizing:       'border-box',
+        }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-32)' }}>
+            {BLEND_EXAMPLES.map((ex, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
+                <BlendBox
+                  token={ex.token}
+                  baseColor={ex.baseColor}
+                  overlayColor={ex.overlayColor}
+                  width={ex.width}
+                  height={ex.height}
+                />
+                <span style={{
+                  fontSize:   'var(--font-size-caption-1)',
+                  lineHeight: 'var(--line-height-caption-1)',
+                  fontWeight: 'var(--font-weight-regular)',
+                  color:      'var(--color-label-alternative)',
+                }}>{ex.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
     </div>
   )
 }

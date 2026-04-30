@@ -261,7 +261,6 @@ function ActiveSection() {
   return (
     <Section title="active">
       <div style={CARD}>
-        <PropHead name="active" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
           <TFItem label="false">
             <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." />
@@ -282,7 +281,7 @@ function FocusSection() {
   return (
     <Section title="focus">
       <div style={CARD}>
-        <PropHead name="focus" values={['false', 'true']} />
+        <PropHead name="forceFocused" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <TFItem label="false">
             <Textfield heading="주제" placeholder={PH} description="메시지에 마침표를 찍어요." />
@@ -303,7 +302,7 @@ function DisableSection() {
   return (
     <Section title="disable">
       <div style={CARD}>
-        <PropHead name="disable" values={['false', 'true']} />
+        <PropHead name="disabled" values={['false', 'true']} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-20)' }}>
           <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
             <TFItem label="false">
@@ -355,7 +354,7 @@ function RequiredBadgeSection() {
   return (
     <Section title="requiredBadge">
       <div style={CARD}>
-        <PropHead name="requiredBadge" values={['false', 'true']} />
+        <PropHead name="required" values={['false', 'true']} />
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <TFItem label="false">
             <Textfield heading="이메일" placeholder="example@email.com" />
@@ -507,7 +506,7 @@ function TrailingButtonSection() {
             </TFItem>
           </div>
 
-          <PropHead name="disable" values={['false', 'true']} />
+          <PropHead name="disabled" values={['false', 'true']} />
           <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
             <TFItem label="false" width={280}>
               <Textfield defaultValue="값" trailingButton={{ label: '텍스트', variant: 'normal' }} />

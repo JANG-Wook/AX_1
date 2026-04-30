@@ -155,7 +155,7 @@ export default function FramedStylePage() {
           3 color - semantic에 등록된 Shadow styles를 사용해 shadow를 변경할 수 있습니다.
         </p>
         <div style={{ display: 'flex', gap: 'var(--spacing-24)', flexWrap: 'wrap' }}>
-          {['xsmall', 'small', 'medium', 'large', 'xlarge'].map(s => (
+          {['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'].map(s => (
             <div key={s} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-8)' }}>
               <FrameLabel>{s}</FrameLabel>
               <FramedStyle shadow={s}><SlotPlaceholder /></FramedStyle>

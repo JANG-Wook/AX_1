@@ -137,20 +137,20 @@ function GridScreen({ viewportW, viewportH, gnbH, outerMargin = 0, colMargin, gu
 function GridColumnContent() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-32)' }}>
-      <Section title="모바일" column>
+      <Section title="Mobile" column>
         <PreviewCard description="모바일에서는 2단 컬럼 그리드를 사용합니다.">
           <GridScreen viewportW={375} viewportH={560} gnbH={56} outerMargin={0} colMargin={20} gutter={20} colCount={2} scale={0.7} spans={[1, 1]} />
         </PreviewCard>
       </Section>
 
-      <Section title="태블릿" column>
+      <Section title="Tablet" column>
         <PreviewCard description="태블릿 대응이 필요한 경우에는 3단 컬럼 그리드를 쓰며, 컬럼을 묶어 사용할 수 있습니다.">
           <GridScreen viewportW={768} viewportH={480} gnbH={56} outerMargin={0} colMargin={20} gutter={20} colCount={3} scale={0.45} spans={[1, 1, 1]} />
           <GridScreen viewportW={768} viewportH={480} gnbH={56} outerMargin={0} colMargin={20} gutter={20} colCount={3} scale={0.45} spans={[1, 2]} />
         </PreviewCard>
       </Section>
 
-      <Section title="데스크톱" column>
+      <Section title="Desktop" column>
         <PreviewCard>
           <GridScreen viewportW={1200} viewportH={400} gnbH={60} outerMargin={50} colMargin={20} gutter={20} colCount={12} scale={0.37} spans={[1,1,1,1,1,1,1,1,1,1,1,1]} />
           <GridScreen viewportW={1200} viewportH={400} gnbH={60} outerMargin={50} colMargin={20} gutter={20} colCount={12} scale={0.37} spans={[4, 1, 6, 1]} />
@@ -239,13 +239,13 @@ function MaxWidthScreen({ viewportW, viewportH, gnbH, outerMargin, colMargin, sc
 function MaxWidthContent() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-32)' }}>
-      <Section title="데스크톱" column>
+      <Section title="Desktop" column>
         <PreviewCard description="여백을 포함한 그리드의 최대 너비는 1100px입니다.">
           <MaxWidthScreen viewportW={1200} viewportH={480} gnbH={60} outerMargin={50} colMargin={20} scale={0.42} />
         </PreviewCard>
       </Section>
 
-      <Section title="데스크톱(xl)" column>
+      <Section title="Desktop (XL)" column>
         <PreviewCard description="여백을 포함한 그리드의 최대 너비는 1440px입니다.">
           <MaxWidthScreen viewportW={1600} viewportH={480} gnbH={60} outerMargin={80} colMargin={20} scale={0.37} />
         </PreviewCard>

@@ -249,11 +249,11 @@ export default function BreakpointPage() {
         marginBottom:  'var(--spacing-32)',
       }}>Breakpoint</h2>
 
-      <Section title="범위 요약">
+      <Section title="Summary">
         <BreakpointRuler />
       </Section>
 
-      <Section title="상세" gap="var(--spacing-48)">
+      <Section title="Detail" gap="var(--spacing-48)">
         {BREAKPOINTS.map(bp => (
           <BreakpointCard key={bp.name} bp={bp} scale={0.25} />
         ))}

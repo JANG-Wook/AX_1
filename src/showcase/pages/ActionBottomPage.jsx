@@ -173,7 +173,7 @@ export default function ActionBottomPage() {
       }}>화면 하단에 고정되는 주요 액션 영역입니다.</p>
 
       {/* ──────────────── 인터랙션 데모 ──────────────── */}
-      <Section title="test">
+      <Section title="Test">
         <div style={CARD}>
           <SubLabel>버튼에 마우스를 올리거나 클릭해보세요</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginTop: 'var(--spacing-16)' }}>
@@ -199,7 +199,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 1. extra & divider ──────────────── */}
-      <Section title="extra">
+      <Section title="Extra">
         <div style={CARD}>
           <SubLabel>extra = false / true</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
@@ -234,7 +234,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 2. variant ──────────────── */}
-      <Section title="variant">
+      <Section title="Variant">
         <div style={CARD}>
 
           {/* Strong */}
@@ -370,7 +370,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 3. customize ──────────────── */}
-      <Section title="customize">
+      <Section title="Customize">
         <div style={CARD}>
           <SubLabel>customize = button (메인 액션이 Outlined Primary로 커스텀된 케이스)</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)' }}>
@@ -418,7 +418,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 4. caption ──────────────── */}
-      <Section title="caption">
+      <Section title="Caption">
         <div style={CARD}>
           <SubLabel>Strong — caption = false / true</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
@@ -453,7 +453,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 5. sticky ──────────────── */}
-      <Section title="sticky">
+      <Section title="Sticky">
         <div style={CARD}>
           <SubLabel>sticky = false / true (스크롤 본문 위 그라디언트 페이드)</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
@@ -510,7 +510,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 6. resource ──────────────── */}
-      <Section title="resource">
+      <Section title="Resource">
         <div style={CARD}>
 
           {/* ── extra 슬롯 프리셋 ── */}
@@ -712,7 +712,7 @@ export default function ActionBottomPage() {
       </Section>
 
       {/* ──────────────── 7. safeArea ──────────────── */}
-      <Section title="safeArea">
+      <Section title="Safe Area">
         <div style={CARD}>
           <SubLabel>플랫폼별 하단 Safe Area</SubLabel>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-24)' }}>

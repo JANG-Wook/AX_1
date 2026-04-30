@@ -195,7 +195,7 @@ export default function LayoutMaxWidthPage() {
       }}>Layout_Max-width</h2>
 
       {/* 데스크톱 lg */}
-      <Section title="데스크톱" column>
+      <Section title="Desktop" column>
         <MaxWidthPreview description="여백을 포함한 그리드의 최대 너비는 1100px입니다.">
           <MaxWidthScreen
             viewportW={1200} viewportH={480} gnbH={60}
@@ -205,7 +205,7 @@ export default function LayoutMaxWidthPage() {
       </Section>
 
       {/* 데스크톱 xl */}
-      <Section title="데스크톱(xl)" column>
+      <Section title="Desktop (XL)" column>
         <MaxWidthPreview description="여백을 포함한 그리드의 최대 너비는 1440px입니다.">
           <MaxWidthScreen
             viewportW={1600} viewportH={480} gnbH={60}

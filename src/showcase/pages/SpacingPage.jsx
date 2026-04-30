@@ -302,11 +302,11 @@ export default function SpacingPage() {
         marginBottom: 'var(--spacing-32)',
       }}>Spacing</h2>
 
-      <Section title="기준">
+      <Section title="Base">
         <ScaleChart />
       </Section>
 
-      <Section title="훑어보기" gap="var(--spacing-24)" wrap>
+      <Section title="Overview" gap="var(--spacing-24)" wrap>
         <OverviewCard description="기본적으로는 4px을 기준으로 간격을 잡습니다.">
           <Card1 />
         </OverviewCard>

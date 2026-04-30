@@ -100,6 +100,14 @@ export default function ButtonPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-48)' }}>
 
+      <h2 style={{
+        fontSize:     'var(--font-size-title-3)',
+        lineHeight:   'var(--line-height-title-3)',
+        fontWeight:   'var(--font-weight-bold)',
+        color:        'var(--color-label-normal)',
+        marginBottom: 'var(--spacing-8)',
+      }}>Button</h2>
+
       {/* ── 인터랙션 데모 ── */}
       <Section title="test">
         <div style={{ ...CARD, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>

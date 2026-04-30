@@ -258,7 +258,6 @@ function ActiveSection() {
   return (
     <Section title="active">
       <div style={CARD}>
-        <PropHead name="active" values={['false', 'true']} defaults={['false']} />
         <div style={{ display: 'flex', gap: GAP, flexWrap: 'wrap' }}>
           <SelItem label="false">
             <Select placeholder="선택해주세요." />
@@ -279,7 +278,7 @@ function FocusSection() {
   return (
     <Section title="focus">
       <div style={CARD}>
-        <PropHead name="focus" values={['false', 'true']} defaults={['false']} />
+        <PropHead name="forceFocused" values={['false', 'true']} defaults={['false']} />
         <div style={{ display: 'flex', gap: GAP, flexWrap: 'wrap' }}>
           <SelItem label="false">
             <Select placeholder="선택해주세요." />
@@ -363,7 +362,7 @@ function DisableSection() {
   return (
     <Section title="disable">
       <div style={CARD}>
-        <PropHead name="disable" values={['false', 'true']} defaults={['false']} />
+        <PropHead name="disabled" values={['false', 'true']} defaults={['false']} />
 
         <div style={{ display: 'flex', gap: GAP, marginBottom: 'var(--spacing-16)' }}>
           <div style={{ width: '80px', flexShrink: 0 }} />
@@ -433,7 +432,7 @@ function RequiredBadgeSection() {
   return (
     <Section title="requiredBadge">
       <div style={CARD}>
-        <PropHead name="requiredBadge" values={['false', 'true']} defaults={['false']} />
+        <PropHead name="required" values={['false', 'true']} defaults={['false']} />
         <div style={{ display: 'flex', gap: GAP, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <SelItem label="false">
             <Select heading="지역 선택" placeholder="선택해주세요." />

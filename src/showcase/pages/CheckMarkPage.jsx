@@ -98,14 +98,14 @@ export default function CheckMarkPage() {
         </Case>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <CheckMark checked={false} label="텍스트" />
             <CheckMark checked       label="텍스트" />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <CheckMark checked={false} disabled label="텍스트" />
             <CheckMark checked       disabled label="텍스트" />
@@ -160,14 +160,14 @@ export default function CheckMarkPage() {
         </div>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <CheckMark checked={false} />
             <CheckMark checked />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <CheckMark checked={false} disabled />
             <CheckMark checked       disabled />

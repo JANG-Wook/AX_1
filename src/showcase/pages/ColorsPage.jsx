@@ -24,6 +24,7 @@ const COLOR_GROUPS = [
     tokens: [
       { name: '--color-label-normal',      label: 'label-normal'      },
       { name: '--color-label-strong',      label: 'label-strong'      },
+      { name: '--color-label-neutral',     label: 'label-neutral'     },
       { name: '--color-label-alternative', label: 'label-alternative' },
       { name: '--color-label-assistive',   label: 'label-assistive'   },
       { name: '--color-label-disable',     label: 'label-disable'     },

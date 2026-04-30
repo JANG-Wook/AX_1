@@ -109,15 +109,15 @@ export default function CheckboxPage() {
         </Case>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Checkbox state="unchecked"     label="텍스트" />
             <Checkbox state="checked"       label="텍스트" />
             <Checkbox state="indeterminate" label="텍스트" />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Checkbox state="unchecked"     disabled label="텍스트" />
             <Checkbox state="checked"       disabled label="텍스트" />
@@ -176,15 +176,15 @@ export default function CheckboxPage() {
         </div>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Checkbox state="unchecked" />
             <Checkbox state="checked" />
             <Checkbox state="indeterminate" />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Checkbox state="unchecked"     disabled />
             <Checkbox state="checked"       disabled />

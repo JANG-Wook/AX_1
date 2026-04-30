@@ -86,14 +86,14 @@ export default function RadioPage() {
         </Case>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Radio checked={false} label="텍스트" />
             <Radio checked       label="텍스트" />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Radio checked={false} disabled label="텍스트" />
             <Radio checked       disabled label="텍스트" />
@@ -148,14 +148,14 @@ export default function RadioPage() {
         </div>
       </Section>
 
-      <Section title="disable" gap="var(--spacing-24)">
-        <Case label='disable=false (default)'>
+      <Section title="disabled" gap="var(--spacing-24)">
+        <Case label='disabled=false (default)'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Radio checked={false} />
             <Radio checked />
           </div>
         </Case>
-        <Case label='disable=true'>
+        <Case label='disabled=true'>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
             <Radio checked={false} disabled />
             <Radio checked       disabled />
