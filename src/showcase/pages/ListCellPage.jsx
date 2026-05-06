@@ -1,13 +1,22 @@
-import { useState } from 'react'
 import ListCell from '../../design-system/components/ListCell/ListCell'
 import Avatar from '../../design-system/components/Avatar/Avatar'
 import Switch from '../../design-system/components/Switch/Switch'
-import Icon from '../../design-system/components/Icon/Icon'
 import Section, { Case } from '../Section'
 
-export default function ListCellPage() {
-  const [lastClicked, setLastClicked] = useState(null)
+const INTERACTION_STATES = [
+  { state: 'none',     selected: false },
+  { state: 'hover',    selected: false },
+  { state: 'active',   selected: false },
+  { state: 'selected', selected: true  },
+]
 
+const boundStyle = { border: '1px solid var(--color-line-normal)' }
+
+function Bound({ children }) {
+  return <div style={boundStyle}>{children}</div>
+}
+
+export default function ListCellPage() {
   return (
     <div>
       <h2 style={{
@@ -18,148 +27,242 @@ export default function ListCellPage() {
         marginBottom: 'var(--spacing-32)',
       }}>ListCell</h2>
 
-      <Section title="인터랙션 데모" gap="var(--spacing-8)" column>
-        <Case label="셀을 클릭하거나 마우스를 올려보세요">
-          <div style={{ width: '400px', display: 'flex', flexDirection: 'column' }}>
-            {['알림 설정', '개인정보 보호', '언어 설정'].map((label, i, arr) => (
-              <ListCell
-                key={label}
-                label={label}
-                chevron
-                divider={i < arr.length - 1}
-                onClick={() => setLastClicked(label)}
-              />
+      {/* 1. verticalPadding */}
+      <Section title="verticalPadding" gap="var(--spacing-8)" column>
+        <div style={{ width: '335px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+          <Case label='verticalPadding="none"'>
+            <Bound><ListCell label="텍스트" verticalPadding="none" /></Bound>
+          </Case>
+          <Case label='verticalPadding="small"'>
+            <Bound><ListCell label="텍스트" verticalPadding="small" /></Bound>
+          </Case>
+          <Case label='verticalPadding="medium" (default)'>
+            <Bound><ListCell label="텍스트" verticalPadding="medium" /></Bound>
+          </Case>
+          <Case label='verticalPadding="large"'>
+            <Bound><ListCell label="텍스트" verticalPadding="large" /></Bound>
+          </Case>
+        </div>
+      </Section>
+
+      {/* 2. verticalAlign */}
+      <Section title="verticalAlign" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='verticalAlign="top" (default)'>
+              <Bound>
+                <ListCell
+                  label="텍스트"
+                  description="보조 텍스트가 여러 줄이 될 때 leadingContent 정렬 기준입니다"
+                  verticalAlign="top"
+                  leadingContent={<Avatar variant="person" size="medium" />}
+                />
+              </Bound>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='verticalAlign="center"'>
+              <Bound>
+                <ListCell
+                  label="텍스트"
+                  description="보조 텍스트가 여러 줄이 될 때 leadingContent 정렬 기준입니다"
+                  verticalAlign="center"
+                  leadingContent={<Avatar variant="person" size="medium" />}
+                />
+              </Bound>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 3. fillWidth */}
+      <Section title="fillWidth" gap="var(--spacing-8)" column>
+        <Case label='fillWidth=false (default) — 335px 고정 너비'>
+          <div style={{ width: '335px' }}>
+            <Bound><ListCell label="텍스트" /></Bound>
+          </div>
+        </Case>
+        <Case label='fillWidth=true — 부모 너비를 채움'>
+          <Bound><ListCell label="텍스트" /></Bound>
+        </Case>
+      </Section>
+
+      {/* 4. textEllipsis */}
+      <Section title="textEllipsis" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='textEllipsis=false (default)'>
+              <Bound>
+                <ListCell
+                  label="매우 긴 제목이 있을 때 어떻게 처리되는지 확인하는 셀입니다"
+                  description="보조 텍스트도 말줄임 없이 모두 표시됩니다"
+                  textEllipsis={false}
+                />
+              </Bound>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='textEllipsis=true'>
+              <Bound>
+                <ListCell
+                  label="매우 긴 제목이 있을 때 어떻게 처리되는지 확인하는 셀입니다"
+                  description="보조 텍스트도 말줄임 처리됩니다"
+                  textEllipsis={true}
+                />
+              </Bound>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 5. divider */}
+      <Section title="divider" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='divider=false (default)'>
+              <Bound>
+                <ListCell label="텍스트" description="보조 텍스트" />
+                <ListCell label="텍스트" description="보조 텍스트" />
+              </Bound>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='divider=true'>
+              <Bound>
+                <ListCell label="텍스트" description="보조 텍스트" divider />
+                <ListCell label="텍스트" description="보조 텍스트" />
+              </Bound>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 6. chevron */}
+      <Section title="chevron" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='chevron=false (default)'>
+              <Bound><ListCell label="텍스트" onClick={() => {}} /></Bound>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='chevron=true'>
+              <Bound><ListCell label="텍스트" chevron onClick={() => {}} /></Bound>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 7. selected */}
+      <Section title="selected" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='selected=false (default)'>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+                <Bound><ListCell label="텍스트" /></Bound>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" /></Bound>
+              </div>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='selected=true'>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+                <Bound><ListCell label="텍스트" selected /></Bound>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" selected /></Bound>
+              </div>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 8. disabled */}
+      <Section title="disabled" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='disabled=false (default)'>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" /></Bound>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" selected /></Bound>
+              </div>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='disabled=true'>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" disabled /></Bound>
+                <Bound><ListCell label="텍스트" description="보조 텍스트" disabled selected /></Bound>
+              </div>
+            </Case>
+          </div>
+        </div>
+      </Section>
+
+      {/* 9. interaction */}
+      <Section title="interaction" gap="var(--spacing-8)" column>
+        <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+          <div style={{ width: '335px' }}>
+            <Case label='interaction=false (default, onClick 없음)'>
+              <Bound><ListCell label="텍스트" /></Bound>
+            </Case>
+          </div>
+          <div style={{ width: '335px' }}>
+            <Case label='interaction=true (onClick 있음)'>
+              <Bound><ListCell label="텍스트" onClick={() => {}} /></Bound>
+            </Case>
+          </div>
+        </div>
+        <Case label='interaction=true — none / hover / active / selected 상태'>
+          <div style={{ display: 'flex', gap: 'var(--spacing-24)' }}>
+            {INTERACTION_STATES.map(({ state, selected }) => (
+              <div key={state} style={{ width: '240px' }}>
+                <span style={{
+                  display:      'block',
+                  fontSize:     'var(--font-size-label-2)',
+                  color:        'var(--color-label-alternative)',
+                  marginBottom: 'var(--spacing-8)',
+                }}>{state}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)' }}>
+                  <Bound><ListCell label="텍스트" selected={selected} onClick={() => {}} /></Bound>
+                  <Bound><ListCell label="텍스트" description="보조 텍스트" selected={selected} onClick={() => {}} /></Bound>
+                </div>
+              </div>
             ))}
-            <div style={{
-              marginTop: 'var(--spacing-12)',
-              padding: 'var(--spacing-12)',
-              borderRadius: 'var(--spacing-8)',
-              backgroundColor: 'var(--color-fill-normal)',
-              fontSize: 'var(--font-size-body-2)',
-              color: 'var(--color-label-alternative)',
-            }}>
-              {lastClicked
-                ? <><strong style={{ color: 'var(--color-label-normal)' }}>"{lastClicked}"</strong> 클릭됨</>
-                : '항목을 클릭해보세요'
-              }
-            </div>
           </div>
         </Case>
       </Section>
 
-      <Section title="Basic" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px' }}>
-          <Case label="label만">
-            <ListCell label="기본 셀" />
-          </Case>
-          <Case label="label + description">
-            <ListCell label="이름" description="홍길동" />
-          </Case>
-        </div>
-      </Section>
-
-      <Section title="Vertical Padding" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
-          <Case label='verticalPadding="small"'>
-            <ListCell label="Small padding" description="보조 텍스트" verticalPadding="small" />
-          </Case>
-          <Case label='verticalPadding="medium"'>
-            <ListCell label="Medium padding" description="보조 텍스트" verticalPadding="medium" />
-          </Case>
-          <Case label='verticalPadding="large"'>
-            <ListCell label="Large padding" description="보조 텍스트" verticalPadding="large" />
-          </Case>
-        </div>
-      </Section>
-
-      <Section title="States" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px' }}>
-          <Case label="기본">
-            <ListCell label="기본 상태" description="보조 텍스트" />
-          </Case>
-          <Case label="selected">
-            <ListCell label="선택된 상태" description="보조 텍스트" selected />
-          </Case>
-          <Case label="disabled">
-            <ListCell label="비활성 상태" description="보조 텍스트" disabled />
-          </Case>
-        </div>
-      </Section>
-
-      <Section title="Divider" gap="var(--spacing-0)" column>
-        <div style={{ width: '400px' }}>
-          {['첫 번째', '두 번째', '세 번째'].map((label, i, arr) => (
+      {/* 10. leadingContent */}
+      <Section title="leadingContent" gap="var(--spacing-8)" column>
+        <div style={{ width: '335px' }}>
+          <Bound>
             <ListCell
-              key={label}
-              label={label}
-              description="보조 텍스트"
-              divider={i < arr.length - 1}
-            />
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Chevron" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px' }}>
-          <Case label="chevron=true">
-            <ListCell label="다음 페이지" chevron onClick={() => {}} />
-          </Case>
-          <Case label="chevron + description">
-            <ListCell label="알림 설정" description="모든 알림 켜짐" chevron onClick={() => {}} />
-          </Case>
-        </div>
-      </Section>
-
-      <Section title="Leading Content" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px' }}>
-          <Case label="leadingContent: Avatar">
-            <ListCell
-              label="홍길동"
-              description="디자이너"
+              label="텍스트"
               leadingContent={<Avatar variant="person" size="medium" />}
             />
-          </Case>
-          <Case label="leadingContent: Icon">
-            <ListCell
-              label="알림 설정"
-              leadingContent={<Icon name="bell" size={24} color="var(--color-label-normal)" />}
-              chevron
-              onClick={() => {}}
-            />
-          </Case>
+          </Bound>
         </div>
       </Section>
 
-      <Section title="Trailing Content" gap="var(--spacing-8)" column>
-        <div style={{ width: '400px' }}>
-          <Case label="trailingContent: Switch">
+      {/* 11. trailingContent */}
+      <Section title="trailingContent" gap="var(--spacing-8)" column>
+        <div style={{ width: '335px' }}>
+          <Bound>
             <ListCell
-              label="다크 모드"
+              label="텍스트"
               trailingContent={<Switch active={false} size="small" />}
             />
-          </Case>
-          <Case label="trailingContent: 텍스트">
-            <ListCell
-              label="언어"
-              trailingContent={
-                <span style={{ fontSize: 'var(--font-size-body-2)', color: 'var(--color-label-alternative)' }}>한국어</span>
-              }
-              chevron
-              onClick={() => {}}
-            />
-          </Case>
+          </Bound>
         </div>
       </Section>
 
-      <Section title="Text Ellipsis" gap="var(--spacing-8)" column>
-        <div style={{ width: '300px' }}>
-          <Case label="textEllipsis=false (줄바꿈)">
-            <ListCell label="매우 긴 제목이 있을 때 어떻게 처리되는지 확인하는 셀입니다" textEllipsis={false} />
-          </Case>
-          <Case label="textEllipsis=true (말줄임)">
-            <ListCell label="매우 긴 제목이 있을 때 어떻게 처리되는지 확인하는 셀입니다" textEllipsis={true} />
-          </Case>
-        </div>
+      {/* 12. customize */}
+      <Section title="customize" gap="var(--spacing-8)" column>
+        <span style={{
+          fontSize: 'var(--font-size-label-2)',
+          color:    'var(--color-label-alternative)',
+        }}>
+          className · style · onClick 등 기본 속성으로 커스터마이즈할 수 있습니다.
+        </span>
       </Section>
     </div>
   )

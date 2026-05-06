@@ -73,8 +73,7 @@ const NAV = [
       { id: 'thumbnail',    label: 'Thumbnail'      },
       { id: 'avatar',       label: 'Avatar Person'  },
       { id: 'listCell',     label: 'List Cell'      },
-      { id: 'card',         label: 'Card_Card'      },
-      { id: 'listCard',     label: 'Card_List Card' },
+      { id: 'card',         label: 'Card'           },
     ],
   },
   {

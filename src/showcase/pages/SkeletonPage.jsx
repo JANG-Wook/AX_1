@@ -81,7 +81,7 @@ export default function SkeletonPage() {
 
       {/* ── SkeletonText ───────────────────────────────────────── */}
       <Section title="SkeletonText · Length" gap="var(--spacing-16)" column>
-        <Case label='length="100%"'>
+        <Case label='length="100%" (기본)'>
           <div style={{ width: '320px' }}>
             <SkeletonText length="100%" />
           </div>
@@ -96,13 +96,21 @@ export default function SkeletonPage() {
             <SkeletonText length="50%" />
           </div>
         </Case>
+        <Case label='length="25%"'>
+          <div style={{ width: '320px' }}>
+            <SkeletonText length="25%" />
+          </div>
+        </Case>
       </Section>
 
-      <Section title="SkeletonText · Align" gap="var(--spacing-16)" column>
+      <Section title="SkeletonText · Align" gap="var(--spacing-24)">
         {(['leading', 'center', 'trailing']).map(align => (
           <Case key={align} label={`align="${align}"`}>
-            <div style={{ width: '320px' }}>
-              <SkeletonText length="60%" align={align} />
+            <div style={{ width: '240px', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)' }}>
+              <SkeletonText length="100%" align={align} />
+              <SkeletonText length="75%"  align={align} />
+              <SkeletonText length="50%"  align={align} />
+              <SkeletonText length="25%"  align={align} />
             </div>
           </Case>
         ))}

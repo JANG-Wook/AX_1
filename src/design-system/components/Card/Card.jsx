@@ -237,9 +237,11 @@ export default function Card({
           <div style={overlayStyle}>
             <div aria-hidden="true" style={gradientStyle} />
 
-            {overlayCaption && (
-              <span style={overlayCaptionStyle}>{overlayCaption}</span>
-            )}
+            <div style={{ flex: '1 0 0', minWidth: 0 }}>
+              {overlayCaption && (
+                <span style={overlayCaptionStyle}>{overlayCaption}</span>
+              )}
+            </div>
 
             {(onToggleSave !== null || saved) && (
               <button

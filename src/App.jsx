@@ -20,7 +20,6 @@ import ContentBadgePage   from './showcase/pages/ContentBadgePage'
 import DividerPage        from './showcase/pages/DividerPage'
 import FramedStylePage    from './showcase/pages/FramedStylePage'
 import IconPage           from './showcase/pages/IconPage'
-import ListCardPage       from './showcase/pages/ListCardPage'
 import ListCellPage       from './showcase/pages/ListCellPage'
 import MenuPage           from './showcase/pages/MenuPage'
 import PageIndicatorPage  from './showcase/pages/PageIndicatorPage'
@@ -72,7 +71,6 @@ const PAGE_MAP = {
   divider:          DividerPage,
   framedStyle:      FramedStylePage,
   icon:             IconPage,
-  listCard:         ListCardPage,
   listCell:         ListCellPage,
   menu:             MenuPage,
   pageIndicator:    PageIndicatorPage,
