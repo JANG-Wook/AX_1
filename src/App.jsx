@@ -28,7 +28,9 @@ import PaginationNavPage  from './showcase/pages/PaginationNavPage'
 import RadioPage          from './showcase/pages/RadioPage'
 import SegmentedControlPage from './showcase/pages/SegmentedControlPage'
 import SelectPage         from './showcase/pages/SelectPage'
-import SkeletonPage       from './showcase/pages/SkeletonPage'
+import SkeletonTextPage      from './showcase/pages/SkeletonTextPage'
+import SkeletonRectanglePage from './showcase/pages/SkeletonRectanglePage'
+import SkeletonCirclePage    from './showcase/pages/SkeletonCirclePage'
 import SnackbarPage       from './showcase/pages/SnackbarPage'
 import SpinnerPage        from './showcase/pages/SpinnerPage'
 import SwitchPage         from './showcase/pages/SwitchPage'
@@ -79,7 +81,9 @@ const PAGE_MAP = {
   radio:            RadioPage,
   segmentedControl: SegmentedControlPage,
   select:           SelectPage,
-  skeleton:         SkeletonPage,
+  skeletonText:      SkeletonTextPage,
+  skeletonRectangle: SkeletonRectanglePage,
+  skeletonCircle:    SkeletonCirclePage,
   snackbar:         SnackbarPage,
   spinner:          SpinnerPage,
   switch:           SwitchPage,
